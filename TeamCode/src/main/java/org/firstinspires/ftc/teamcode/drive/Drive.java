@@ -18,7 +18,7 @@ public class Drive extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
 
-            gyrobot.drive(gamepad1.left_stick_y, gamepad1.right_stick_x);
+            gyrobot.drive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
             gyrobot.update(telemetry);
 
             telemetry.update();
