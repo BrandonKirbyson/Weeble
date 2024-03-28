@@ -4,12 +4,22 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.util.constants.BalanceConstants;
 
 public class Gyrobot {
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
 
     private final IMU imu;
+
+    private double previousError = 0;
+    private double previousTime = 0;
+    private double i = 0;
+
+    private double drivePower = 0;
+    private double turnPower = 0;
 
     public Gyrobot(HardwareMap hardwareMap) {
         leftMotor = hardwareMap.get(DcMotor.class, "left");
@@ -24,5 +34,37 @@ public class Gyrobot {
                         )
                 )
         );
+    }
+
+    public void drive(double drivePower, double turnPower) {
+        this.drivePower = drivePower;
+        this.turnPower = turnPower;
+    }
+
+    public void update(Telemetry telemetry) {
+        double angle = imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES);
+
+        double currentTime = System.currentTimeMillis();
+
+        double currentError = angle - BalanceConstants.TargetAngle;
+
+        double p = BalanceConstants.Kp * currentError;
+//
+        i += BalanceConstants.Ki * (currentError * (currentTime - previousTime));
+//
+        i = Math.max(Math.min(i, BalanceConstants.MaxI), -BalanceConstants.MaxI);
+//
+        double d = BalanceConstants.Kd * (currentError - previousError) / (currentTime - previousTime);
+//
+        double output = p + i + d;
+//
+        previousError = currentError;
+        previousTime = currentTime;
+
+        leftMotor.setPower(output);
+        rightMotor.setPower(output);
+
+        telemetry.addData("Angle", angle);
+        telemetry.addData("Correction Speed", output);
     }
 }

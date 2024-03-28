@@ -12,13 +12,14 @@ public class Drive extends LinearOpMode {
         Gyrobot gyrobot = new Gyrobot(hardwareMap);
 
         StatefulGamepad gamepad1Buttons = new StatefulGamepad(gamepad1);
-        StatefulGamepad gamepad2Buttons = new StatefulGamepad(gamepad2);
 
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
-            gamepad2Buttons.update();
+
+            gyrobot.drive(gamepad1.left_stick_y, gamepad1.right_stick_x);
+            gyrobot.update(telemetry);
 
             telemetry.update();
         }
