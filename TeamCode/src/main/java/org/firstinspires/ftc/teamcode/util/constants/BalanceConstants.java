@@ -13,8 +13,8 @@ public class BalanceConstants {
 
     public static double SmallPIDMargin = 30;
 
-    public static PIDConstants SmallPID = new PIDConstants(0.04, 0.0006, 1.2);
-    public static PIDConstants LargePID = new PIDConstants(0.06, 0.001, 1);
+    public static PIDConstants SmallPID = new PIDConstants(0.04, 0.0002, 1);
+    public static PIDConstants LargePID = new PIDConstants(0.05, 0.001, 1);
 
     public static double MaxI = 0.3;
 }

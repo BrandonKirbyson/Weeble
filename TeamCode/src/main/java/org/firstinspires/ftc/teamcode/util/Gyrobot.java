@@ -83,11 +83,14 @@ public class Gyrobot {
         double currentTime = System.currentTimeMillis();
 
         double angle = imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES);
-        double currentError = angle - BalanceConstants.TargetAngle;
+
+        double targetAngle = BalanceConstants.TargetAngle + drivePower;
+        double currentError = angle - targetAngle;
 
         boolean balanced = Math.abs(currentError) < BalanceConstants.BalancedMargin;
 
-        boolean smallPID = Math.abs(currentError) < BalanceConstants.SmallPIDMargin;
+//        boolean smallPID = Math.abs(currentError) < BalanceConstants.SmallPIDMargin;
+        boolean smallPID = drivePower == 0;
 
         PIDConstants pid = smallPID ? BalanceConstants.SmallPID : BalanceConstants.LargePID;
 
