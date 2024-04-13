@@ -18,7 +18,7 @@ public class BalanceConstants {
     public static double MaxAngular = 1.5;
 
     public static PIDConstants SmallPID = new PIDConstants(0.03, 0.0002, 0.8);
-    public static PIDConstants LargePID = new PIDConstants(0.04, 0.0006, 0.5);
+    public static PIDConstants LargePID = new PIDConstants(0.03, 0.001, 1);
 
     public static double MaxI = 0.3;
 }

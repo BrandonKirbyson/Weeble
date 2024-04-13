@@ -28,6 +28,8 @@ public class Gyrobot {
     private double drivePower = 0;
     private double turnPower = 0;
 
+    private boolean stopped = false;
+
     private double leftTargetPos = 0;
     private double rightTargetPos = 0;
 
@@ -65,20 +67,26 @@ public class Gyrobot {
             leftTargetPos = leftMotor.getCurrentPosition();
             rightTargetPos = rightMotor.getCurrentPosition();
         }
-//        this.drivePower = drivePower * SpeedConstants.ManualDrive;
-        drivePower = drivePower * SpeedConstants.ManualDrive;
+        this.drivePower = drivePower * SpeedConstants.ManualDrive;
+//        drivePower = drivePower > SpeedConstants.ManualDriveMargin ? SpeedConstants.ManualDrive : drivePower < -SpeedConstants.ManualDriveMargin ? -SpeedConstants.ManualDrive : 0;
         if (drivePower != 0) {
             if (this.drivePower > drivePower) {
                 this.drivePower = Math.max(this.drivePower - SpeedConstants.ManualAccel, drivePower);
             } else if (this.drivePower < drivePower) {
                 this.drivePower = Math.min(this.drivePower + SpeedConstants.ManualAccel, drivePower);
             }
+//            this.drivePower = drivePower;
         } else {
-            if (this.drivePower > 0) {
-                this.drivePower = Math.max(this.drivePower - SpeedConstants.ManualAccelDown, 0);
-            } else if (this.drivePower < 0) {
-                this.drivePower = Math.min(this.drivePower + SpeedConstants.ManualAccelDown, 0);
+//            if (this.drivePower > 0) {
+//                this.drivePower = Math.max(this.drivePower - SpeedConstants.ManualAccelDown, 0);
+//            } else if (this.drivePower < 0) {
+//                this.drivePower = Math.min(this.drivePower + SpeedConstants.ManualAccelDown, 0);
+//            }
+            if (stopped) {
+                this.drivePower = 0;
             }
+            stopped = true;
+            this.drivePower = -this.drivePower;
         }
         this.turnPower = turnPower * SpeedConstants.ManualTurn;
     }
@@ -89,13 +97,15 @@ public class Gyrobot {
         double angle = imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES);
         double angleVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;
 
-        double targetAngle = BalanceConstants.TargetAngle + drivePower;
+        boolean smallPID = drivePower == 0;
+
+//        double targetAngle = BalanceConstants.TargetAngle + (!smallPID ? (drivePower > 0 ? SpeedConstants.DriveAngle : -SpeedConstants.DriveAngle) : 0);
+        double targetAngle = BalanceConstants.TargetAngle;
         double currentError = angle - targetAngle;
 
         boolean balanced = Math.abs(currentError) < BalanceConstants.BalancedMargin;
 
 //        boolean smallPID = Math.abs(currentError) < BalanceConstants.SmallPIDMargin;
-        boolean smallPID = drivePower == 0;
 
         PIDConstants pid = smallPID ? BalanceConstants.SmallPID : BalanceConstants.LargePID;
 
