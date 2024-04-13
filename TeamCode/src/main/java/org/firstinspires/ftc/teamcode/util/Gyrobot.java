@@ -17,6 +17,8 @@ public class Gyrobot {
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
 
+    public final Eyes eyes;
+
     private final IMU imu;
 
     private double previousError = 0;
@@ -54,6 +56,8 @@ public class Gyrobot {
                         )
                 )
         );
+
+        eyes = new Eyes(hardwareMap, imu);
     }
 
     public void drive(double drivePower, double turnPower) {
@@ -83,6 +87,7 @@ public class Gyrobot {
         double currentTime = System.currentTimeMillis();
 
         double angle = imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES);
+        double angleVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;
 
         double targetAngle = BalanceConstants.TargetAngle + drivePower;
         double currentError = angle - targetAngle;
@@ -95,6 +100,8 @@ public class Gyrobot {
         PIDConstants pid = smallPID ? BalanceConstants.SmallPID : BalanceConstants.LargePID;
 
         double p = pid.Kp * currentError;
+
+//        p *= Math.min(Math.max(BalanceConstants.AngularP * Math.abs(angleVelocity), BalanceConstants.MinAngular), BalanceConstants.MaxAngular);
 
         i += pid.Ki * (currentError * (currentTime - previousTime));
         i = Math.max(Math.min(i, BalanceConstants.MaxI), -BalanceConstants.MaxI);
@@ -137,6 +144,7 @@ public class Gyrobot {
         }
 
         telemetry.addData("Angle", angle);
+        telemetry.addData("Angular Velocity", angleVelocity);
         telemetry.addData("Correction Speed", output);
         telemetry.addData("Drive Power", drivePower);
         telemetry.addData("Left Pos", leftPos);
@@ -145,6 +153,7 @@ public class Gyrobot {
         telemetry.addData("Right Target Pos", rightTargetPos);
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("Angle", angle);
+        packet.put("Angular Velocity", angleVelocity);
         packet.put("Correction Speed", output);
         packet.put("Left Pos", leftPos);
         packet.put("Right Pos", rightPos);
