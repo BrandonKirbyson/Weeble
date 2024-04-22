@@ -4,7 +4,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
-import org.firstinspires.ftc.teamcode.util.Eyes;
+import org.firstinspires.ftc.teamcode.util.Head;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 
@@ -22,7 +22,7 @@ public class EyesTest extends LinearOpMode {
                 )
         );
 
-        Eyes eyes = new Eyes(hardwareMap, imu);
+        Head head = new Head(hardwareMap, imu);
 
         StatefulGamepad gamepad1Buttons = new StatefulGamepad(gamepad1);
 
@@ -30,11 +30,11 @@ public class EyesTest extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
-            
+
             if (!gamepad1Buttons.getButton(GamepadButton.Y)) {
-                eyes.setManualPosition(gamepad1.right_stick_x, gamepad1.right_stick_y);
+                head.setManualPosition(gamepad1.right_stick_x, gamepad1.right_stick_y);
             } else {
-                eyes.holdPosition();
+                head.holdPosition();
             }
         }
     }

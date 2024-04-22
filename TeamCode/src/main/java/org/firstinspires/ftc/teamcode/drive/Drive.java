@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.util.Eyes;
 import org.firstinspires.ftc.teamcode.util.Gyrobot;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
@@ -24,9 +23,9 @@ public class Drive extends LinearOpMode {
             robot.update(telemetry);
 
             if (!gamepad1Buttons.getButton(GamepadButton.Y)) {
-                robot.eyes.setManualPosition(gamepad1.right_stick_x, gamepad1.right_stick_y);
+                robot.head.setManualPosition(gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.right_trigger - gamepad1.left_trigger);
             } else {
-                robot.eyes.holdPosition();
+                robot.head.holdPosition();
             }
 
             telemetry.update();

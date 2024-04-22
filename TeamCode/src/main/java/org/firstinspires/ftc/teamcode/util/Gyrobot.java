@@ -17,7 +17,7 @@ public class Gyrobot {
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
 
-    public final Eyes eyes;
+    public final Head head;
 
     private final IMU imu;
 
@@ -59,7 +59,7 @@ public class Gyrobot {
                 )
         );
 
-        eyes = new Eyes(hardwareMap, imu);
+        head = new Head(hardwareMap, imu);
     }
 
     public void drive(double drivePower, double turnPower) {
