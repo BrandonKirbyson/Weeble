@@ -23,7 +23,7 @@ public class Drive extends LinearOpMode {
             robot.update(telemetry);
 
             if (!gamepad1Buttons.getButton(GamepadButton.Y)) {
-                robot.head.setManualPosition(gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.right_trigger - gamepad1.left_trigger);
+                robot.head.setManualPosition(gamepad1.right_trigger - gamepad1.left_trigger, gamepad1.right_stick_y, gamepad1.right_stick_x);
             } else {
                 robot.head.holdPosition();
             }

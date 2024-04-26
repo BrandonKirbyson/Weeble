@@ -32,7 +32,7 @@ public class EyesTest extends LinearOpMode {
             gamepad1Buttons.update();
 
             if (!gamepad1Buttons.getButton(GamepadButton.Y)) {
-                head.setManualPosition(gamepad1.right_stick_x, gamepad1.right_stick_y);
+                head.setManualPosition(gamepad1.left_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_x);
             } else {
                 head.holdPosition();
             }
