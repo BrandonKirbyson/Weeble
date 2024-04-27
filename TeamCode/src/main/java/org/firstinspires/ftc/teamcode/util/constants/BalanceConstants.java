@@ -10,8 +10,8 @@ public class BalanceConstants {
     public static double TargetAngle = 0;
     public static double MaxAngle = 30;
 
-    public static PIDConstants IdlePID = new PIDConstants(0.07, 0.0006, 0.8, 0.3);
+    public static PIDConstants IdlePID = new PIDConstants(0.07, 0.0009, 1, 0.4);
     public static PIDConstants UprightPID = new PIDConstants(0.1, 0.0, 0.8, 0.1);
-    public static PIDConstants DrivePID = new PIDConstants(0.03, 0.001, 1, 0.3);
-    public static PIDConstants AcceleratePID = new PIDConstants(0.03, 0.001, 1, 0.3);
+    public static PIDConstants DrivePID = new PIDConstants(0.04, 0.002, 1, 0.3);
+    public static PIDConstants AcceleratePID = new PIDConstants(0.03, 0.0, 1, 0.3);
 }

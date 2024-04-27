@@ -27,6 +27,8 @@ public class Gyrobot {
     private double previousTime = 0;
     private double i = 0;
 
+    private boolean brake = false;
+
     private PIDConstants lastPID;
 
     private boolean idle;
@@ -78,8 +80,11 @@ public class Gyrobot {
     }
 
     public void drive(double drivePower) {
+        brake = true;
+
         double currentTime = System.currentTimeMillis();
-        double currentError = angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle + (drivePower > 0 ? SpeedConstants.DriveAngle : -SpeedConstants.DriveAngle);
+        double driveAngle = drivePower * SpeedConstants.DriveAngle;
+        double currentError = angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle + driveAngle;
 
         PIDConstants pid = BalanceConstants.DrivePID;
         if ((currentError < 0 && drivePower > 0) || (currentError > 0 && drivePower < 0)) {
@@ -109,6 +114,12 @@ public class Gyrobot {
             pid = BalanceConstants.UprightPID;
         }
         double output = getPIDOutput(pid, currentError, previousError, currentTime - previousTime);
+        if (brake) {
+            output += currentError * SpeedConstants.BrakeP;
+            if (currentError < SpeedConstants.BrakeError) {
+                brake = false;
+            }
+        }
 
         leftMotor.setPower(output);
         rightMotor.setPower(output);
