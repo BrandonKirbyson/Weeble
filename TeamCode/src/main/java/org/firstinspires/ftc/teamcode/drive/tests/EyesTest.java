@@ -22,7 +22,7 @@ public class EyesTest extends LinearOpMode {
                 )
         );
 
-        Head head = new Head(hardwareMap, imu);
+        Head head = new Head(hardwareMap);
 
         StatefulGamepad gamepad1Buttons = new StatefulGamepad(gamepad1);
 

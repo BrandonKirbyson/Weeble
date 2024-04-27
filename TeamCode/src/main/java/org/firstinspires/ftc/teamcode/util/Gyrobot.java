@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.util.constants.BalanceConstants;
 import org.firstinspires.ftc.teamcode.util.constants.SpeedConstants;
 import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
@@ -25,26 +27,16 @@ public class Gyrobot {
     private double previousTime = 0;
     private double i = 0;
 
-    private double drivePower = 0;
-    private double turnPower = 0;
+    private PIDConstants lastPID;
 
-    private boolean stopped = false;
+    private boolean idle;
 
-    private double leftTargetPos = 0;
-    private double rightTargetPos = 0;
-
-    private double lastLeftPos = 0;
-    private double lastRightPos = 0;
+    private YawPitchRollAngles angles;
 
     public Gyrobot(HardwareMap hardwareMap) {
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-//        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -59,116 +51,88 @@ public class Gyrobot {
                 )
         );
 
-        head = new Head(hardwareMap, imu);
-    }
-
-    public void drive(double drivePower, double turnPower) {
-        if ((this.drivePower != 0 && drivePower == 0) || (this.turnPower != 0 && turnPower == 0)) {
-            leftTargetPos = leftMotor.getCurrentPosition();
-            rightTargetPos = rightMotor.getCurrentPosition();
-        }
-        this.drivePower = drivePower * SpeedConstants.ManualDrive;
-//        drivePower = drivePower > SpeedConstants.ManualDriveMargin ? SpeedConstants.ManualDrive : drivePower < -SpeedConstants.ManualDriveMargin ? -SpeedConstants.ManualDrive : 0;
-        if (drivePower != 0) {
-            if (this.drivePower > drivePower) {
-                this.drivePower = Math.max(this.drivePower - SpeedConstants.ManualAccel, drivePower);
-            } else if (this.drivePower < drivePower) {
-                this.drivePower = Math.min(this.drivePower + SpeedConstants.ManualAccel, drivePower);
-            }
-//            this.drivePower = drivePower;
-        } else {
-//            if (this.drivePower > 0) {
-//                this.drivePower = Math.max(this.drivePower - SpeedConstants.ManualAccelDown, 0);
-//            } else if (this.drivePower < 0) {
-//                this.drivePower = Math.min(this.drivePower + SpeedConstants.ManualAccelDown, 0);
-//            }
-            if (stopped) {
-                this.drivePower = 0;
-            }
-            stopped = true;
-            this.drivePower = -this.drivePower;
-        }
-        this.turnPower = turnPower * SpeedConstants.ManualTurn;
+        head = new Head(hardwareMap);
     }
 
     public void update(Telemetry telemetry) {
+        angles = imu.getRobotYawPitchRollAngles();
+        head.updateAngles(angles);
+
+        if (Drive.DEBUG) {
+            telemetry.addData("Angle", angles.getPitch(AngleUnit.DEGREES));
+            telemetry.addData("Angular Velocity", imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
+            TelemetryPacket packet = new TelemetryPacket();
+            packet.put("Angle", angles.getPitch(AngleUnit.DEGREES));
+            packet.put("Angular Velocity", imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        }
+    }
+
+    public boolean isBalanced() {
+        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxAngle;
+    }
+
+    public void stopMotors() {
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
+
+    public void drive(double drivePower) {
         double currentTime = System.currentTimeMillis();
+        double currentError = angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle + (drivePower > 0 ? SpeedConstants.DriveAngle : -SpeedConstants.DriveAngle);
 
-        double angle = imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES);
-        double angleVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;
+        PIDConstants pid = BalanceConstants.DrivePID;
+        if ((currentError < 0 && drivePower > 0) || (currentError > 0 && drivePower < 0)) {
+            pid = BalanceConstants.AcceleratePID;
+        }
+        double output = getPIDOutput(pid, currentError, previousError, currentTime - previousTime);
 
-        boolean smallPID = drivePower == 0;
-
-//        double targetAngle = BalanceConstants.TargetAngle + (!smallPID ? (drivePower > 0 ? SpeedConstants.DriveAngle : -SpeedConstants.DriveAngle) : 0);
-        double targetAngle = BalanceConstants.TargetAngle;
-        double currentError = angle - targetAngle;
-
-        boolean balanced = Math.abs(currentError) < BalanceConstants.BalancedMargin;
-
-//        boolean smallPID = Math.abs(currentError) < BalanceConstants.SmallPIDMargin;
-
-        PIDConstants pid = smallPID ? BalanceConstants.SmallPID : BalanceConstants.LargePID;
-
-        double p = pid.Kp * currentError;
-
-//        p *= Math.min(Math.max(BalanceConstants.AngularP * Math.abs(angleVelocity), BalanceConstants.MinAngular), BalanceConstants.MaxAngular);
-
-        i += pid.Ki * (currentError * (currentTime - previousTime));
-        i = Math.max(Math.min(i, BalanceConstants.MaxI), -BalanceConstants.MaxI);
-
-        double d = pid.Kd * (currentError - previousError) / (currentTime - previousTime);
-        double output = p + i + d;
-
-        double balanceTicks = (previousError - currentError) * BalanceConstants.TICKS_PER_DEGREE;
-
-        double leftPos = leftMotor.getCurrentPosition();
-        double rightPos = rightMotor.getCurrentPosition();
-
-        leftTargetPos += balanceTicks;
-        rightTargetPos += balanceTicks;
-
-        double leftError = leftTargetPos - leftPos;
-        double rightError = rightTargetPos - rightPos;
-
-//        double holdLeftPower = leftError * SpeedConstants.HoldPower;
-//        double holdRightPower = rightError * SpeedConstants.HoldPower;
-        double holdLeftPower = 0;
-        double holdRightPower = 0;
+        leftMotor.setPower(output);
+        rightMotor.setPower(output);
 
         previousError = currentError;
         previousTime = currentTime;
-        lastLeftPos = leftPos;
-        lastRightPos = rightPos;
+    }
 
-        if (Math.abs(angle) < BalanceConstants.MaxAngle) {
-            if (drivePower != 0) {
-                leftMotor.setPower(output + drivePower - turnPower);
-                rightMotor.setPower(output + drivePower + turnPower);
-            } else {
-                leftMotor.setPower(output + holdLeftPower - turnPower);
-                rightMotor.setPower(output + holdRightPower + turnPower);
-            }
-        } else {
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
+    public void turn(double turnPower) {
+        leftMotor.setPower(leftMotor.getPower() + turnPower * SpeedConstants.ManualTurn);
+        rightMotor.setPower(rightMotor.getPower() - turnPower * SpeedConstants.ManualTurn);
+    }
+
+
+    public void idle() {
+        double currentTime = System.currentTimeMillis();
+        double currentError = angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle;
+
+        PIDConstants pid = BalanceConstants.IdlePID;
+        if (Math.abs(currentError) > BalanceConstants.MaxAngle) {
+            pid = BalanceConstants.UprightPID;
         }
+        double output = getPIDOutput(pid, currentError, previousError, currentTime - previousTime);
 
-        telemetry.addData("Angle", angle);
-        telemetry.addData("Angular Velocity", angleVelocity);
-        telemetry.addData("Correction Speed", output);
-        telemetry.addData("Drive Power", drivePower);
-        telemetry.addData("Left Pos", leftPos);
-        telemetry.addData("Right Pos", rightPos);
-        telemetry.addData("Left Target Pos", leftTargetPos);
-        telemetry.addData("Right Target Pos", rightTargetPos);
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.put("Angle", angle);
-        packet.put("Angular Velocity", angleVelocity);
-        packet.put("Correction Speed", output);
-        packet.put("Left Pos", leftPos);
-        packet.put("Right Pos", rightPos);
-        packet.put("Left Target Pos", leftTargetPos);
-        packet.put("Right Target Pos", rightTargetPos);
-        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        leftMotor.setPower(output);
+        rightMotor.setPower(output);
+
+        previousError = currentError;
+        previousTime = currentTime;
+    }
+
+    private double getPIDOutput(PIDConstants pid, double error, double previousError, double deltaTime) {
+        double p = pid.Kp * error;
+        if (!pid.equals(lastPID)) {
+            i = 0;
+            TelemetryPacket packet = new TelemetryPacket();
+            packet.put("reset", true);
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        } else {
+            TelemetryPacket packet = new TelemetryPacket();
+            packet.put("reset", false);
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        }
+        i += pid.Ki * error * deltaTime;
+        i = Math.max(Math.min(i, pid.MaxI), -pid.MaxI);
+        double d = pid.Kd * (error - previousError) / deltaTime;
+        lastPID = pid;
+        return p + i + d;
     }
 }

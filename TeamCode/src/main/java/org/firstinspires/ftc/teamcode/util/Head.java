@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,15 +14,18 @@ public class Head {
     private final Servo headServo;
     private final Servo eyesServo;
 
-    private final IMU imu;
+    private YawPitchRollAngles angles;
 
     private double eyesTargetHeading = 0;
 
-    public Head(HardwareMap hardwareMap, IMU imu) {
+    public Head(HardwareMap hardwareMap) {
         neckServo = hardwareMap.get(Servo.class, "neck");
         headServo = hardwareMap.get(Servo.class, "head");
         eyesServo = hardwareMap.get(Servo.class, "eyes");
-        this.imu = imu;
+    }
+
+    public void updateAngles(YawPitchRollAngles angles) {
+        this.angles = angles;
     }
 
     public void setManualPosition(double manualEyes, double manualNeck, double manualHead) {
@@ -31,14 +36,16 @@ public class Head {
         neckServo.setPosition(neck);
         headServo.setPosition(head);
 
-        YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
-
         eyesTargetHeading = angles.getYaw(AngleUnit.DEGREES);
     }
 
     public void holdPosition() {
-        YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
         double eyes = HeadConstants.eyesCenter + ((angles.getYaw(AngleUnit.DEGREES) - eyesTargetHeading) / HeadConstants.eyesConversion);
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.put("eyes", eyes);
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        double neck = HeadConstants.neckCenter + (angles.getPitch(AngleUnit.DEGREES) / HeadConstants.neckConversion);
         eyesServo.setPosition(eyes);
+        neckServo.setPosition(neck);
     }
 }

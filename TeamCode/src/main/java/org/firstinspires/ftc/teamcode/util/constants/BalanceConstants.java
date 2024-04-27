@@ -9,16 +9,9 @@ public class BalanceConstants {
 
     public static double TargetAngle = 0;
     public static double MaxAngle = 30;
-    public static double BalancedMargin = 2;
 
-    public static double SmallPIDMargin = 30;
-
-    public static double AngularP = 0.005;
-    public static double MinAngular = 1;
-    public static double MaxAngular = 1.5;
-
-    public static PIDConstants SmallPID = new PIDConstants(0.04, 0.0002, 0.8);
-    public static PIDConstants LargePID = new PIDConstants(0.03, 0.001, 1);
-
-    public static double MaxI = 0.3;
+    public static PIDConstants IdlePID = new PIDConstants(0.06, 0.0004, 0.8, 0.1);
+    public static PIDConstants UprightPID = new PIDConstants(0.1, 0.0, 0.8, 0.1);
+    public static PIDConstants DrivePID = new PIDConstants(0.03, 0.001, 1, 0.3);
+    public static PIDConstants AcceleratePID = new PIDConstants(0.03, 0.001, 1, 0.3);
 }
