@@ -59,8 +59,8 @@ public class Gyrobot {
         head.updateAngles(angles);
 
         if (Drive.DEBUG) {
-            telemetry.addData("Angle", angles.getPitch(AngleUnit.DEGREES));
-            telemetry.addData("Angular Velocity", imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
+//            telemetry.addData("Angle", angles.getPitch(AngleUnit.DEGREES));
+//            telemetry.addData("Angular Velocity", imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
             TelemetryPacket packet = new TelemetryPacket();
             packet.put("Angle", angles.getPitch(AngleUnit.DEGREES));
             packet.put("Angular Velocity", imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
@@ -95,8 +95,8 @@ public class Gyrobot {
     }
 
     public void turn(double turnPower) {
-        leftMotor.setPower(leftMotor.getPower() + turnPower * SpeedConstants.ManualTurn);
-        rightMotor.setPower(rightMotor.getPower() - turnPower * SpeedConstants.ManualTurn);
+        leftMotor.setPower(leftMotor.getPower() - turnPower * SpeedConstants.ManualTurn);
+        rightMotor.setPower(rightMotor.getPower() + turnPower * SpeedConstants.ManualTurn);
     }
 
 
@@ -121,13 +121,6 @@ public class Gyrobot {
         double p = pid.Kp * error;
         if (!pid.equals(lastPID)) {
             i = 0;
-            TelemetryPacket packet = new TelemetryPacket();
-            packet.put("reset", true);
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
-        } else {
-            TelemetryPacket packet = new TelemetryPacket();
-            packet.put("reset", false);
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
         i += pid.Ki * error * deltaTime;
         i = Math.max(Math.min(i, pid.MaxI), -pid.MaxI);

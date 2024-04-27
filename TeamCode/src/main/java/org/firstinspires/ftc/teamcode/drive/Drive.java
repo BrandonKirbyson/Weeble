@@ -48,9 +48,6 @@ public class Drive extends LinearOpMode {
             } else {
                 robot.head.holdPosition();
             }
-
-            telemetry.addData("Balanced", robot.isBalanced());
-            if (DEBUG) telemetry.update();
         }
     }
 }
