@@ -48,8 +48,10 @@ public class Head {
     }
 
     public void setEyes(double manualEyes) {
-        double eyes = eyesServo.getPosition() + manualEyes * HeadConstants.eyesSpeed;
-        eyes = Math.min(HeadConstants.eyesCenter + HeadConstants.eyesRange, Math.max(HeadConstants.eyesCenter - HeadConstants.eyesRange, eyes));
+//        double eyes = eyesServo.getPosition() + manualEyes * HeadConstants.eyesSpeed;
+
+//        eyes = Math.min(HeadConstants.eyesCenter + HeadConstants.eyesRange, Math.max(HeadConstants.eyesCenter - HeadConstants.eyesRange, eyes));
+        double eyes = HeadConstants.eyesCenter + (manualEyes * HeadConstants.eyesRange);
         eyesServo.setPosition(eyes);
     }
 
@@ -83,7 +85,7 @@ public class Head {
     }
 
     public void holdPosition() {
-        double head = HeadConstants.headCenter + ((angles.getRoll(AngleUnit.DEGREES) - headTarget) / HeadConstants.headConversion);
+        double head = HeadConstants.headCenter + ((angles.getYaw(AngleUnit.DEGREES) - headTarget) / HeadConstants.headConversion);
         headServo.setPosition(head);
         if (Math.abs(head) > 1) {
             double eyes = HeadConstants.eyesCenter + ((angles.getYaw(AngleUnit.DEGREES) - eyesTarget) / HeadConstants.eyesConversion);

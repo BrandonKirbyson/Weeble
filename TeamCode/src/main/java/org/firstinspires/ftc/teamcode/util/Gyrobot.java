@@ -109,7 +109,7 @@ public class Gyrobot {
         double currentTime = System.currentTimeMillis();
         double currentError = angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle;
 
-        PIDConstants pid = BalanceConstants.IdlePID;
+        PIDConstants pid = Drive.AnyTerrain ? BalanceConstants.IdleAnyTerrainPID : BalanceConstants.IdlePID;
         if (Math.abs(currentError) > BalanceConstants.MaxAngle) {
             pid = BalanceConstants.UprightPID;
         }

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 @TeleOp(name = "Drive")
 public class Drive extends LinearOpMode {
     public static boolean DEBUG = false;
+    public static boolean AnyTerrain = true;
 
     @Override
     public void runOpMode() {
@@ -19,6 +20,8 @@ public class Drive extends LinearOpMode {
         StatefulGamepad gamepad1Buttons = new StatefulGamepad(gamepad1);
 
         waitForStart();
+
+        boolean heangdMoving = false;
 
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
@@ -48,18 +51,20 @@ public class Drive extends LinearOpMode {
             } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
                 robot.head.reset();
             } else if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
+                heangdMoving = true;
                 robot.head.setManualPosition(gamepad1.right_stick_y, gamepad1.right_stick_x);
             } else if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
                 robot.head.adjustSetPosition(gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.dpad_left, gamepad1.dpad_right);
-            } else {
-                robot.head.idle();
+            } else if (heangdMoving) {
+                robot.head.reset();
+                heangdMoving = false;
             }
 
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
-                robot.head.resetEyes();
-            } else if (gamepad1.right_trigger != 0 || gamepad1.left_trigger != 0) {
-                robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
-            }
+//            if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
+//                robot.head.resetEyes();
+//            } else if (gamepad1.right_trigger != 0 || gamepad1.left_trigger != 0) {
+//            }
+            robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
         }
     }
 }
