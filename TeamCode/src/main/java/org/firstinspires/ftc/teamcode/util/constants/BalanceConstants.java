@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
 public class BalanceConstants {
     public static double TICKS_PER_DEGREE = 537.7 / 360;
 
-    public static double TargetAngle = -0.5;
+    public static double TargetAngle = 0;
     public static double MaxAngle = 30;
 
     public static PIDConstants IdlePID = new PIDConstants(0.06, 0.0006, 1, 0.4);

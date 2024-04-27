@@ -21,7 +21,7 @@ public class Drive extends LinearOpMode {
 
         waitForStart();
 
-        boolean heangdMoving = false;
+        boolean headMoving = false;
 
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
@@ -51,13 +51,13 @@ public class Drive extends LinearOpMode {
             } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
                 robot.head.reset();
             } else if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
-                heangdMoving = true;
+                headMoving = true;
                 robot.head.setManualPosition(gamepad1.right_stick_y, gamepad1.right_stick_x);
             } else if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
                 robot.head.adjustSetPosition(gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.dpad_left, gamepad1.dpad_right);
-            } else if (heangdMoving) {
+            } else if (headMoving) {
                 robot.head.reset();
-                heangdMoving = false;
+                headMoving = false;
             }
 
 //            if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {

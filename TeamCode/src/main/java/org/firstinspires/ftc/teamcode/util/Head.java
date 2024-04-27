@@ -45,6 +45,9 @@ public class Head {
         }
         neckServo.setPosition(neck);
         headServo.setPosition(head);
+
+        headTarget = angles.getYaw(AngleUnit.DEGREES) + head * HeadConstants.headConversion;
+        neckTarget = angles.getPitch(AngleUnit.DEGREES) + neck * HeadConstants.neckConversion;
     }
 
     public void setEyes(double manualEyes) {
@@ -85,7 +88,7 @@ public class Head {
     }
 
     public void holdPosition() {
-        double head = HeadConstants.headCenter + ((angles.getYaw(AngleUnit.DEGREES) - headTarget) / HeadConstants.headConversion);
+        double head = HeadConstants.headCenter - ((angles.getYaw(AngleUnit.DEGREES) - headTarget) / HeadConstants.headConversion);
         headServo.setPosition(head);
         if (Math.abs(head) > 1) {
             double eyes = HeadConstants.eyesCenter + ((angles.getYaw(AngleUnit.DEGREES) - eyesTarget) / HeadConstants.eyesConversion);
