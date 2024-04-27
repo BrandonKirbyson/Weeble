@@ -43,10 +43,22 @@ public class Drive extends LinearOpMode {
                 }
             }
 
-            if (!gamepad1Buttons.getButton(GamepadButton.Y)) {
-                robot.head.setManualPosition(gamepad1.right_trigger - gamepad1.left_trigger, gamepad1.right_stick_y, gamepad1.right_stick_x);
-            } else {
+            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
                 robot.head.holdPosition();
+            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
+                robot.head.reset();
+            } else if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
+                robot.head.setManualPosition(gamepad1.right_stick_y, gamepad1.right_stick_x);
+            } else if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
+                robot.head.adjustSetPosition(gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.dpad_left, gamepad1.dpad_right);
+            } else {
+                robot.head.idle();
+            }
+
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
+                robot.head.resetEyes();
+            } else if (gamepad1.right_trigger != 0 || gamepad1.left_trigger != 0) {
+                robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
             }
         }
     }

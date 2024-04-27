@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -16,7 +13,11 @@ public class Head {
 
     private YawPitchRollAngles angles;
 
-    private double eyesTargetHeading = 0;
+    private double eyesTarget = 0;
+    private double headTarget = 0;
+    private double neckTarget = 0;
+
+    private boolean setPosition = false;
 
     public Head(HardwareMap hardwareMap) {
         neckServo = hardwareMap.get(Servo.class, "neck");
@@ -28,24 +29,68 @@ public class Head {
         this.angles = angles;
     }
 
-    public void setManualPosition(double manualEyes, double manualNeck, double manualHead) {
-        double eyes = HeadConstants.eyesCenter + (manualEyes * HeadConstants.eyesRange);
-        double neck = HeadConstants.neckCenter + (manualNeck * HeadConstants.neckRange);
-        double head = HeadConstants.headCenter + (manualHead * HeadConstants.headRange);
+    public void adjustSetPosition(boolean up, boolean down, boolean left, boolean right) {
+        setPosition = true;
+        double neck = neckServo.getPosition();
+        if (up) {
+            neck += HeadConstants.neckSpeed;
+        } else if (down) {
+            neck -= HeadConstants.neckSpeed;
+        }
+        double head = headServo.getPosition();
+        if (left) {
+            head += HeadConstants.headSpeed;
+        } else if (right) {
+            head -= HeadConstants.headSpeed;
+        }
+        neckServo.setPosition(neck);
+        headServo.setPosition(head);
+    }
+
+    public void setEyes(double manualEyes) {
+        double eyes = eyesServo.getPosition() + manualEyes * HeadConstants.eyesSpeed;
+        eyes = Math.min(HeadConstants.eyesCenter + HeadConstants.eyesRange, Math.max(HeadConstants.eyesCenter - HeadConstants.eyesRange, eyes));
         eyesServo.setPosition(eyes);
+    }
+
+    public void resetEyes() {
+        eyesServo.setPosition(HeadConstants.eyesCenter);
+    }
+
+    public void setManualPosition(double manualNeck, double manualHead) {
+        setPosition = false;
+        double neck = HeadConstants.neckCenter + (-manualNeck * (manualNeck > 0 ? HeadConstants.neckRange : HeadConstants.neckRangeOther));
+        double head = HeadConstants.headCenter + (manualHead * HeadConstants.headRange);
         neckServo.setPosition(neck);
         headServo.setPosition(head);
 
-        eyesTargetHeading = angles.getYaw(AngleUnit.DEGREES);
+        eyesTarget = angles.getYaw(AngleUnit.DEGREES);
+        headTarget = angles.getRoll(AngleUnit.DEGREES);
+        neckTarget = angles.getPitch(AngleUnit.DEGREES);
+    }
+
+    public void idle() {
+        if (setPosition) return;
+        double neck = HeadConstants.neckCenter + (angles.getPitch(AngleUnit.DEGREES) / HeadConstants.neckConversion);
+        neck = Math.min(HeadConstants.neckCenter + HeadConstants.neckRange, Math.max(HeadConstants.neckCenter - HeadConstants.neckRangeOther, neck));
+        if (neckServo.getPosition() != neck) neckServo.setPosition(neck);
+    }
+
+    public void reset() {
+        eyesServo.setPosition(HeadConstants.eyesCenter);
+        neckServo.setPosition(HeadConstants.neckCenter);
+        headServo.setPosition(HeadConstants.headCenter);
     }
 
     public void holdPosition() {
-        double eyes = HeadConstants.eyesCenter + ((angles.getYaw(AngleUnit.DEGREES) - eyesTargetHeading) / HeadConstants.eyesConversion);
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.put("eyes", eyes);
-        FtcDashboard.getInstance().sendTelemetryPacket(packet);
-        double neck = HeadConstants.neckCenter + (angles.getPitch(AngleUnit.DEGREES) / HeadConstants.neckConversion);
-        eyesServo.setPosition(eyes);
+        double head = HeadConstants.headCenter + ((angles.getRoll(AngleUnit.DEGREES) - headTarget) / HeadConstants.headConversion);
+        headServo.setPosition(head);
+        if (Math.abs(head) > 1) {
+            double eyes = HeadConstants.eyesCenter + ((angles.getYaw(AngleUnit.DEGREES) - eyesTarget) / HeadConstants.eyesConversion);
+            eyesServo.setPosition(eyes);
+        }
+        double neck = HeadConstants.neckCenter + ((angles.getPitch(AngleUnit.DEGREES) - neckTarget) / HeadConstants.neckConversion);
+        neck = Math.min(HeadConstants.neckCenter + HeadConstants.neckRange, Math.max(HeadConstants.neckCenter - HeadConstants.neckRange, neck));
         neckServo.setPosition(neck);
     }
 }
