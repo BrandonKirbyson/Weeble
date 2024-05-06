@@ -1,3 +1,3 @@
-## Gyrobot
+## Meet Weeble
 
-This is an FTC off-season project making a 2 wheeled robot that can drive around and balance using the imu.
+Weeble is a 2 wheeled balancing robot with a lot of personality!
