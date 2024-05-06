@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.constants.BalanceConstants;
 import org.firstinspires.ftc.teamcode.util.constants.SpeedConstants;
 import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
 
-public class Gyrobot {
+public class Weeble {
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
 
@@ -35,7 +35,7 @@ public class Gyrobot {
 
     private YawPitchRollAngles angles;
 
-    public Gyrobot(HardwareMap hardwareMap) {
+    public Weeble(HardwareMap hardwareMap) {
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);

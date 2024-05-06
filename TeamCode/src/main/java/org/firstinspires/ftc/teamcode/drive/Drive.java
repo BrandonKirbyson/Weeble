@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.drive;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.util.Gyrobot;
+import org.firstinspires.ftc.teamcode.util.Weeble;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 
@@ -15,7 +15,7 @@ public class Drive extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Gyrobot robot = new Gyrobot(hardwareMap);
+        Weeble robot = new Weeble(hardwareMap);
 
         StatefulGamepad gamepad1Buttons = new StatefulGamepad(gamepad1);
 
