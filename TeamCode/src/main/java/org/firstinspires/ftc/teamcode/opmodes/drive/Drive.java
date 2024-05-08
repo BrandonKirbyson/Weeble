@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive;
+package org.firstinspires.ftc.teamcode.opmodes.drive;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -25,24 +25,24 @@ public class Drive extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
-            robot.update(telemetry);
+            robot.drive.update(telemetry);
 
             if (gamepad1Buttons.getButton(GamepadButton.LEFT_BUMPER)) {
-                robot.stopMotors();
-            } else if (robot.isBalanced()) {
+                robot.drive.stopMotors();
+            } else if (robot.drive.isBalanced()) {
                 if (gamepad1.left_stick_y != 0) {
-                    robot.drive(-gamepad1.left_stick_y);
+                    robot.drive.drive(-gamepad1.left_stick_y);
                 } else {
-                    robot.idle();
+                    robot.drive.idle();
                 }
                 if (gamepad1.left_stick_x != 0) {
-                    robot.turn(gamepad1.left_stick_x);
+                    robot.drive.turn(gamepad1.left_stick_x);
                 }
             } else {
                 if (gamepad1Buttons.getButton(GamepadButton.LEFT_STICK_BUTTON)) {
-                    robot.idle();
+                    robot.drive.idle();
                 } else {
-                    robot.stopMotors();
+                    robot.drive.stopMotors();
                 }
             }
 
@@ -60,10 +60,6 @@ public class Drive extends LinearOpMode {
                 headMoving = false;
             }
 
-//            if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
-//                robot.head.resetEyes();
-//            } else if (gamepad1.right_trigger != 0 || gamepad1.left_trigger != 0) {
-//            }
             robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
         }
     }

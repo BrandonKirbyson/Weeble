@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.drive.tests;
+package org.firstinspires.ftc.teamcode.opmodes.tests;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
-import org.firstinspires.ftc.teamcode.util.Head;
+import org.firstinspires.ftc.teamcode.util.head.Head;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 
