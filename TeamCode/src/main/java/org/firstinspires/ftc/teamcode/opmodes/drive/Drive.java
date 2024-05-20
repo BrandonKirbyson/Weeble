@@ -25,6 +25,9 @@ public class Drive extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
+            robot.update();
+
+
             robot.drive.update(telemetry);
 
             if (gamepad1Buttons.getButton(GamepadButton.LEFT_BUMPER)) {
@@ -45,22 +48,22 @@ public class Drive extends LinearOpMode {
                     robot.drive.stopMotors();
                 }
             }
+//
+//            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
+//                robot.head.holdPosition();
+//            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
+//                robot.head.reset();
+//            } else if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
+//                headMoving = true;
+//                robot.head.setManualPosition(gamepad1.right_stick_y, gamepad1.right_stick_x);
+//            } else if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
+//                robot.head.adjustSetPosition(gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.dpad_left, gamepad1.dpad_right);
+//            } else if (headMoving) {
+//                robot.head.reset();
+//                headMoving = false;
+//            }
 
-            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
-                robot.head.holdPosition();
-            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
-                robot.head.reset();
-            } else if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
-                headMoving = true;
-                robot.head.setManualPosition(gamepad1.right_stick_y, gamepad1.right_stick_x);
-            } else if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
-                robot.head.adjustSetPosition(gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.dpad_left, gamepad1.dpad_right);
-            } else if (headMoving) {
-                robot.head.reset();
-                headMoving = false;
-            }
-
-            robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
+//            robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
         }
     }
 }
