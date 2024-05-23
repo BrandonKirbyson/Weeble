@@ -4,14 +4,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
-import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 
 @Config
 @TeleOp(name = "Drive")
 public class Drive extends LinearOpMode {
-    public static boolean DEBUG = false;
-    public static boolean AnyTerrain = true;
+    public static boolean DEBUG = true;
 
     @Override
     public void runOpMode() {
@@ -21,34 +19,13 @@ public class Drive extends LinearOpMode {
 
         waitForStart();
 
-        boolean headMoving = false;
-
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
+
+            robot.drive.drive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
+
             robot.update();
 
-
-            robot.drive.update(telemetry);
-
-            if (gamepad1Buttons.getButton(GamepadButton.LEFT_BUMPER)) {
-                robot.drive.stopMotors();
-            } else if (robot.drive.isBalanced()) {
-                if (gamepad1.left_stick_y != 0) {
-                    robot.drive.drive(-gamepad1.left_stick_y);
-                } else {
-                    robot.drive.idle();
-                }
-                if (gamepad1.left_stick_x != 0) {
-                    robot.drive.turn(gamepad1.left_stick_x);
-                }
-            } else {
-                if (gamepad1Buttons.getButton(GamepadButton.LEFT_STICK_BUTTON)) {
-                    robot.drive.idle();
-                } else {
-                    robot.drive.stopMotors();
-                }
-            }
-//
 //            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
 //                robot.head.holdPosition();
 //            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
