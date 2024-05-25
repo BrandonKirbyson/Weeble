@@ -23,6 +23,13 @@ public class GyroDrive {
 
     private YawPitchRollAngles angles;
 
+    private double lastLeftTicks = 0;
+    private double lastRightTicks = 0;
+    private double leftTicks = 0;
+    private double rightTicks = 0;
+
+    private boolean lastBalanced = false;
+
     private double targetVel = 0;
     private double targetAngle = BalanceConstants.TargetAngle;
     private double rotSpeed = 0;
@@ -54,10 +61,16 @@ public class GyroDrive {
 
     public void update(YawPitchRollAngles angles) {
         this.angles = angles;
+        leftTicks = leftMotor.getCurrentPosition();
+        rightTicks = rightMotor.getCurrentPosition();
 
         if (!isBalanced()) {
             stopMotors();
+            lastBalanced = false;
             return;
+        } else if (!lastBalanced) {
+            targetAngle = BalanceConstants.TargetAngle;
+            lastBalanced = true;
         }
 
         double currentVel = getVel();
@@ -81,6 +94,9 @@ public class GyroDrive {
 
         setPower(outputPower + rotSpeed, outputPower - rotSpeed);
 
+        lastLeftTicks = leftTicks;
+        lastRightTicks = rightTicks;
+
         if (Drive.DEBUG) {
             TelemetryPacket packet = new TelemetryPacket();
             packet.put("Angle", currentAngle);
@@ -96,7 +112,9 @@ public class GyroDrive {
     }
 
     private double getVel() {
-        return (leftMotor.getPower() + rightMotor.getPower()) / 2;
+        double leftDelta = leftTicks - lastLeftTicks;
+        double rightDelta = rightTicks - lastRightTicks;
+        return (leftDelta + rightDelta) / 2 / BalanceConstants.TICKS_PER_DEGREE;
     }
 
     private void setPower(double leftPower, double rightPower) {
