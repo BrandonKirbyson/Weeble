@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
 
 @Config
 public class BalanceConstants {
-    public static double TICKS_PER_DEGREE = 537.7 / 360;
+    public static double TICKS_PER_REVOLUTE = 537.7 * 27 / 20;
 
     public static double TargetAngle = -5;
     public static double MaxAngle = 30;
@@ -14,7 +14,11 @@ public class BalanceConstants {
 
     public static double DriveVelMin = 0.15;
 
+    public static double VelErrorMargin = 0.1;
+
     public static PIDConstants AnglePID = new PIDConstants(0.06, 0.0002, 1, 0.4);
     public static PIDConstants DriveVelPID = new PIDConstants(0.3, 0, 0.8, 0.3);
     public static PIDConstants IdleVelPID = new PIDConstants(0.1, 0.000, 0.8, 0.3);
+
+    public static PIDConstants MotorPID = new PIDConstants(0.0012, 0.000, 0, 0.3);
 }
