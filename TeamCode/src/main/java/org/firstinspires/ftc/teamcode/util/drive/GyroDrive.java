@@ -28,6 +28,8 @@ public class GyroDrive {
     private double lastLeftTicks = 0;
     private double lastRightTicks = 0;
 
+    private int loopCounter = 0;
+
     private double leftSpeed = 0;
     private double rightSpeed = 0;
 
@@ -63,12 +65,23 @@ public class GyroDrive {
         rotSpeed = turnPower * SpeedConstants.ManualTurn;
     }
 
-    public void update(YawPitchRollAngles angles) {
-        this.angles = angles;
+    private void updateAngle() {
         double leftTicks = leftMotor.getCurrentPosition();
         double rightTicks = rightMotor.getCurrentPosition();
         leftSpeed = leftTicks - lastLeftTicks;
         rightSpeed = rightTicks - lastRightTicks;
+
+        double currentVel = getVel();
+        double velError = targetVel - currentVel;
+
+        targetAngle += velPID.update(velError);
+
+        lastLeftTicks = leftTicks;
+        lastRightTicks = rightTicks;
+    }
+
+    public void update(YawPitchRollAngles angles) {
+        this.angles = angles;
 
         if (!isBalanced()) {
             stopMotors();
@@ -80,49 +93,27 @@ public class GyroDrive {
             lastBalanced = true;
         }
 
-        double currentVel = getVel();
-        double currentAngle = angles.getPitch(AngleUnit.DEGREES);
-
-        double velError = targetVel - currentVel;
-//        PIDConstants oldConstants = velPID.getConstants();
-//        if (Math.abs(velError) > BalanceConstants.DriveVelMin) {
-//            velPID.setConstants(BalanceConstants.DriveVelPID);
-//        } else {
-//            velPID.setConstants(BalanceConstants.IdleVelPID);
-//        }
-//        if (!oldConstants.equals(velPID.getConstants())) {
-//            velPID.reset();
-//        }
-//        if ((velError < 0 && targetAngle - currentAngle < 0) || (velError > 0 && targetAngle - currentAngle > 0)) {
-//        if (lastDrivePower != 0 && targetVel == 0) {
-//            targetAngle = BalanceConstants.TargetAngle;
-//        }
-        double velOutput = velPID.update(velError);
-        if (Math.abs(velError) < BalanceConstants.VelErrorMargin) {
-            targetAngle = currentAngle;
-        } else if (Math.abs(targetAngle - currentAngle) < BalanceConstants.AngleMargin) {
-            targetAngle -= velOutput;
+        if (loopCounter % BalanceConstants.LoopSpeedRatio == 0) {
+            updateAngle();
         }
+        
+        loopCounter++;
 
-//        targetAngle += currentAngle + velPID.update(velError);
-//        targetAngle = velPID.update(velError);
-
+        double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 
         double angleError = targetAngle - currentAngle;
         double outputPower = anglePID.update(angleError);
 
         setPower(outputPower + rotSpeed, outputPower - rotSpeed);
 
-        lastLeftTicks = leftTicks;
-        lastRightTicks = rightTicks;
 
         if (Drive.DEBUG) {
             TelemetryPacket packet = new TelemetryPacket();
             packet.put("Angle", currentAngle);
             packet.put("AngleError", currentAngle);
             packet.put("AngleTarget", targetAngle);
-            packet.put("Velocity", currentVel);
-            packet.put("VelocityError", velError);
+//            packet.put("Velocity", currentVel);
+//            packet.put("VelocityError", velError);
             packet.put("VelocityTarget", targetVel);
             packet.put("Turn", rotSpeed);
             packet.put("Output", outputPower);
