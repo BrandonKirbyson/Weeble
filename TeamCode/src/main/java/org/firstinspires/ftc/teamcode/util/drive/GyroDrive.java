@@ -15,6 +15,7 @@ public class GyroDrive {
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
 
+    private DriveState lastState = DriveState.STOPPED;
     private DriveState state = DriveState.STOPPED;
 
     private final PIDController anglePID = new PIDController(BalanceConstants.AnglePID);
@@ -96,7 +97,7 @@ public class GyroDrive {
         if (loopCounter % BalanceConstants.LoopSpeedRatio == 0) {
             updateAngle();
         }
-        
+
         loopCounter++;
 
         double currentAngle = angles.getPitch(AngleUnit.DEGREES);
@@ -121,6 +122,23 @@ public class GyroDrive {
         }
     }
 
+    private void updateState() {
+        lastState = state;
+        if (isBalanced()) {
+            if (targetVel == 0) {
+                if (getVel() < BalanceConstants.DriveVelMin) {
+                    state = DriveState.IDLE;
+                } else {
+                    state = DriveState.DRIVING;
+                }
+            } else {
+                state = DriveState.DRIVING;
+            }
+        } else {
+            state = DriveState.STOPPED;
+        }
+    }
+
     private double getVel() {
         return (leftSpeed + rightSpeed) / 2;
     }
@@ -142,6 +160,10 @@ public class GyroDrive {
     public void stopMotors() {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+    }
+
+    public DriveState getLastState() {
+        return lastState;
     }
 
     public DriveState getState() {
