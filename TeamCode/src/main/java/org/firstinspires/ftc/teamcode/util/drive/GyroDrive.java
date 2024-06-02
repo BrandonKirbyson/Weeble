@@ -66,7 +66,7 @@ public class GyroDrive {
         rotSpeed = turnPower * SpeedConstants.ManualTurn;
     }
 
-    private void updateAngle() {
+    private void updateAngle(TelemetryPacket packet) {
         double leftTicks = leftMotor.getCurrentPosition();
         double rightTicks = rightMotor.getCurrentPosition();
         leftSpeed = leftTicks - lastLeftTicks;
@@ -77,11 +77,16 @@ public class GyroDrive {
 
         targetAngle += velPID.update(velError);
 
+        packet.put("Velocity", currentVel);
+        packet.put("VelocityError", velError);
+        packet.put("VelocityTarget", targetVel);
+
         lastLeftTicks = leftTicks;
         lastRightTicks = rightTicks;
     }
 
     public void update(YawPitchRollAngles angles) {
+        TelemetryPacket packet = new TelemetryPacket();
         this.angles = angles;
 
         if (!isBalanced()) {
@@ -95,7 +100,7 @@ public class GyroDrive {
         }
 
         if (loopCounter % BalanceConstants.LoopSpeedRatio == 0) {
-            updateAngle();
+            updateAngle(packet);
         }
 
         loopCounter++;
@@ -107,15 +112,12 @@ public class GyroDrive {
 
         setPower(outputPower + rotSpeed, outputPower - rotSpeed);
 
+        updateState();
 
         if (Drive.DEBUG) {
-            TelemetryPacket packet = new TelemetryPacket();
             packet.put("Angle", currentAngle);
             packet.put("AngleError", currentAngle);
             packet.put("AngleTarget", targetAngle);
-//            packet.put("Velocity", currentVel);
-//            packet.put("VelocityError", velError);
-            packet.put("VelocityTarget", targetVel);
             packet.put("Turn", rotSpeed);
             packet.put("Output", outputPower);
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
