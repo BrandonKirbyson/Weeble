@@ -146,13 +146,18 @@ public class GyroDrive {
     }
 
     private void setPower(double leftPower, double rightPower) {
-        double leftError = leftPower * BalanceConstants.TICKS_PER_REVOLUTE - leftSpeed;
-        double rightError = rightPower * BalanceConstants.TICKS_PER_REVOLUTE - rightSpeed;
-        double leftOutput = leftMotorPID.update(leftError);
-        double rightOutput = rightMotorPID.update(rightError);
-
-        leftMotor.setPower(leftOutput);
-        rightMotor.setPower(rightOutput);
+        if (BalanceConstants.MotorPIDEnabled) {
+            double leftError = leftPower * BalanceConstants.TICKS_PER_REVOLUTE - leftSpeed;
+            double rightError = rightPower * BalanceConstants.TICKS_PER_REVOLUTE - rightSpeed;
+            double leftOutput = leftMotorPID.update(leftError);
+            double rightOutput = rightMotorPID.update(rightError);
+//
+            leftMotor.setPower(leftOutput);
+            rightMotor.setPower(rightOutput);
+        } else {
+            leftMotor.setPower(leftPower);
+            rightMotor.setPower(rightPower);
+        }
     }
 
     public boolean isBalanced() {
