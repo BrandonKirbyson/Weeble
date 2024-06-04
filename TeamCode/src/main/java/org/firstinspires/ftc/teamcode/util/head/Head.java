@@ -12,12 +12,6 @@ public class Head {
 
     private YawPitchRollAngles angles;
 
-    private double eyesTarget = 0;
-    private double headTarget = 0;
-    private double neckTarget = 0;
-
-    private boolean setPosition = false;
-
     public Head(HardwareMap hardwareMap) {
         neckServo = hardwareMap.get(Servo.class, "neck");
         headServo = hardwareMap.get(Servo.class, "head");
@@ -41,6 +35,9 @@ public class Head {
     }
 
     public void worldToRelative(HeadPosition position) {
+        position.z = position.z - angles.getYaw(AngleUnit.DEGREES);
+        position.y = position.y - angles.getPitch(AngleUnit.DEGREES);
+        position.eyes = position.eyes - angles.getYaw(AngleUnit.DEGREES);
     }
 
 }
