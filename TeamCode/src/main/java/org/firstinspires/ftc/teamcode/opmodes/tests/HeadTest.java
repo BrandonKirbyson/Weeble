@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.teamcode.util.head.Head;
+import org.firstinspires.ftc.teamcode.util.head.HeadPresets;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 
-@TeleOp(name = "EyesTest", group = "tests")
-public class EyesTest extends LinearOpMode {
+@TeleOp(name = "HeadTest", group = "tests")
+public class HeadTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         IMU imu = hardwareMap.get(IMU.class, "imu");
@@ -31,10 +32,16 @@ public class EyesTest extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
 
-            if (!gamepad1Buttons.getButton(GamepadButton.Y)) {
-//                head.setManualPosition(gamepad1.right_stick_y, gamepad1.right_stick_x);
-            } else {
-//                head.holdPosition();
+            head.updateAngles(imu.getRobotYawPitchRollAngles());
+
+            if (gamepad1.left_stick_y != 0 && gamepad2.left_stick_x != 0) {
+                head.manualControl(gamepad1.left_stick_y, gamepad1.left_stick_x);
+            }
+
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
+                head.runAnimation(HeadPresets.NodYes);
+            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
+                head.runAnimation(HeadPresets.ShakeNo);
             }
         }
     }

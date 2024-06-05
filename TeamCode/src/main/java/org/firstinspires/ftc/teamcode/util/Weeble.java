@@ -25,6 +25,8 @@ public class Weeble {
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
         drive.update(angles);
 
+//        head.update();
+
 //        if (drive.getLastState() == DriveState.DRIVING && drive.getState() == DriveState.STOPPED) {
 //            arms.setArmPosition(ArmPosition.Forward);
 //        } else if (drive.getLastState() == DriveState.STOPPED && drive.getState() == DriveState.DRIVING) {
