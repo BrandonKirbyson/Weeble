@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.drive.GyroDrive;
 
 public class Weeble {
+    //    public final Vision vision;
     public final GyroDrive drive;
 //    public final Arms arms;
 //    public final Head head;
@@ -13,6 +14,7 @@ public class Weeble {
     private final IMU imu;
 
     public Weeble(HardwareMap hardwareMap) {
+//        vision = new Vision(hardwareMap);
         drive = new GyroDrive(hardwareMap);
 //        arms = new Arms(hardwareMap);
 //        head = new Head(hardwareMap);
@@ -24,6 +26,8 @@ public class Weeble {
     public void update() {
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
         drive.update(angles);
+//        vision.update();
+
 
 //        head.update();
 
