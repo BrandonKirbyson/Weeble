@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.util.vision.sensors;
 
+import com.acmerobotics.dashboard.canvas.Canvas;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
+import org.firstinspires.ftc.teamcode.util.lib.Point;
 import org.firstinspires.ftc.teamcode.util.lib.Pose;
 
 public class SensorManager {
@@ -30,7 +33,17 @@ public class SensorManager {
 
     public void update() {
         readSensors();
-        
+
         mapping.processSensors(frontDist, leftDist, rightDist, new Pose(0, 0, 0));
+
+        overlayMapping();
+    }
+
+    private void overlayMapping() {
+        Canvas canvas = FtcDashboardManager.getPacket().field();
+
+        for (Point point : mapping.getPoints()) {
+            canvas.strokeCircle(point.x, point.y, 2);
+        }
     }
 }
