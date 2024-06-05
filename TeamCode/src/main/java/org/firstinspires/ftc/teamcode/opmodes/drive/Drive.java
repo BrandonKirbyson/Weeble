@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
+import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 
 @Config
@@ -41,6 +42,7 @@ public class Drive extends LinearOpMode {
 //            }
 
 //            robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
+            FtcDashboardManager.update();
         }
     }
 }
