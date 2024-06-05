@@ -5,8 +5,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
-import org.firstinspires.ftc.teamcode.util.lib.Point;
-import org.firstinspires.ftc.teamcode.util.lib.Pose;
+import org.firstinspires.ftc.teamcode.util.drive.Pose;
 
 public class SensorManager {
     private final DistanceSensor frontSensor;
@@ -17,7 +16,7 @@ public class SensorManager {
     private double leftDist;
     private double rightDist;
 
-    private final MappingManager mapping = new MappingManager();
+    private final PointCloudMappingManager mapping = new PointCloudMappingManager();
 
     public SensorManager(HardwareMap hardwareMap) {
         frontSensor = hardwareMap.get(DistanceSensor.class, "sensor0");
@@ -42,7 +41,7 @@ public class SensorManager {
     private void overlayMapping() {
         Canvas canvas = FtcDashboardManager.getPacket().field();
 
-        for (Point point : mapping.getPoints()) {
+        for (MapPoint point : mapping.getPoints()) {
             canvas.strokeCircle(point.x, point.y, 2);
         }
     }
