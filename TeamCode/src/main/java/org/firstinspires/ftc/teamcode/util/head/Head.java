@@ -76,7 +76,8 @@ public class Head {
             animationIndex++;
             animationTimer.reset();
         } else {
-            double progress = animationTimer.milliseconds() / key.time;
+            double progress = animationTimer.milliseconds() / (double) key.time;
+            progress = HeadAnimationKeyframe.getTransitionProgress(progress, key.transitionType);
             HeadAnimationKeyframe lastKey = currentAnimation.get(animationIndex - 1);
             HeadPosition position = new HeadPosition(
                     key.position.y + ((key.position.y - lastKey.position.y) * progress),
