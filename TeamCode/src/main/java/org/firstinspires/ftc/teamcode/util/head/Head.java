@@ -35,26 +35,31 @@ public class Head {
         }
     }
 
-    public void manualControl(double y, double z) {
-        HeadPosition position = new HeadPosition(y, z);
+    public void reset() {
+        HeadOrientation position = new HeadOrientation(0, 0, 0);
         setHeadPosition(position);
     }
 
-    public void setHeadPosition(HeadPosition position) {
-        neckServo.setPosition(position.z);
-        headServo.setPosition(position.y);
+    public void manualControl(double x, double y) {
+        HeadOrientation position = new HeadOrientation(x * 90, y * 90);
+        setHeadPosition(position);
+    }
+
+    public void setHeadPosition(HeadOrientation position) {
+        neckServo.setPosition(position.x / HeadConstants.xConversion + HeadConstants.xCenter);
+        headServo.setPosition(position.y / HeadConstants.yConversion + HeadConstants.yCenter);
         eyesServo.setPosition(position.eyes);
     }
 
-    private void relativeToWorld(HeadPosition position) {
-        position.z = HeadConstants.zCenter + ((angles.getYaw(AngleUnit.DEGREES) - position.z) / HeadConstants.zConversion);
-        position.y = HeadConstants.yCenter + ((angles.getYaw(AngleUnit.DEGREES) - position.y) / HeadConstants.yConversion);
-        position.eyes = angles.getYaw(AngleUnit.DEGREES) + position.eyes;
+    private void relativeToWorld(HeadOrientation position) {
+        position.x = position.x - angles.getPitch(AngleUnit.DEGREES);
+        position.y = position.y - angles.getRoll(AngleUnit.DEGREES);
+        position.eyes = position.eyes + angles.getYaw(AngleUnit.DEGREES);
     }
 
-    public void worldToRelative(HeadPosition position) {
-        position.z = angles.getYaw(AngleUnit.DEGREES) - ((position.z - HeadConstants.zCenter) * HeadConstants.zConversion);
-        position.y = angles.getYaw(AngleUnit.DEGREES) - ((position.y - HeadConstants.yCenter) * HeadConstants.yConversion);
+    public void worldToRelative(HeadOrientation position) {
+        position.x = position.x + angles.getPitch(AngleUnit.DEGREES);
+        position.y = position.y + angles.getRoll(AngleUnit.DEGREES);
         position.eyes = position.eyes - angles.getYaw(AngleUnit.DEGREES);
     }
 
@@ -70,21 +75,25 @@ public class Head {
             return;
         }
 
+        if (animationIndex >= currentAnimation.size()) {
+            currentAnimation = null;
+            return;
+        }
+
         HeadAnimationKeyframe key = currentAnimation.get(animationIndex);
-        if (animationTimer.milliseconds() >= key.time) {
+        if (animationTimer.seconds() >= key.time) {
             setHeadPosition(key.position);
             animationIndex++;
             animationTimer.reset();
         } else {
-            double progress = animationTimer.milliseconds() / (double) key.time;
+            double progress = animationTimer.seconds() / (double) key.time;
             progress = HeadAnimationKeyframe.getTransitionProgress(progress, key.transitionType);
             HeadAnimationKeyframe lastKey = currentAnimation.get(animationIndex - 1);
-            HeadPosition position = new HeadPosition(
+            HeadOrientation position = new HeadOrientation(
                     key.position.y + ((key.position.y - lastKey.position.y) * progress),
-                    key.position.z + ((key.position.z - lastKey.position.z) * progress),
+                    key.position.x + ((key.position.x - lastKey.position.x) * progress),
                     key.position.eyes + ((key.position.eyes - lastKey.position.eyes) * progress)
             );
-            worldToRelative(position);
             setHeadPosition(position);
         }
     }

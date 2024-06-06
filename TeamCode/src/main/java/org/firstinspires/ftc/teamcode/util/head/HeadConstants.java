@@ -4,10 +4,10 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class HeadConstants {
-    public static double zCenter = 0.5;
-    public static double zMin = 0.0;
-    public static double zMax = 1.0;
-    public static double zConversion = 180;
+    public static double xCenter = 0.5;
+    public static double xMin = 0.0;
+    public static double xMax = 1.0;
+    public static double xConversion = 180;
 
     public static double yCenter = 0.5;
     public static double yMin = 0.0;

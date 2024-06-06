@@ -8,11 +8,11 @@ public class HeadAnimationKeyframe {
         EASE_IN_OUT
     }
 
-    public final HeadPosition position;
+    public final HeadOrientation position;
     public final int time;
     public final TransitionType transitionType;
 
-    public HeadAnimationKeyframe(HeadPosition position, int time, TransitionType transitionType) {
+    public HeadAnimationKeyframe(HeadOrientation position, int time, TransitionType transitionType) {
         this.position = position;
         this.time = time;
         this.transitionType = transitionType;

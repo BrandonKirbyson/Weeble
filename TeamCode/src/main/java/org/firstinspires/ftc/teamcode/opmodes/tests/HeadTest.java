@@ -34,11 +34,13 @@ public class HeadTest extends LinearOpMode {
 
             head.updateAngles(imu.getRobotYawPitchRollAngles());
 
-            if (gamepad1.left_stick_y != 0 && gamepad2.left_stick_x != 0) {
+            if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
                 head.manualControl(gamepad1.left_stick_y, gamepad1.left_stick_x);
             }
 
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
+                head.reset();
+            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
                 head.runAnimation(HeadPresets.NodYes);
             } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
                 head.runAnimation(HeadPresets.ShakeNo);
