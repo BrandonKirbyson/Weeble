@@ -36,8 +36,9 @@ public class GyroDrive {
 
     private int loopCounter = 0;
 
-    private double leftSpeed = 0;
-    private double rightSpeed = 0;
+    private double leftVel = 0;
+    private double rightVel = 0;
+    private double vel = 0;
 
     private boolean lastBalanced = false;
 
@@ -78,17 +79,21 @@ public class GyroDrive {
         double time = System.currentTimeMillis();
         double leftTicks = leftMotor.getCurrentPosition();
         double rightTicks = rightMotor.getCurrentPosition();
-        leftSpeed = leftTicks - lastLeftTicks;
-        rightSpeed = rightTicks - lastRightTicks;
 
         double deltaTime = time - lastTime;
 
-        double currentVel = getVel(deltaTime);
-        double velError = targetVel - currentVel;
+        double ticksToVel = BalanceConstants.TICKS_PER_REVOLUTE / deltaTime * 1000;
+
+        leftVel = (leftTicks - lastLeftTicks) * ticksToVel;
+        rightVel = (rightTicks - lastRightTicks) * ticksToVel;
+
+        vel = (leftVel + rightVel) / 2;
+
+        double velError = targetVel - vel;
 
         targetAngle += velPID.update(velError);
 
-        FtcDashboardManager.addData("Velocity", currentVel);
+        FtcDashboardManager.addData("Velocity", vel);
         FtcDashboardManager.addData("VelocityError", velError);
         FtcDashboardManager.addData("VelocityTarget", targetVel);
 
@@ -96,8 +101,8 @@ public class GyroDrive {
         lastRightTicks = rightTicks;
 
 
-        pose.x += Math.cos(angles.getYaw(AngleUnit.RADIANS)) * currentVel;
-        pose.y += Math.sin(angles.getYaw(AngleUnit.RADIANS)) * currentVel;
+        pose.x += Math.cos(angles.getYaw(AngleUnit.RADIANS)) * vel;
+        pose.y += Math.sin(angles.getYaw(AngleUnit.RADIANS)) * vel;
         pose.heading = angles.getYaw(AngleUnit.DEGREES);
 
         lastTime = time;
@@ -146,7 +151,7 @@ public class GyroDrive {
         lastState = state;
         if (isBalanced()) {
             if (targetVel == 0) {
-                if (getVel() < BalanceConstants.DriveVelMin) {
+                if (vel < BalanceConstants.DriveVelMin) {
                     state = DriveState.IDLE;
                 } else {
                     state = DriveState.DRIVING;
@@ -159,14 +164,10 @@ public class GyroDrive {
         }
     }
 
-    private double getVel(double dt) {
-        return (leftSpeed + rightSpeed) / 2 / BalanceConstants.TICKS_PER_REVOLUTE / dt * 1000;
-    }
-
     private void setPower(double leftPower, double rightPower) {
         if (BalanceConstants.MotorPIDEnabled) {
-            double leftError = leftPower * BalanceConstants.TICKS_PER_REVOLUTE - leftSpeed;
-            double rightError = rightPower * BalanceConstants.TICKS_PER_REVOLUTE - rightSpeed;
+            double leftError = leftPower * BalanceConstants.TICKS_PER_REVOLUTE - leftVel;
+            double rightError = rightPower * BalanceConstants.TICKS_PER_REVOLUTE - rightVel;
             double leftOutput = leftMotorPID.update(leftError);
             double rightOutput = rightMotorPID.update(rightError);
 //
