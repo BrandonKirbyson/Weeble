@@ -34,7 +34,7 @@ public class BlobDetectionProcessor implements VisionProcessor {
         Mat hierarchy = new Mat();
         Imgproc.findContours(colMask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        MatOfPoint largestContour = findLargestContour(contours);
+        MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
 
         if (largestContour != null) {
             Imgproc.drawContours(frame, contours, contours.indexOf(largestContour), new Scalar(255, 0, 0), 2);
@@ -68,21 +68,6 @@ public class BlobDetectionProcessor implements VisionProcessor {
         Imgproc.morphologyEx(colMask, colMask, Imgproc.MORPH_CLOSE, kernel);
 
         return colMask;
-    }
-
-    private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
-        double maxArea = 0;
-        MatOfPoint largestContour = null;
-
-        for (MatOfPoint contour : contours) {
-            double area = Imgproc.contourArea(contour);
-            if (area > maxArea) {
-                maxArea = area;
-                largestContour = contour;
-            }
-        }
-
-        return largestContour;
     }
 
     @Override

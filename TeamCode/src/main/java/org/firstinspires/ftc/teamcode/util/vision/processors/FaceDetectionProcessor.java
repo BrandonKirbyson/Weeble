@@ -156,6 +156,13 @@ public class FaceDetectionProcessor implements VisionProcessor {
 
 //
 
+        MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
+        Moments moments = Imgproc.moments(largestContour);
+        double cX = moments.get_m10() / moments.get_m00();
+        double cY = moments.get_m01() / moments.get_m00();
+        center.x = cX - (double) frame.width() / 2;
+        center.y = cY - (double) frame.height() / 2;
+
         return null;
     }
 
