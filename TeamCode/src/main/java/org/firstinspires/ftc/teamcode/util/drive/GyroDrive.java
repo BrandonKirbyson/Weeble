@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.opmodes.drive.Drive;
+import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 
 public class GyroDrive {
     private final DcMotor leftMotor;
@@ -26,6 +27,10 @@ public class GyroDrive {
 
     private YawPitchRollAngles angles;
 
+    private final Pose pose = new Pose();
+
+    private double lastTime = 0;
+
     private double lastLeftTicks = 0;
     private double lastRightTicks = 0;
 
@@ -35,7 +40,6 @@ public class GyroDrive {
     private double rightSpeed = 0;
 
     private boolean lastBalanced = false;
-    private double lastDrivePower;
 
     private double targetVel = 0;
     private double targetAngle = BalanceConstants.TargetAngle;
@@ -61,28 +65,42 @@ public class GyroDrive {
         );
     }
 
+    public Pose getPose() {
+        return pose;
+    }
+
     public void drive(double drivePower, double turnPower) {
         targetVel = drivePower * SpeedConstants.ManualDrive;
         rotSpeed = turnPower * SpeedConstants.ManualTurn;
     }
 
-    private void updateAngle(TelemetryPacket packet) {
+    private void updateAngle() {
+        double time = System.currentTimeMillis();
         double leftTicks = leftMotor.getCurrentPosition();
         double rightTicks = rightMotor.getCurrentPosition();
         leftSpeed = leftTicks - lastLeftTicks;
         rightSpeed = rightTicks - lastRightTicks;
 
-        double currentVel = getVel();
+        double deltaTime = time - lastTime;
+
+        double currentVel = getVel(deltaTime);
         double velError = targetVel - currentVel;
 
         targetAngle += velPID.update(velError);
 
-        packet.put("Velocity", currentVel);
-        packet.put("VelocityError", velError);
-        packet.put("VelocityTarget", targetVel);
+        FtcDashboardManager.addData("Velocity", currentVel);
+        FtcDashboardManager.addData("VelocityError", velError);
+        FtcDashboardManager.addData("VelocityTarget", targetVel);
 
         lastLeftTicks = leftTicks;
         lastRightTicks = rightTicks;
+
+
+        pose.x += Math.cos(angles.getYaw(AngleUnit.RADIANS)) * currentVel;
+        pose.y += Math.sin(angles.getYaw(AngleUnit.RADIANS)) * currentVel;
+        pose.heading = angles.getYaw(AngleUnit.DEGREES);
+
+        lastTime = time;
     }
 
     public void update(YawPitchRollAngles angles) {
@@ -100,7 +118,7 @@ public class GyroDrive {
         }
 
         if (loopCounter % BalanceConstants.LoopSpeedRatio == 0) {
-            updateAngle(packet);
+            updateAngle();
         }
 
         loopCounter++;
@@ -115,11 +133,11 @@ public class GyroDrive {
         updateState();
 
         if (Drive.DEBUG) {
-            packet.put("Angle", currentAngle);
-            packet.put("AngleError", currentAngle);
-            packet.put("AngleTarget", targetAngle);
-            packet.put("Turn", rotSpeed);
-            packet.put("Output", outputPower);
+            FtcDashboardManager.addData("Angle", currentAngle);
+            FtcDashboardManager.addData("AngleError", currentAngle);
+            FtcDashboardManager.addData("AngleTarget", targetAngle);
+            FtcDashboardManager.addData("Turn", rotSpeed);
+            FtcDashboardManager.addData("Output", outputPower);
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
     }
@@ -141,8 +159,8 @@ public class GyroDrive {
         }
     }
 
-    private double getVel() {
-        return (leftSpeed + rightSpeed) / 2;
+    private double getVel(double dt) {
+        return (leftSpeed + rightSpeed) / 2 / BalanceConstants.TICKS_PER_REVOLUTE / dt * 1000;
     }
 
     private void setPower(double leftPower, double rightPower) {
