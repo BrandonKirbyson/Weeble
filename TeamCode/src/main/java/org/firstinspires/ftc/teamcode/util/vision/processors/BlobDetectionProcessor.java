@@ -17,6 +17,10 @@ public class BlobDetectionProcessor implements VisionProcessor {
 
     private Point center = new Point();
 
+    public Point getCenter() {
+        return center;
+    }
+
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
         // Not useful in this case, but we do need to implement it either way
