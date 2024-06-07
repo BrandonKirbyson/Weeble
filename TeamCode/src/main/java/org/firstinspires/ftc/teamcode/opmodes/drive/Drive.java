@@ -13,8 +13,6 @@ import org.firstinspires.ftc.teamcode.util.vision.VisionMode;
 @Config
 @TeleOp(name = "Drive")
 public class Drive extends LinearOpMode {
-    public static boolean DEBUG = true;
-
     @Override
     public void runOpMode() {
         Weeble robot = new Weeble(hardwareMap);

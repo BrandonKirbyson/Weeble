@@ -10,7 +10,6 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.opencv.core.Point;
 
 public class Vision {
-    private final WebcamName webcam;
     private final SensorManager sensorMapping;
 
     private final VisionPortal visionPortal;
@@ -21,7 +20,7 @@ public class Vision {
     private final FaceDetectionProcessor faceDetectionProcessor;
 
     public Vision(HardwareMap hardwareMap) {
-        this.webcam = hardwareMap.get(WebcamName.class, "webcam");
+        WebcamName webcam = hardwareMap.get(WebcamName.class, "webcam");
         sensorMapping = new SensorManager(hardwareMap);
 
         blobDetectionProcessor = new BlobDetectionProcessor();
