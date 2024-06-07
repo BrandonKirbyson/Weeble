@@ -17,6 +17,8 @@ public class Head {
 
     private YawPitchRollAngles angles;
 
+    private HeadOrientation currentPosition = new HeadOrientation(0, 0, 0);
+
     private ArrayList<HeadAnimationKeyframe> currentAnimation = null;
     private final ElapsedTime animationTimer = new ElapsedTime();
     private int animationIndex = 0;
@@ -35,7 +37,19 @@ public class Head {
         this.angles = angles;
     }
 
+    private void updateCurrentHeadOrientation() {
+        currentPosition = new HeadOrientation(
+                headServo.getPosition(),
+                neckServo.getPosition(),
+                eyesServo.getPosition()
+        );
+
+        servoPositionToOrientation(currentPosition);
+    }
+
     public void update(Point trackingTarget) {
+        updateCurrentHeadOrientation();
+
         if (currentAnimation != null) {
             updateAnimation();
         } else if (tracking && trackingTarget != null) {
@@ -67,10 +81,22 @@ public class Head {
         position.eyes = position.eyes + angles.getYaw(AngleUnit.DEGREES);
     }
 
-    public void worldToRelative(HeadOrientation position) {
+    private void worldToRelative(HeadOrientation position) {
         position.x = position.x + angles.getPitch(AngleUnit.DEGREES);
         position.y = position.y + angles.getRoll(AngleUnit.DEGREES);
         position.eyes = position.eyes - angles.getYaw(AngleUnit.DEGREES);
+    }
+
+    private void servoPositionToOrientation(HeadOrientation position) {
+        position.x = (neckServo.getPosition() - HeadConstants.xCenter) * HeadConstants.xConversion;
+        position.y = (headServo.getPosition() - HeadConstants.yCenter) * HeadConstants.yConversion;
+        position.eyes = (eyesServo.getPosition() - HeadConstants.eyesCenter) * HeadConstants.eyesConversion;
+    }
+
+    private void orientationToServoPosition(HeadOrientation position) {
+        neckServo.setPosition(position.x / HeadConstants.xConversion + HeadConstants.xCenter);
+        headServo.setPosition(position.y / HeadConstants.yConversion + HeadConstants.yCenter);
+        eyesServo.setPosition(position.eyes / HeadConstants.eyesConversion + HeadConstants.eyesCenter);
     }
 
     public void runAnimation(ArrayList<HeadAnimationKeyframe> animation) {
@@ -115,8 +141,8 @@ public class Head {
 
     public void trackObject(Point target) {
         // Flipped x and y because it is 2d point to 3d rotational axis
-        double xError = target.y - HeadConstants.xCenter;
-        double yError = target.x - HeadConstants.yCenter;
+        double xError = target.y - currentPosition.x;
+        double yError = target.x - currentPosition.y;
 
         double xOutput = xTrackingPID.update(xError);
         double yOutput = yTrackingPID.update(yError);
