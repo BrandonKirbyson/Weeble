@@ -26,7 +26,9 @@ public class FaceDetectionProcessor implements VisionProcessor {
     public double minBlobSize = 5;
     public double minEyes = 2;
 
-    private Point center = new Point();
+    private Point center = null;
+
+    private boolean findFace = false;
 
     public Point getCenter() {
         return center;
@@ -35,6 +37,11 @@ public class FaceDetectionProcessor implements VisionProcessor {
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
 
+    }
+
+    public void findFace() {
+        center = null;
+        findFace = true;
     }
 
     @Override
@@ -156,12 +163,16 @@ public class FaceDetectionProcessor implements VisionProcessor {
 
 //
 
-        MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
-        Moments moments = Imgproc.moments(largestContour);
-        double cX = moments.get_m10() / moments.get_m00();
-        double cY = moments.get_m01() / moments.get_m00();
-        center.x = cX - (double) frame.width() / 2;
-        center.y = cY - (double) frame.height() / 2;
+        if (findFace && center == null) {
+            MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
+            Moments moments = Imgproc.moments(largestContour);
+            double cX = moments.get_m10() / moments.get_m00();
+            double cY = moments.get_m01() / moments.get_m00();
+            center.x = cX - (double) frame.width() / 2;
+            center.y = cY - (double) frame.height() / 2;
+        } else {
+            center = null;
+        }
 
         return null;
     }
