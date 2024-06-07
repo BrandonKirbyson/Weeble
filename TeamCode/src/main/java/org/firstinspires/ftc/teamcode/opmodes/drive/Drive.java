@@ -21,7 +21,13 @@ public class Drive extends LinearOpMode {
 
         waitForStart();
 
+        double lastTime = System.currentTimeMillis();
+
         while (opModeIsActive() && !isStopRequested()) {
+            double currentTime = System.currentTimeMillis();
+            FtcDashboardManager.addData("Loop Time", currentTime - lastTime);
+            lastTime = currentTime;
+
             gamepad1Buttons.update();
 
             robot.drive.drive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
