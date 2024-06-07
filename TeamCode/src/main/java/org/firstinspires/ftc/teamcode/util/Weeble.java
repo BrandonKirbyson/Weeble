@@ -4,20 +4,22 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.drive.GyroDrive;
+import org.firstinspires.ftc.teamcode.util.head.Head;
+import org.firstinspires.ftc.teamcode.util.vision.Vision;
 
 public class Weeble {
-    //    public final Vision vision;
+    public final Vision vision;
     public final GyroDrive drive;
-//    public final Arms arms;
-//    public final Head head;
+    //    public final Arms arms;
+    public final Head head;
 
     private final IMU imu;
 
     public Weeble(HardwareMap hardwareMap) {
-//        vision = new Vision(hardwareMap);
+        vision = new Vision(hardwareMap);
         drive = new GyroDrive(hardwareMap);
 //        arms = new Arms(hardwareMap);
-//        head = new Head(hardwareMap);
+        head = new Head(hardwareMap);
 
         imu = hardwareMap.get(IMU.class, "imu");
         drive.initIMU(imu);
@@ -26,10 +28,9 @@ public class Weeble {
     public void update() {
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
         drive.update(angles);
-//        vision.update();
+        vision.update();
 
-
-//        head.update();
+        head.update(vision.getTrackingCenter());
 
 //        if (drive.getLastState() == DriveState.DRIVING && drive.getState() == DriveState.STOPPED) {
 //            arms.setArmPosition(ArmPosition.Forward);

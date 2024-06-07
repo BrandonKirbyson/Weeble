@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.util.drive.PIDController;
+import org.opencv.core.Point;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,10 @@ public class Head {
     private final ElapsedTime animationTimer = new ElapsedTime();
     private int animationIndex = 0;
 
+    private final PIDController xTrackingPID = new PIDController(HeadConstants.xTrackingPID);
+    private final PIDController yTrackingPID = new PIDController(HeadConstants.yTrackingPID);
+    private boolean tracking = false;
+
     public Head(HardwareMap hardwareMap) {
         neckServo = hardwareMap.get(Servo.class, "neck");
         headServo = hardwareMap.get(Servo.class, "head");
@@ -29,20 +35,24 @@ public class Head {
         this.angles = angles;
     }
 
-    public void update() {
+    public void update(Point trackingTarget) {
         if (currentAnimation != null) {
             updateAnimation();
+        } else if (tracking && trackingTarget != null) {
+            trackObject(trackingTarget);
         }
     }
 
     public void reset() {
         HeadOrientation position = new HeadOrientation(0, 0, 0);
         setHeadPosition(position);
+        tracking = false;
     }
 
     public void manualControl(double x, double y) {
         HeadOrientation position = new HeadOrientation(x * 90, y * 90);
         setHeadPosition(position);
+        tracking = false;
     }
 
     public void setHeadPosition(HeadOrientation position) {
@@ -67,6 +77,7 @@ public class Head {
         currentAnimation = animation;
         animationIndex = 0;
         animationTimer.reset();
+        tracking = false;
     }
 
     private void updateAnimation() {
@@ -96,5 +107,21 @@ public class Head {
             );
             setHeadPosition(position);
         }
+    }
+
+    public void setTracking(boolean tracking) {
+        this.tracking = tracking;
+    }
+
+    public void trackObject(Point target) {
+        // Flipped x and y because it is 2d point to 3d rotational axis
+        double xError = target.y - HeadConstants.xCenter;
+        double yError = target.x - HeadConstants.yCenter;
+
+        double xOutput = xTrackingPID.update(xError);
+        double yOutput = yTrackingPID.update(yError);
+
+        HeadOrientation position = new HeadOrientation(xOutput, yOutput);
+        setHeadPosition(position);
     }
 }
