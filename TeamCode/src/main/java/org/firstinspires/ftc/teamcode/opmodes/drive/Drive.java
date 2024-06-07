@@ -28,8 +28,6 @@ public class Drive extends LinearOpMode {
 
             robot.drive.drive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-            robot.update();
-
             if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
                 //noinspection SuspiciousNameCombination
                 robot.head.manualControl(gamepad1.left_stick_y, gamepad1.left_stick_x);
@@ -44,21 +42,8 @@ public class Drive extends LinearOpMode {
                 robot.head.reset();
             }
 
-//            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
-//                robot.head.holdPosition();
-//            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
-//                robot.head.reset();
-//            } else if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
-//                headMoving = true;
-//                robot.head.setManualPosition(gamepad1.right_stick_y, gamepad1.right_stick_x);
-//            } else if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
-//                robot.head.adjustSetPosition(gamepad1.dpad_up, gamepad1.dpad_down, gamepad1.dpad_left, gamepad1.dpad_right);
-//            } else if (headMoving) {
-//                robot.head.reset();
-//                headMoving = false;
-//            }
+            robot.update();
 
-//            robot.head.setEyes(gamepad1.right_trigger - gamepad1.left_trigger);
             FtcDashboardManager.update();
         }
     }
