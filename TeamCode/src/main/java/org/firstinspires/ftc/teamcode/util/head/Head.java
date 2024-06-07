@@ -144,8 +144,8 @@ public class Head {
         double xError = target.y - currentPosition.x;
         double yError = target.x - currentPosition.y;
 
-        double xOutput = xTrackingPID.update(xError);
-        double yOutput = yTrackingPID.update(yError);
+        double xOutput = currentPosition.x + xTrackingPID.update(xError);
+        double yOutput = currentPosition.y + yTrackingPID.update(yError);
 
         HeadOrientation position = new HeadOrientation(xOutput, yOutput);
         setHeadPosition(position);
