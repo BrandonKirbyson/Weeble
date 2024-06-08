@@ -4,6 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class SpeedConstants {
-    public static double ManualDrive = 20;
-    public static double ManualTurn = 0.5;
+    public static double ManualDrive = 0.4;
+    public static double ManualTurn = 0.3;
 }
