@@ -26,6 +26,7 @@ public class Head {
     private final PIDController xTrackingPID = new PIDController(HeadConstants.xTrackingPID);
     private final PIDController yTrackingPID = new PIDController(HeadConstants.yTrackingPID);
     private boolean tracking = false;
+    private final ElapsedTime trackingTimout = new ElapsedTime();
 
     private boolean manualControl = false;
 
@@ -54,7 +55,7 @@ public class Head {
 
         if (currentAnimation != null) {
             updateAnimation();
-        } else if (tracking && trackingTarget != null) {
+        } else if (tracking) {
             trackObject(trackingTarget);
         }
     }
@@ -65,10 +66,26 @@ public class Head {
         tracking = false;
     }
 
-    public void manualControl(double x, double y) {
-        HeadOrientation position = new HeadOrientation(x * 90, y * 90);
+    public void protectionMode() {
+        HeadOrientation position = new HeadOrientation(0, 0, 0);
+        if (angles.getPitch(AngleUnit.DEGREES) < 0) {
+            position.x = 90;
+        } else {
+            position.x = -90;
+        }
         setHeadPosition(position);
-        tracking = false;
+    }
+
+    public void manualControl(double x, double y) {
+        if (x != 0 || y != 0) {
+            HeadOrientation position = new HeadOrientation(x * 90, y * 90);
+            setHeadPosition(position);
+            tracking = false;
+            manualControl = true;
+        } else if (manualControl) {
+            reset();
+            manualControl = false;
+        }
     }
 
     public void setHeadPosition(HeadOrientation position) {
@@ -142,6 +159,15 @@ public class Head {
     }
 
     public void trackObject(Point target) {
+        if (target == null) {
+            if (trackingTimout.seconds() > HeadConstants.trackingTimeout) {
+                HeadOrientation position = new HeadOrientation(0, 0);
+                setHeadPosition(position);
+            }
+            return;
+        }
+        trackingTimout.reset();
+
         // Flipped x and y because it is 2d point to 3d rotational axis
         double xError = target.y - currentPosition.x;
         double yError = target.x - currentPosition.y;

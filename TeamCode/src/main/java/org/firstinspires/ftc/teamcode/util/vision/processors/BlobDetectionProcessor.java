@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.vision.processors;
 
 import android.graphics.Canvas;
+import com.acmerobotics.dashboard.config.Config;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.util.vision.CameraConstants;
 import org.firstinspires.ftc.vision.VisionProcessor;
@@ -11,11 +12,16 @@ import org.opencv.imgproc.Moments;
 import java.util.ArrayList;
 import java.util.List;
 
+@Config
 public class BlobDetectionProcessor implements VisionProcessor {
-    public Scalar lower = new Scalar(90, 100, 100);
-    public Scalar upper = new Scalar(115, 255, 255);
+    public static Scalar lower = new Scalar(20, 20, 0);
+    public static Scalar upper = new Scalar(50, 255, 255);
 
-    private Point center = new Point();
+    public static double minArea = 100;
+
+    public static boolean mask = false;
+
+    private Point center = null;
 
     public Point getCenter() {
         return center;
@@ -36,7 +42,8 @@ public class BlobDetectionProcessor implements VisionProcessor {
 
         MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
 
-        if (largestContour != null) {
+        if (largestContour != null && Imgproc.contourArea(largestContour) > minArea) {
+
             Imgproc.drawContours(frame, contours, contours.indexOf(largestContour), new Scalar(255, 0, 0), 2);
 
             Moments moments = Imgproc.moments(largestContour);
@@ -46,11 +53,14 @@ public class BlobDetectionProcessor implements VisionProcessor {
             Imgproc.putText(frame, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
             Imgproc.circle(frame, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
 
-            center.x = cX - (double) CameraConstants.WIDTH / 2;
-            center.y = cY - (double) CameraConstants.HEIGHT / 2;
+            center = new Point(cX - (double) CameraConstants.WIDTH / 2, cY - (double) CameraConstants.HEIGHT / 2);
         } else {
-            center.x = (double) CameraConstants.WIDTH / 2;
-            center.y = (double) CameraConstants.HEIGHT / 2;
+            center = null;
+        }
+
+        if (mask) {
+            Imgproc.cvtColor(colMask, colMask, Imgproc.COLOR_GRAY2RGBA);
+            colMask.copyTo(frame);
         }
 
         return null;
