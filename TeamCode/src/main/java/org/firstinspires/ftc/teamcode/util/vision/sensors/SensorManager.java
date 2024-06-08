@@ -19,9 +19,9 @@ public class SensorManager {
     private final PointCloudMappingManager mapping = new PointCloudMappingManager();
 
     public SensorManager(HardwareMap hardwareMap) {
-        frontSensor = hardwareMap.get(DistanceSensor.class, "sensor0");
-        leftSensor = hardwareMap.get(DistanceSensor.class, "sensor1");
-        rightSensor = hardwareMap.get(DistanceSensor.class, "sensor2");
+        frontSensor = hardwareMap.get(DistanceSensor.class, "sensor2");
+        leftSensor = hardwareMap.get(DistanceSensor.class, "sensor3");
+        rightSensor = hardwareMap.get(DistanceSensor.class, "sensor1");
     }
 
     public void readSensors() {

@@ -36,7 +36,7 @@ public class Drive extends LinearOpMode {
                 robot.head.manualControl(gamepad1.left_stick_y, gamepad1.left_stick_x);
             } else if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
                 robot.vision.setMode(VisionMode.FACE_TRACKING);
-                robot.head.setTracking(true);
+//                robot.head.setTracking(true);
             }
 //            else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
 //                robot.head.runAnimation(HeadPresets.NodYes);

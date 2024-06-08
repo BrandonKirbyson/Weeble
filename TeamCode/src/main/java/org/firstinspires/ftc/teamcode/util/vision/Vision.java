@@ -20,7 +20,7 @@ public class Vision {
     private final FaceDetectionProcessor faceDetectionProcessor;
 
     public Vision(HardwareMap hardwareMap) {
-        WebcamName webcam = hardwareMap.get(WebcamName.class, "webcam");
+        WebcamName webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         sensorMapping = new SensorManager(hardwareMap);
 
         blobDetectionProcessor = new BlobDetectionProcessor();
@@ -32,6 +32,8 @@ public class Vision {
                 .setCameraResolution(new Size(CameraConstants.WIDTH, CameraConstants.HEIGHT))
                 .addProcessors(blobDetectionProcessor, faceDetectionProcessor)
                 .build();
+
+        setMode(mode);
     }
 
     public void setMode(VisionMode mode) {
@@ -65,6 +67,6 @@ public class Vision {
     }
 
     public void update() {
-        sensorMapping.update();
+//        sensorMapping.update();
     }
 }
