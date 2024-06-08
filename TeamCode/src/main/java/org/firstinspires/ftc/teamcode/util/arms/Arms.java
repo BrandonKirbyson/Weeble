@@ -8,8 +8,9 @@ public class Arms {
     private final Servo rightArm;
 
     public Arms(HardwareMap hardwareMap) {
-        leftArm = hardwareMap.get(Servo.class, "leftArm");
-        rightArm = hardwareMap.get(Servo.class, "rightArm");
+        leftArm = hardwareMap.get(Servo.class, "arm1");
+        rightArm = hardwareMap.get(Servo.class, "arm0");
+        leftArm.setDirection(Servo.Direction.REVERSE);
     }
 
     public void setArmPosition(double position) {
