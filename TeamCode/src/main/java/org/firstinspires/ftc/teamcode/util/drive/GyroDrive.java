@@ -80,7 +80,7 @@ public class GyroDrive {
 
         double deltaTime = time - lastTime;
 
-        double ticksToVel = BalanceConstants.TICKS_PER_REVOLUTE / deltaTime * 1000;
+        double ticksToVel = (1000 / deltaTime) * (1 / BalanceConstants.TICKS_PER_REVOLUTE);
 
         leftVel = (leftTicks - lastLeftTicks) * ticksToVel;
         rightVel = (rightTicks - lastRightTicks) * ticksToVel;
@@ -140,6 +140,7 @@ public class GyroDrive {
         FtcDashboardManager.addData("AngleTarget", targetAngle);
         FtcDashboardManager.addData("Turn", rotSpeed);
         FtcDashboardManager.addData("Output", outputPower);
+        overlayRobot();
     }
 
     private void updateState() {
@@ -189,5 +190,13 @@ public class GyroDrive {
 
     public DriveState getState() {
         return state;
+    }
+
+    private void overlayRobot() {
+        FtcDashboardManager.getPacket().fieldOverlay()
+                .setFill("white")
+                .setStroke("green")
+                .fillCircle(pose.x, pose.y, 5)
+                .strokeLine(pose.x, pose.y, Math.cos(Math.toRadians(pose.heading)) * 4, Math.sin(Math.toRadians(pose.heading)) * 4);
     }
 }

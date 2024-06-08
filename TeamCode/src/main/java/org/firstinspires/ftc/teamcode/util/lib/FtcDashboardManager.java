@@ -17,6 +17,7 @@ public class FtcDashboardManager {
 
     public static void update() {
         dashboard.sendTelemetryPacket(packet);
-        packet = new TelemetryPacket();
+        packet = new TelemetryPacket(false);
+        packet.fieldOverlay().setScale(0.5, 0.5);
     }
 }
