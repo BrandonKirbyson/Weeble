@@ -127,11 +127,11 @@ public class Head {
         } else {
             double progress = animationTimer.seconds() / (double) key.time;
             progress = HeadAnimationKeyframe.getTransitionProgress(progress, key.transitionType);
-            HeadAnimationKeyframe lastKey = currentAnimation.get(animationIndex - 1);
+            HeadOrientation lastPosition = animationIndex > 0 ? currentAnimation.get(animationIndex - 1).position : currentPosition;
             HeadOrientation position = new HeadOrientation(
-                    key.position.y + ((key.position.y - lastKey.position.y) * progress),
-                    key.position.x + ((key.position.x - lastKey.position.x) * progress),
-                    key.position.eyes + ((key.position.eyes - lastKey.position.eyes) * progress)
+                    key.position.y + ((key.position.y - lastPosition.y) * progress),
+                    key.position.x + ((key.position.x - lastPosition.x) * progress),
+                    key.position.eyes + ((key.position.eyes - lastPosition.eyes) * progress)
             );
             setHeadPosition(position);
         }

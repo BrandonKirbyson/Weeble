@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.teamcode.util.head.Head;
-import org.firstinspires.ftc.teamcode.util.head.HeadPresets;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
 
@@ -46,11 +45,12 @@ public class HeadTest extends LinearOpMode {
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
                 head.reset();
-            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
-                head.runAnimation(HeadPresets.NodYes);
-            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
-                head.runAnimation(HeadPresets.ShakeNo);
             }
+//            else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
+//                head.runAnimation(HeadPresets.NodYes);
+//            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
+//                head.runAnimation(HeadPresets.ShakeNo);
+//            }
 
             head.update(null);
         }

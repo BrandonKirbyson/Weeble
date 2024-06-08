@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
-import org.firstinspires.ftc.teamcode.util.head.HeadPresets;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
@@ -38,11 +37,13 @@ public class Drive extends LinearOpMode {
             } else if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
                 robot.vision.setMode(VisionMode.FACE_TRACKING);
                 robot.head.setTracking(true);
-            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
-                robot.head.runAnimation(HeadPresets.NodYes);
-            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
-                robot.head.runAnimation(HeadPresets.ShakeNo);
-            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
+            }
+//            else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
+//                robot.head.runAnimation(HeadPresets.NodYes);
+//            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
+//                robot.head.runAnimation(HeadPresets.ShakeNo);
+//            }
+            else if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
                 robot.head.reset();
             }
 
