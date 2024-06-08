@@ -6,13 +6,13 @@ import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
 @Config
 public class HeadConstants {
     public static double xCenter = 0.5;
-    public static double xMin = -45;
-    public static double xMax = 45;
+    public static double xMin = -15;
+    public static double xMax = 20;
     public static double xConversion = 180;
 
-    public static double yCenter = 0.5;
-    public static double yMin = -90;
-    public static double yMax = 90;
+    public static double yCenter = 0.46;
+    public static double yMin = -60;
+    public static double yMax = 60;
     public static double yConversion = 180;
 
     public static double eyesCenter = 0.5;

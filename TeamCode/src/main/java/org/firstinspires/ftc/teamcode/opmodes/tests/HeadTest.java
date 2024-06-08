@@ -29,13 +29,19 @@ public class HeadTest extends LinearOpMode {
 
         waitForStart();
 
+        boolean manualControl = false;
+
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
 
             head.updateAngles(imu.getRobotYawPitchRollAngles());
 
             if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
-                head.manualControl(gamepad1.left_stick_y, gamepad1.left_stick_x);
+                head.manualControl(gamepad1.left_stick_y, -gamepad1.left_stick_x);
+                manualControl = true;
+            } else if (manualControl) {
+                manualControl = false;
+                head.reset();
             }
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
@@ -45,6 +51,8 @@ public class HeadTest extends LinearOpMode {
             } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
                 head.runAnimation(HeadPresets.ShakeNo);
             }
+
+            head.update(null);
         }
     }
 }

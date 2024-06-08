@@ -27,6 +27,8 @@ public class Head {
     private final PIDController yTrackingPID = new PIDController(HeadConstants.yTrackingPID);
     private boolean tracking = false;
 
+    private boolean manualControl = false;
+
     public Head(HardwareMap hardwareMap) {
         neckServo = hardwareMap.get(Servo.class, "neck");
         headServo = hardwareMap.get(Servo.class, "head");
@@ -72,7 +74,7 @@ public class Head {
     public void setHeadPosition(HeadOrientation position) {
         neckServo.setPosition(position.x / HeadConstants.xConversion + HeadConstants.xCenter);
         headServo.setPosition(position.y / HeadConstants.yConversion + HeadConstants.yCenter);
-        eyesServo.setPosition(position.eyes);
+        eyesServo.setPosition(position.eyes / HeadConstants.eyesConversion + HeadConstants.eyesCenter);
     }
 
     private void relativeToWorld(HeadOrientation position) {

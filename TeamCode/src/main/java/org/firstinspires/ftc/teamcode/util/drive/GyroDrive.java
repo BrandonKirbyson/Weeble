@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.util.drive;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +8,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.opmodes.drive.Drive;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 
 public class GyroDrive {
@@ -137,14 +135,11 @@ public class GyroDrive {
 
         updateState();
 
-        if (Drive.DEBUG) {
-            FtcDashboardManager.addData("Angle", currentAngle);
-            FtcDashboardManager.addData("AngleError", currentAngle);
-            FtcDashboardManager.addData("AngleTarget", targetAngle);
-            FtcDashboardManager.addData("Turn", rotSpeed);
-            FtcDashboardManager.addData("Output", outputPower);
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
-        }
+        FtcDashboardManager.addData("Angle", currentAngle);
+        FtcDashboardManager.addData("AngleError", currentAngle);
+        FtcDashboardManager.addData("AngleTarget", targetAngle);
+        FtcDashboardManager.addData("Turn", rotSpeed);
+        FtcDashboardManager.addData("Output", outputPower);
     }
 
     private void updateState() {
