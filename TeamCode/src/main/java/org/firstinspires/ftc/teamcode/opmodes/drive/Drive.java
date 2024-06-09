@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
+import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
@@ -31,6 +32,7 @@ public class Drive extends LinearOpMode {
 
             robot.drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x);
 
+
             //noinspection SuspiciousNameCombination
             robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
 
@@ -47,16 +49,27 @@ public class Drive extends LinearOpMode {
             if (gamepad1Buttons.wasJustPressed(GamepadButton.LEFT_BUMPER)) {
                 robot.vision.setMode(VisionMode.FACE_TRACKING);
                 robot.head.setTracking(true);
-
             }
+
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_UP)) {
+                robot.head.setEyebrows(HeadConstants.eyebrowsAngry);
+            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_DOWN)) {
+                robot.head.setEyebrows(HeadConstants.eyebrowsSad);
+            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_LEFT)) {
+                robot.head.setEyebrows(HeadConstants.eyebrowsNeutral);
+            }
+
 //            else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
 //                robot.head.runAnimation(HeadPresets.NodYes);
 //            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
 //                robot.head.runAnimation(HeadPresets.ShakeNo);
 //            }
 
-
             robot.update();
+
+            if (gamepad1Buttons.getButton(GamepadButton.LEFT_STICK_BUTTON)) {
+                robot.drive.stopMotors();
+            }
 
             FtcDashboardManager.update();
         }

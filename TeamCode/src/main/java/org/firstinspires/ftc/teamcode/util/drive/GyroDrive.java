@@ -80,7 +80,7 @@ public class GyroDrive {
 
         double deltaTime = time - lastTime;
 
-        double ticksToVel = (1000 / deltaTime) * (1 / BalanceConstants.TICKS_PER_REVOLUTE);
+        double ticksToVel = (1000 / deltaTime) * (1 / BalanceConstants.TICKS_PER_INCH);
 
         leftVel = (leftTicks - lastLeftTicks) * ticksToVel;
         rightVel = (rightTicks - lastRightTicks) * ticksToVel;
@@ -89,7 +89,10 @@ public class GyroDrive {
 
         double velError = targetVel - vel;
 
-        targetAngle += velPID.update(velError);
+        double angleOutput = velPID.update(velError);
+        if (velError > BalanceConstants.VelErrorMargin) {
+            targetAngle += angleOutput;
+        }
 
         FtcDashboardManager.addData("Velocity", vel);
         FtcDashboardManager.addData("VelocityError", velError);
@@ -97,7 +100,6 @@ public class GyroDrive {
 
         lastLeftTicks = leftTicks;
         lastRightTicks = rightTicks;
-
 
         pose.x += Math.cos(angles.getYaw(AngleUnit.RADIANS)) * vel;
         pose.y += Math.sin(angles.getYaw(AngleUnit.RADIANS)) * vel;
@@ -162,8 +164,8 @@ public class GyroDrive {
 
     private void setPower(double leftPower, double rightPower) {
         if (BalanceConstants.MotorPIDEnabled) {
-            double leftError = leftPower * BalanceConstants.TICKS_PER_REVOLUTE - leftVel;
-            double rightError = rightPower * BalanceConstants.TICKS_PER_REVOLUTE - rightVel;
+            double leftError = leftPower * BalanceConstants.TICKS_PER_INCH - leftVel;
+            double rightError = rightPower * BalanceConstants.TICKS_PER_INCH - rightVel;
             double leftOutput = leftMotorPID.update(leftError);
             double rightOutput = rightMotorPID.update(rightError);
 //
