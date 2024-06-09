@@ -20,6 +20,10 @@ public class HeadConstants {
     public static double eyesMax = 45;
     public static double eyesConversion = 180;
 
+    public static double eyebrowsAngry = 0.75;
+    public static double eyebrowsSad = 0.4;
+    public static double eyebrowsNeutral = 0.6;
+
     public static double trackingTimeout = 1;
 
     public static PIDConstants xTrackingPID = new PIDConstants(-0.002, 0.0, 0.0, 0.3);

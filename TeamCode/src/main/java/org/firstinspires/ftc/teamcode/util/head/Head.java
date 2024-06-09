@@ -14,6 +14,7 @@ public class Head {
     private final Servo neckServo;
     private final Servo headServo;
     private final Servo eyesServo;
+    private final Servo eyebrowsServo;
 
     private YawPitchRollAngles angles;
 
@@ -34,6 +35,13 @@ public class Head {
         neckServo = hardwareMap.get(Servo.class, "neck");
         headServo = hardwareMap.get(Servo.class, "head");
         eyesServo = hardwareMap.get(Servo.class, "eyes");
+        eyebrowsServo = hardwareMap.get(Servo.class, "eyebrows");
+        
+        setEyebrows(HeadConstants.eyebrowsNeutral);
+    }
+
+    public void setEyebrows(double position) {
+        eyebrowsServo.setPosition(position);
     }
 
     public void updateAngles(YawPitchRollAngles angles) {
@@ -63,6 +71,7 @@ public class Head {
     public void reset() {
         HeadOrientation position = new HeadOrientation(0, 0, 0);
         setHeadPosition(position);
+        setEyebrows(HeadConstants.eyebrowsNeutral);
         tracking = false;
     }
 
