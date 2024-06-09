@@ -168,8 +168,7 @@ public class FaceDetectionProcessor implements VisionProcessor {
             Moments moments = Imgproc.moments(largestContour);
             double cX = moments.get_m10() / moments.get_m00();
             double cY = moments.get_m01() / moments.get_m00();
-            center.x = cX - (double) frame.width() / 2;
-            center.y = cY - (double) frame.height() / 2;
+            center = new Point(cX - (double) frame.width() / 2, cY - (double) frame.height() / 2);
         } else {
             center = null;
         }
