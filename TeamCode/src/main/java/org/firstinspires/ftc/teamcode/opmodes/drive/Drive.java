@@ -33,7 +33,9 @@ public class Drive extends LinearOpMode {
 
             //noinspection SuspiciousNameCombination
             robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
-            
+
+            robot.head.setEyes(0.5 + (gamepad1.left_trigger - gamepad1.right_trigger) / 2);
+
             if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
                 robot.vision.setMode(VisionMode.DISABLED);
                 robot.head.reset();
@@ -41,6 +43,11 @@ public class Drive extends LinearOpMode {
             if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
                 robot.vision.setMode(VisionMode.BLOB_TRACKING);
                 robot.head.setTracking(true);
+            }
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.LEFT_BUMPER)) {
+                robot.vision.setMode(VisionMode.FACE_TRACKING);
+                robot.head.setTracking(true);
+
             }
 //            else if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
 //                robot.head.runAnimation(HeadPresets.NodYes);

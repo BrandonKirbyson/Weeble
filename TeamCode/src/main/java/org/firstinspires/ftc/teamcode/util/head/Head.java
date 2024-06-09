@@ -88,6 +88,10 @@ public class Head {
         }
     }
 
+    public void setEyes(double e) {
+        eyesServo.setPosition(e);
+    }
+
     public void setHeadPosition(HeadOrientation position) {
         neckServo.setPosition(position.x / HeadConstants.xConversion + HeadConstants.xCenter);
         headServo.setPosition(position.y / HeadConstants.yConversion + HeadConstants.yCenter);
