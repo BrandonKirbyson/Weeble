@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.vision.processors;
 
 import android.graphics.Canvas;
+import com.acmerobotics.dashboard.config.Config;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.*;
@@ -10,25 +11,28 @@ import org.opencv.imgproc.Moments;
 import java.util.ArrayList;
 import java.util.List;
 
+@Config
 public class FaceDetectionProcessor implements VisionProcessor {
-    public Scalar lowerFace = new Scalar(100, 25, 50);
-    public Scalar upperFace = new Scalar(126, 185, 255);
+    public static Scalar lowerFace = new Scalar(100, 25, 50);
+    public static Scalar upperFace = new Scalar(126, 185, 255);
 
-    public Scalar lowerEye = new Scalar(136, 0, 0);
-    public Scalar upperEye = new Scalar(255, 255, 120);
+    public static Scalar lowerEye = new Scalar(136, 0, 0);
+    public static Scalar upperEye = new Scalar(255, 255, 120);
 
-    public double blur = 1;
+    public static double blur = 1;
 
-    public double faceSolidity = 0.4;
-    public double faceArea = 500;
-    public double minPerimeter = 100;
+    public static double faceSolidity = 0.4;
+    public static double faceArea = 500;
+    public static double minPerimeter = 100;
 
-    public double minBlobSize = 5;
-    public double minEyes = 2;
+    public static double minBlobSize = 5;
+    public static double minEyes = 2;
 
     private Point center = null;
 
-    private boolean findFace = false;
+    private boolean findFace = true;
+
+    public static boolean mask = false;
 
     public Point getCenter() {
         return center;
@@ -162,15 +166,23 @@ public class FaceDetectionProcessor implements VisionProcessor {
 //        }
 
 //
+        MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
 
-        if (findFace && center == null) {
-            MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
+        if (largestContour != null) {
             Moments moments = Imgproc.moments(largestContour);
             double cX = moments.get_m10() / moments.get_m00();
             double cY = moments.get_m01() / moments.get_m00();
             center = new Point(cX - (double) frame.width() / 2, cY - (double) frame.height() / 2);
+
+            Rect boundingBox = Imgproc.boundingRect(largestContour);
+            Imgproc.rectangle(frame, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0), 3);
         } else {
             center = null;
+        }
+
+        if (mask) {
+            Imgproc.cvtColor(colMask, colMask, Imgproc.COLOR_GRAY2RGBA);
+            colMask.copyTo(frame);
         }
 
         return null;
