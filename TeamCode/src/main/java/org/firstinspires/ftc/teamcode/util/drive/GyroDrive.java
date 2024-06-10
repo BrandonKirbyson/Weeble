@@ -18,7 +18,7 @@ public class GyroDrive {
     private DriveState state = DriveState.STOPPED;
 
     private final PIDController anglePID = new PIDController(BalanceConstants.AnglePID);
-    private final PIDController velPID = new PIDController(BalanceConstants.IdleVelPID);
+    private final PIDController velPID = new PIDController(BalanceConstants.VelPID);
 
     private final PIDController leftMotorPID = new PIDController(BalanceConstants.MotorPID);
     private final PIDController rightMotorPID = new PIDController(BalanceConstants.MotorPID);
@@ -44,6 +44,8 @@ public class GyroDrive {
     private double targetAngle = BalanceConstants.TargetAngle;
     private double rotSpeed = 0;
 
+    private boolean emergencyStop = false;
+
     public GyroDrive(HardwareMap hardwareMap) {
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
@@ -68,9 +70,19 @@ public class GyroDrive {
         return pose;
     }
 
-    public void drive(double drivePower, double turnPower) {
-        targetVel = drivePower * SpeedConstants.ManualDrive;
-        rotSpeed = turnPower * SpeedConstants.ManualTurn;
+    public void emergencyStop() {
+        emergencyStop = true;
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
+
+    public void drive(double drivePower, double turnPower, boolean fast) {
+        targetVel = drivePower * (fast ? SpeedConstants.FastDrive : SpeedConstants.Drive);
+        rotSpeed = turnPower * (fast ? SpeedConstants.FastTurn : SpeedConstants.Turn);
+    }
+
+    public void setTargetAngle(double target) {
+        targetAngle = target;
     }
 
     private void updateAngle() {
@@ -89,9 +101,16 @@ public class GyroDrive {
 
         double velError = targetVel - vel;
 
-        double angleOutput = velPID.update(velError);
-        if (velError > BalanceConstants.VelErrorMargin) {
+        if (!BalanceConstants.manualDrive) {
+            double angleOutput = velPID.update(velError);
+            double currentAngle = angles.getPitch(AngleUnit.DEGREES);
+//            if (Math.abs(velError) < BalanceConstants.VelErrorMargin) {
+//                targetAngle = currentAngle;
+//            } else {
             targetAngle += angleOutput;
+//            }
+        } else {
+            targetAngle -= targetVel / SpeedConstants.Drive * SpeedConstants.ManualDrive;
         }
 
         FtcDashboardManager.addData("Velocity", vel);
@@ -112,7 +131,8 @@ public class GyroDrive {
         TelemetryPacket packet = new TelemetryPacket();
         this.angles = angles;
 
-        if (!isBalanced()) {
+        if (!isBalanced() || emergencyStop) {
+            if (!isBalanced() && emergencyStop) emergencyStop = false;
             stopMotors();
             state = DriveState.STOPPED;
             lastBalanced = false;
