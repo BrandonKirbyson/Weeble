@@ -41,11 +41,11 @@ public class Vision {
         visionPortal.setProcessorEnabled(blobDetectionProcessor, false);
         visionPortal.setProcessorEnabled(faceDetectionProcessor, false);
         switch (mode) {
-            case DISABLED:
-                if (visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING) {
-                    visionPortal.stopStreaming();
-                }
-                break;
+//            case DISABLED:
+//                if (visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING) {
+//                    visionPortal.stopStreaming();
+//                }
+//                break;
             case BLOB_TRACKING:
                 visionPortal.setProcessorEnabled(blobDetectionProcessor, true);
                 break;
