@@ -1,8 +1,17 @@
 package org.firstinspires.ftc.teamcode.util.head;
 
 public class HeadOrientation {
+    /**
+     * The x axis rotation in degrees, controls looking up and down
+     */
     public double x;
+    /**
+     * The y axis rotation in degrees, controls looking left and right
+     */
     public double y;
+    /**
+     * The eyes position, similar to y axis rotation but only affects the eyes
+     */
     public double eyes;
 
     public HeadOrientation(double x, double y, double eyes) {
