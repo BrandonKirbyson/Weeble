@@ -14,8 +14,8 @@ import java.util.List;
 
 @Config
 public class BlobDetectionProcessor implements VisionProcessor {
-    public static Scalar lower = new Scalar(20, 20, 0);
-    public static Scalar upper = new Scalar(50, 255, 255);
+    public static Scalar lower = new Scalar(30, 20, 0);
+    public static Scalar upper = new Scalar(60, 255, 255);
 
     public static double minArea = 100;
 
