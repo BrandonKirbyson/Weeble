@@ -10,7 +10,7 @@ public class HeadConstants {
     public static double xMax = 20;
     public static double xConversion = 180;
 
-    public static double yCenter = 0.42;
+    public static double yCenter = 0.38;
     public static double yMin = -60;
     public static double yMax = 60;
     public static double yConversion = -180;
@@ -27,5 +27,5 @@ public class HeadConstants {
     public static double trackingTimeout = 1;
 
     public static PIDConstants xTrackingPID = new PIDConstants(-0.002, 0.0, 0.0, 0.3);
-    public static PIDConstants yTrackingPID = new PIDConstants(0.004, 0.0, 0.0, 0.3);
+    public static PIDConstants yTrackingPID = new PIDConstants(0.008, 0.0, 0.0, 0.3);
 }
