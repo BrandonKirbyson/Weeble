@@ -10,7 +10,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.opencv.core.Point;
 
 public class Vision {
-    private final SensorManager sensorMapping;
+    public final SensorManager sensorMapping;
 
     private final VisionPortal visionPortal;
 

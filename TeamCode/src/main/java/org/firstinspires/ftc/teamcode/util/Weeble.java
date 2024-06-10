@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.util.arms.Arms;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.drive.GyroDrive;
 import org.firstinspires.ftc.teamcode.util.head.Head;
+import org.firstinspires.ftc.teamcode.util.overlay.OverlayManager;
 import org.firstinspires.ftc.teamcode.util.vision.Vision;
 
 public class Weeble {
@@ -17,6 +18,8 @@ public class Weeble {
     public final Head head;
 
     private final IMU imu;
+
+    private final OverlayManager overlay = new OverlayManager();
 
     public Weeble(HardwareMap hardwareMap) {
         vision = new Vision(hardwareMap);
@@ -44,5 +47,10 @@ public class Weeble {
             arms.setArmPosition(ArmPosition.Down);
             head.reset();
         }
+
+        overlay.updatePose(drive.getPose());
+        overlay.updatePoints(vision.sensorMapping.getPoints());
+
+        overlay.update();
     }
 }
