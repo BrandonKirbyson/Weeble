@@ -36,7 +36,7 @@ public class Head {
         headServo = hardwareMap.get(Servo.class, "head");
         eyesServo = hardwareMap.get(Servo.class, "eyes");
         eyebrowsServo = hardwareMap.get(Servo.class, "eyebrows");
-        
+
         setEyebrows(HeadConstants.eyebrowsNeutral);
     }
 
@@ -71,7 +71,6 @@ public class Head {
     public void reset() {
         HeadOrientation position = new HeadOrientation(0, 0, 0);
         setHeadPosition(position);
-        setEyebrows(HeadConstants.eyebrowsNeutral);
         tracking = false;
     }
 
