@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
+import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
@@ -30,23 +31,31 @@ public class Drive extends LinearOpMode {
 
             gamepad1Buttons.update();
 
-            robot.drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x);
+            robot.drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1Buttons.getButton(GamepadButton.LEFT_BUMPER));
 
+            if (gamepad1Buttons.getButton(GamepadButton.LEFT_STICK_BUTTON)) {
+                robot.drive.emergencyStop();
+            }
+
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.RIGHT_STICK_BUTTON)) {
+                robot.drive.setTargetAngle(BalanceConstants.TargetAngle);
+            }
 
             //noinspection SuspiciousNameCombination
             robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
 
-            robot.head.setEyes(0.5 + (gamepad1.left_trigger - gamepad1.right_trigger) / 2);
+            robot.head.setEyes(0.5 + (-gamepad1.left_trigger + gamepad1.right_trigger) / 2);
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
                 robot.vision.setMode(VisionMode.DISABLED);
                 robot.head.reset();
+                robot.head.setEyebrows(HeadConstants.eyebrowsNeutral);
             }
             if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
                 robot.vision.setMode(VisionMode.BLOB_TRACKING);
                 robot.head.setTracking(true);
             }
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.LEFT_BUMPER)) {
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
                 robot.vision.setMode(VisionMode.FACE_TRACKING);
                 robot.head.setTracking(true);
             }
@@ -67,9 +76,6 @@ public class Drive extends LinearOpMode {
 
             robot.update();
 
-            if (gamepad1Buttons.getButton(GamepadButton.LEFT_STICK_BUTTON)) {
-                robot.drive.stopMotors();
-            }
 
             FtcDashboardManager.update();
         }
