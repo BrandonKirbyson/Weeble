@@ -20,7 +20,10 @@ public class BalanceConstants {
 
     public static double LoopSpeedRatio = 10;
 
-    public static PIDConstants AnglePID = new PIDConstants(0.06, 0.0002, 1, 0.3);
+    public static double LargeAnglePIDMargin = 4;
+
+    public static PIDConstants SmallAnglePID = new PIDConstants(0.06, 0.0002, 1, 0.3);
+    public static PIDConstants LargeAnglePID = new PIDConstants(0.08, 0.0001, 0.5, 0.5);
     public static PIDConstants VelPID = new PIDConstants(-0.05, 0.000, 0.15, 0.3); //-0.08, 0, 0
 
     public static PIDConstants MotorPID = new PIDConstants(0.0012, 0.000, 0, 0.3);

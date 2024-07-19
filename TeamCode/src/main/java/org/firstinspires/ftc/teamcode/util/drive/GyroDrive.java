@@ -17,7 +17,7 @@ public class GyroDrive {
     private DriveState lastState = DriveState.STOPPED;
     private DriveState state = DriveState.STOPPED;
 
-    private final PIDController anglePID = new PIDController(BalanceConstants.AnglePID);
+    private final PIDController anglePID = new PIDController(BalanceConstants.SmallAnglePID);
     private final PIDController velPID = new PIDController(BalanceConstants.VelPID);
 
     private final PIDController leftMotorPID = new PIDController(BalanceConstants.MotorPID);
@@ -151,6 +151,11 @@ public class GyroDrive {
         double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 
         double angleError = targetAngle - currentAngle;
+        if (Math.abs(angleError) < BalanceConstants.LargeAnglePIDMargin) {
+            anglePID.setConstants(BalanceConstants.SmallAnglePID);
+        } else {
+            anglePID.setConstants(BalanceConstants.LargeAnglePID);
+        }
         double outputPower = anglePID.update(angleError);
 
         setPower(outputPower + rotSpeed, outputPower - rotSpeed);
