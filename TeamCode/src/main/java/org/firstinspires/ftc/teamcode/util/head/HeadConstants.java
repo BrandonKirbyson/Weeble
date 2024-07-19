@@ -26,6 +26,9 @@ public class HeadConstants {
 
     public static double trackingTimeout = 1;
 
+    public static boolean eyesTracking = true;
+
     public static PIDConstants xTrackingPID = new PIDConstants(-0.002, 0.0, 0.0, 0.3);
     public static PIDConstants yTrackingPID = new PIDConstants(0.008, 0.0, 0.0, 0.3);
+    public static PIDConstants eyesTrackingPID = new PIDConstants(0.008, 0.0, 0.0, 0.3);
 }

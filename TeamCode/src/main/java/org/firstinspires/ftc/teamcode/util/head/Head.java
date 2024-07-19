@@ -26,6 +26,7 @@ public class Head {
 
     private final PIDController xTrackingPID = new PIDController(HeadConstants.xTrackingPID);
     private final PIDController yTrackingPID = new PIDController(HeadConstants.yTrackingPID);
+    private final PIDController eyesTrackingPID = new PIDController(HeadConstants.eyesTrackingPID);
     private boolean tracking = false;
     private final ElapsedTime trackingTimout = new ElapsedTime();
 
@@ -187,7 +188,13 @@ public class Head {
         double xOutput = currentPosition.x + xTrackingPID.update(xError);
         double yOutput = currentPosition.y + yTrackingPID.update(yError);
 
-        HeadOrientation position = new HeadOrientation(xOutput, yOutput);
+        double eyesOutput = currentPosition.eyes;
+        if (HeadConstants.eyesTracking && xOutput < HeadConstants.xMin && xOutput > HeadConstants.xMax) {
+            double eyesError = target.x - currentPosition.eyes;
+            eyesOutput = currentPosition.eyes + eyesTrackingPID.update(eyesError);
+        }
+
+        HeadOrientation position = new HeadOrientation(xOutput, yOutput, eyesOutput);
         setHeadPosition(position);
     }
 }
