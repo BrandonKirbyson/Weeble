@@ -202,6 +202,16 @@ public class GyroDrive {
         }
     }
 
+    public void uprightPower() {
+        if (angles.getPitch(AngleUnit.DEGREES) > 0) {
+            leftMotor.setPower(-1);
+            rightMotor.setPower(-1);
+        } else {
+            leftMotor.setPower(1);
+            rightMotor.setPower(1);
+        }
+    }
+
     public boolean isBalanced() {
         return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxAngle;
     }

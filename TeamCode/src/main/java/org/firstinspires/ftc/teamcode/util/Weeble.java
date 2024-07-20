@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.arms.ArmPosition;
 import org.firstinspires.ftc.teamcode.util.arms.Arms;
+import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.drive.GyroDrive;
 import org.firstinspires.ftc.teamcode.util.head.Head;
@@ -20,6 +22,8 @@ public class Weeble {
     private final IMU imu;
 
     private final OverlayManager overlay = new OverlayManager();
+
+    private boolean uprighting = false;
 
     public Weeble(HardwareMap hardwareMap) {
         vision = new Vision(hardwareMap);
@@ -48,9 +52,22 @@ public class Weeble {
             head.reset();
         }
 
+        if (uprighting && angles.getPitch(AngleUnit.DEGREES) > BalanceConstants.UprightPowerMargin) {
+            drive.uprightPower();
+            uprighting = false;
+        }
+
         overlay.updatePose(drive.getPose());
         overlay.updatePoints(vision.sensorMapping.getPoints());
 
         overlay.update();
+    }
+
+    public void uprightWithArms() {
+        if (drive.getLastState() != DriveState.STOPPED) return;
+        if (!uprighting) {
+            arms.setArmPosition(ArmPosition.Forward);
+            uprighting = true;
+        }
     }
 }
