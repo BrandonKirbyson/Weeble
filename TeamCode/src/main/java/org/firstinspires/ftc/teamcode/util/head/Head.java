@@ -103,7 +103,7 @@ public class Head {
 
     public void setHeadPosition(HeadOrientation position) {
         neckServo.setPosition(position.x / HeadConstants.xConversion + HeadConstants.xCenter);
-        headServo.setPosition(position.y / HeadConstants.yConversion + HeadConstants.yCenter);
+//        headServo.setPosition(position.y / HeadConstants.yConversion + HeadConstants.yCenter);
         eyesServo.setPosition(position.eyes / HeadConstants.eyesConversion + HeadConstants.eyesCenter);
     }
 

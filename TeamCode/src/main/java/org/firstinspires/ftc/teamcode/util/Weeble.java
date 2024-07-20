@@ -33,6 +33,9 @@ public class Weeble {
 
         imu = hardwareMap.get(IMU.class, "imu");
         drive.initIMU(imu);
+
+        head.reset();
+        arms.setArmPosition(ArmPosition.Down);
     }
 
     public void update() {
@@ -42,10 +45,12 @@ public class Weeble {
 
         vision.update();
 
-        head.update(vision.getTrackingCenter());
+        if (vision.getTrackingCenter() != null) {
+            head.update(vision.getTrackingCenter());
+        }
 
         if (drive.getLastState() != DriveState.STOPPED && drive.getState() == DriveState.STOPPED) {
-            arms.setArmPosition(ArmPosition.Forward);
+            arms.setArmPosition(ArmPosition.Crash);
             head.protectionMode();
         } else if (drive.getLastState() == DriveState.STOPPED && drive.getState() != DriveState.STOPPED) {
             arms.setArmPosition(ArmPosition.Down);
@@ -53,7 +58,7 @@ public class Weeble {
         }
 
         if (uprighting && angles.getPitch(AngleUnit.DEGREES) > BalanceConstants.UprightPowerMargin) {
-            drive.uprightPower();
+//            drive.uprightPower();
             uprighting = false;
         }
 
@@ -64,7 +69,7 @@ public class Weeble {
     }
 
     public void uprightWithArms() {
-        if (drive.getLastState() != DriveState.STOPPED) return;
+        if (drive.getState() != DriveState.STOPPED) return;
         if (!uprighting) {
             arms.setArmPosition(ArmPosition.Forward);
             uprighting = true;

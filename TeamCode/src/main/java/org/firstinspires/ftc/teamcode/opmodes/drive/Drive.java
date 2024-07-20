@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
 import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
+import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
@@ -33,9 +34,14 @@ public class Drive extends LinearOpMode {
 
             robot.drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1Buttons.getButton(GamepadButton.LEFT_BUMPER));
 
-            if (gamepad1Buttons.getButton(GamepadButton.LEFT_STICK_BUTTON)) {
+            if (gamepad1Buttons.getButton(GamepadButton.RIGHT_STICK_BUTTON)) {
                 robot.drive.emergencyStop();
             }
+
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.LEFT_STICK_BUTTON) && robot.drive.getState() == DriveState.STOPPED) {
+                robot.uprightWithArms();
+            }
+
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.RIGHT_STICK_BUTTON)) {
                 robot.drive.setTargetAngle(BalanceConstants.TargetAngle);
