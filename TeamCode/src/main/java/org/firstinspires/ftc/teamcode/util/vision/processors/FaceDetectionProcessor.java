@@ -50,12 +50,8 @@ public class FaceDetectionProcessor implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
-        Mat colMask = preprocessFrame(frame);
-
         // remove background from frame using colMask
-
-
-//        colMask.copyTo(frame);
+        Mat colMask = preprocessFrame(frame);
 
         // Find contours of the detected yellow regions
         List<MatOfPoint> contours = new ArrayList<>();
@@ -63,8 +59,6 @@ public class FaceDetectionProcessor implements VisionProcessor {
         Imgproc.findContours(colMask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
         contours = filterShape(contours);
-
-//        colMask.release();
 
         Mat hsvFrame = new Mat();
         Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
@@ -81,23 +75,6 @@ public class FaceDetectionProcessor implements VisionProcessor {
         List<MatOfPoint> eyes = new ArrayList<>();
         Mat hierarchyEyes = new Mat();
         Imgproc.findContours(eyesMask, eyes, hierarchyEyes, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-
-//        colMask.copyTo(frame);
-
-
-//        List<MatOfPoint> filteredContours = new ArrayList<>();
-//        for (MatOfPoint eye : eyes) {
-//            Rect boundingBox = Imgproc.boundingRect(eye);
-//            for (int i = 0; i < contours.size(); i++) {
-//            for (MatOfPoint contour : contours) {
-//                MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
-//                if (Imgproc.pointPolygonTest(contour2f, new Point(boundingBox.x, boundingBox.y), false) > 0) {
-//                    filteredContours.add(eye);
-//                }
-//            }
-//            }
-//        }
-
 
         Mat frameNoBackground = new Mat();
         Core.bitwise_and(frame, frame, frameNoBackground, colMask);
@@ -124,11 +101,8 @@ public class FaceDetectionProcessor implements VisionProcessor {
             if (c < minEyes) {
                 contours.remove(i);
                 i--;
-            } else {
-//                Imgproc.putText(frame, c + "", new Point(cX, cY + (double) boundingBox.height / 2 + 30), Imgproc.FONT_HERSHEY_COMPLEX, 1, new Scalar(100, 200, 255), 2);
             }
         }
-
 
 //        Imgproc.drawContours(frame, contours, -1, new Scalar(0, 255, 0), 2);
 
@@ -137,35 +111,7 @@ public class FaceDetectionProcessor implements VisionProcessor {
         for (MatOfPoint contour : contours) {
             Rect boundingBox = Imgproc.boundingRect(contour);
             Imgproc.rectangle(frame, boundingBox.tl(), boundingBox.br(), new Scalar(255, 0, 0), 2);
-
-            Moments moments = Imgproc.moments(contour);
-            double cX = moments.get_m10() / moments.get_m00();
-            double cY = moments.get_m01() / moments.get_m00();
-//            Imgproc.circle(frame, new Point(cX, cY), 1, new Scalar(255, 0, 0), 2);
         }
-
-
-//
-//        // Find the largest yellow contour (blob)
-//        MatOfPoint largestContour = findLargestContour(contours);
-//
-//        if (largestContour != null) {
-//            // Draw a red outline around the largest detected object
-//            Imgproc.drawContours(frame, contours, contours.indexOf(largestContour), new Scalar(255, 0, 0), 2);
-//
-//            // Calculate the centroid of the largest contour
-//            Moments moments = Imgproc.moments(largestContour);
-//            double cX = moments.get_m10() / moments.get_m00();
-//            double cY = moments.get_m01() / moments.get_m00();
-//
-//            // Draw a dot at the centroid
-//            String label = "(" + (int) cX + ", " + (int) cY + ")";
-//            Imgproc.putText(frame, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
-//            Imgproc.circle(frame, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
-//
-//        }
-
-//
         MatOfPoint largestContour = VisionProcessorUtil.findLargestContour(contours);
 
         if (largestContour != null) {
