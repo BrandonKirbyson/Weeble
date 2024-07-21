@@ -80,15 +80,19 @@ public class Vision {
         if (recording) {
             camera.startRecordingPipeline(
                     new PipelineRecordingParameters.Builder()
-                            .setBitrate(4, PipelineRecordingParameters.BitrateUnits.Mbps)
+                            .setBitrate(CameraConstants.RecordingBitrate, PipelineRecordingParameters.BitrateUnits.Mbps)
                             .setEncoder(PipelineRecordingParameters.Encoder.H264)
                             .setOutputFormat(PipelineRecordingParameters.OutputFormat.MPEG_4)
-                            .setFrameRate(30)
-                            .setPath("/recordings/pipeline_rec.mp4")
+                            .setFrameRate(CameraConstants.RecordingFramerate)
+                            .setPath(CameraConstants.RecordingPath)
                             .build());
         } else {
             camera.stopRecordingPipeline();
         }
+    }
+
+    public boolean isRecording() {
+        return recording;
     }
 
     public void update() {

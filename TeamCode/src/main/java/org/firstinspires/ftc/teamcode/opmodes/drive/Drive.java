@@ -20,6 +20,7 @@ public class Drive extends LinearOpMode {
         Weeble robot = new Weeble(hardwareMap);
 
         StatefulGamepad gamepad1Buttons = new StatefulGamepad(gamepad1);
+        StatefulGamepad gamepad2Buttons = new StatefulGamepad(gamepad2);
 
         waitForStart();
 
@@ -42,10 +43,16 @@ public class Drive extends LinearOpMode {
                 robot.uprightWithArms();
             }
 
-
             if (gamepad1Buttons.wasJustPressed(GamepadButton.RIGHT_STICK_BUTTON)) {
                 robot.drive.setTargetAngle(BalanceConstants.TargetAngle);
             }
+
+            if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {
+                robot.vision.setRecording(true);
+            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.X)) {
+                robot.vision.setRecording(false);
+            }
+            FtcDashboardManager.addData("RECORDING", robot.vision.isRecording());
 
             //noinspection SuspiciousNameCombination
             robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
