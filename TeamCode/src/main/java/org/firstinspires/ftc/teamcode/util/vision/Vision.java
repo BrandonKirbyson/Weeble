@@ -8,13 +8,20 @@ import org.firstinspires.ftc.teamcode.util.vision.processors.FaceDetectionProces
 import org.firstinspires.ftc.teamcode.util.vision.sensors.SensorManager;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.opencv.core.Point;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.PipelineRecordingParameters;
 
 public class Vision {
     public final SensorManager sensorMapping;
 
+    private final OpenCvCamera camera;
+
     private final VisionPortal visionPortal;
 
     private VisionMode mode = VisionMode.DISABLED;
+
+    private boolean recording = false;
 
     private final BlobDetectionProcessor blobDetectionProcessor;
     private final FaceDetectionProcessor faceDetectionProcessor;
@@ -22,6 +29,8 @@ public class Vision {
     public Vision(HardwareMap hardwareMap) {
         WebcamName webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         sensorMapping = new SensorManager(hardwareMap);
+
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcam);
 
         blobDetectionProcessor = new BlobDetectionProcessor();
         faceDetectionProcessor = new FaceDetectionProcessor();
@@ -63,6 +72,22 @@ public class Vision {
                 return faceDetectionProcessor.getCenter();
             default:
                 return null;
+        }
+    }
+
+    public void setRecording(boolean enabled) {
+        recording = enabled;
+        if (recording) {
+            camera.startRecordingPipeline(
+                    new PipelineRecordingParameters.Builder()
+                            .setBitrate(4, PipelineRecordingParameters.BitrateUnits.Mbps)
+                            .setEncoder(PipelineRecordingParameters.Encoder.H264)
+                            .setOutputFormat(PipelineRecordingParameters.OutputFormat.MPEG_4)
+                            .setFrameRate(30)
+                            .setPath("/recordings/pipeline_rec.mp4")
+                            .build());
+        } else {
+            camera.stopRecordingPipeline();
         }
     }
 
