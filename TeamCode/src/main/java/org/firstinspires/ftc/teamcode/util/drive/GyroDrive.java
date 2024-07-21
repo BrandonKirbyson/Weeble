@@ -29,6 +29,8 @@ public class GyroDrive {
 
     private double lastTime = 0;
 
+    private double lastAngleError = 0;
+
     private double lastLeftTicks = 0;
     private double lastRightTicks = 0;
 
@@ -143,21 +145,27 @@ public class GyroDrive {
             lastBalanced = true;
         }
 
-        if (loopCounter % BalanceConstants.LoopSpeedRatio == 0) {
+        double currentAngle = angles.getPitch(AngleUnit.DEGREES);
+
+        if (loopCounter % BalanceConstants.LoopSpeedRatio == 0 && Math.abs(targetAngle - currentAngle) < BalanceConstants.TargetAngleMargin) {
             updateAngle(headDelta);
         }
 
         loopCounter++;
 
-        double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 
         double angleError = targetAngle - currentAngle;
+        if (angleError / Math.abs(angleError) != lastAngleError / Math.abs(lastAngleError)) {
+            anglePID.resetI();
+        }
         if (Math.abs(angleError) < BalanceConstants.LargeAnglePIDMargin) {
             anglePID.setConstants(BalanceConstants.SmallAnglePID);
         } else {
             anglePID.setConstants(BalanceConstants.LargeAnglePID);
         }
         double outputPower = anglePID.update(angleError);
+
+        lastAngleError = angleError;
 
         setPower(outputPower + rotSpeed, outputPower - rotSpeed);
 
@@ -169,6 +177,10 @@ public class GyroDrive {
         FtcDashboardManager.addData("Turn", rotSpeed);
         FtcDashboardManager.addData("Output", outputPower);
         overlayRobot();
+    }
+
+    public void resetTarget() {
+        targetAngle = 0;
     }
 
     private void updateState() {

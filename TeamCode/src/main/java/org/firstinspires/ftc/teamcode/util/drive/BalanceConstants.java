@@ -18,17 +18,19 @@ public class BalanceConstants {
 
     public static double DriveVelMin = 0.15;
 
+    public static double TargetAngleMargin = 4;
+
     public static double HeadAngleConversion = 1;
 
-    public static double LoopSpeedRatio = 5;
+    public static double LoopSpeedRatio = 4;
 
     public static double UprightPowerMargin = 50;
 
     public static double LargeAnglePIDMargin = 20;
 
-    public static PIDConstants SmallAnglePID = new PIDConstants(0.1, 0.0000, 1, 0.3); // 0.06, 0.0002, 1
-    public static PIDConstants LargeAnglePID = new PIDConstants(0.08, 0.0000, 0.5, 0.5);
-    public static PIDConstants VelPID = new PIDConstants(-0.02, 0.000, 0.2, 0.3); //-0.08, 0, 0
+    public static PIDConstants SmallAnglePID = new PIDConstants(0.08, 0.00005, 1, 0.1); // 0.06, 0.0002, 1
+    public static PIDConstants LargeAnglePID = new PIDConstants(0.1, 0.0001, 1, 0.2);
+    public static PIDConstants VelPID = new PIDConstants(-0.03, 0.000, 0.2, 0.3); //-0.08, 0, 0
 
     public static PIDConstants MotorPID = new PIDConstants(0.0012, 0.000, 0, 0.3);
 }

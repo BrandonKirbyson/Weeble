@@ -39,4 +39,8 @@ public class PIDController {
         lastError = 0;
         lastTime = 0;
     }
+
+    public void resetI() {
+        i = 0;
+    }
 }

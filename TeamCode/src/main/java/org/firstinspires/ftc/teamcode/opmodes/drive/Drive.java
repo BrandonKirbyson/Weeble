@@ -35,6 +35,10 @@ public class Drive extends LinearOpMode {
 
             robot.drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1Buttons.getButton(GamepadButton.LEFT_BUMPER));
 
+            if (gamepad1Buttons.getButton(GamepadButton.RIGHT_BUMPER)) {
+                robot.drive.resetTarget();
+            }
+
             if (gamepad1Buttons.getButton(GamepadButton.RIGHT_STICK_BUTTON)) {
                 robot.drive.emergencyStop();
             }
