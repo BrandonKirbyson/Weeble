@@ -30,6 +30,8 @@ public class Head {
     private boolean tracking = false;
     private final ElapsedTime trackingTimout = new ElapsedTime();
 
+    private double lastPitch;
+
     private boolean manualControl = false;
 
     public Head(HardwareMap hardwareMap) {
@@ -37,6 +39,8 @@ public class Head {
         headServo = hardwareMap.get(Servo.class, "head");
         eyesServo = hardwareMap.get(Servo.class, "eyes");
         eyebrowsServo = hardwareMap.get(Servo.class, "eyebrows");
+
+        lastPitch = neckServo.getPosition();
 
         setEyebrows(HeadConstants.eyebrowsNeutral);
     }
@@ -57,6 +61,12 @@ public class Head {
         );
 
         servoPositionToOrientation(currentPosition);
+    }
+
+    public double getDeltaPitch() {
+        double deltaPitch = neckServo.getPosition() - lastPitch;
+        lastPitch = neckServo.getPosition();
+        return deltaPitch;
     }
 
     public void update(Point trackingTarget) {

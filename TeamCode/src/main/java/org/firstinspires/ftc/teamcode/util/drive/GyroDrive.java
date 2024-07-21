@@ -85,7 +85,7 @@ public class GyroDrive {
         targetAngle = target;
     }
 
-    private void updateAngle() {
+    private void updateAngle(double headDelta) {
         double time = System.currentTimeMillis();
         double leftTicks = leftMotor.getCurrentPosition();
         double rightTicks = rightMotor.getCurrentPosition();
@@ -112,6 +112,7 @@ public class GyroDrive {
         } else {
             targetAngle -= targetVel / SpeedConstants.Drive * SpeedConstants.ManualDrive;
         }
+        targetAngle += headDelta * BalanceConstants.HeadAngleConversion;
 
         FtcDashboardManager.addData("Velocity", vel);
         FtcDashboardManager.addData("VelocityError", velError);
@@ -127,7 +128,7 @@ public class GyroDrive {
         lastTime = time;
     }
 
-    public void update(YawPitchRollAngles angles) {
+    public void update(YawPitchRollAngles angles, double headDelta) {
         TelemetryPacket packet = new TelemetryPacket();
         this.angles = angles;
 
@@ -143,7 +144,7 @@ public class GyroDrive {
         }
 
         if (loopCounter % BalanceConstants.LoopSpeedRatio == 0) {
-            updateAngle();
+            updateAngle(headDelta);
         }
 
         loopCounter++;

@@ -18,6 +18,8 @@ public class BalanceConstants {
 
     public static double DriveVelMin = 0.15;
 
+    public static double HeadAngleConversion = 2;
+
     public static double LoopSpeedRatio = 5;
 
     public static double UprightPowerMargin = 50;
