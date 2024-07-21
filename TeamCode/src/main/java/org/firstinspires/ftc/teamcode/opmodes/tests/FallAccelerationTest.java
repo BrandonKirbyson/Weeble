@@ -38,6 +38,7 @@ public class FallAccelerationTest extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             FtcDashboardManager.addData("Angle", imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
             FtcDashboardManager.addData("Acceleration", imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
+            FtcDashboardManager.update();
 
             telemetry.addData("Angle", imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
             telemetry.update();
