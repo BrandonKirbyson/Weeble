@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.drive.GyroDrive;
 import org.firstinspires.ftc.teamcode.util.head.Head;
+import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.overlay.OverlayManager;
 import org.firstinspires.ftc.teamcode.util.vision.Vision;
 
@@ -52,9 +53,11 @@ public class Weeble {
         if (drive.getLastState() != DriveState.STOPPED && drive.getState() == DriveState.STOPPED) {
             arms.setArmPosition(ArmPosition.Crash);
             head.protectionMode();
+            head.setEyebrows(HeadConstants.eyebrowsSad);
         } else if (drive.getLastState() == DriveState.STOPPED && drive.getState() != DriveState.STOPPED) {
             arms.setArmPosition(ArmPosition.Down);
             head.reset();
+            head.setEyebrows(HeadConstants.eyebrowsNeutral);
         }
 
         if (uprighting && angles.getPitch(AngleUnit.DEGREES) > BalanceConstants.UprightPowerMargin) {

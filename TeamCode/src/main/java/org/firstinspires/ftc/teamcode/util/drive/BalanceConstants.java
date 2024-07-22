@@ -9,8 +9,9 @@ public class BalanceConstants {
     private static final double TICKS_PER_REVOLUTE = 537.7 * 26 / 20;
     public static final double TICKS_PER_INCH = TICKS_PER_REVOLUTE / (WHEEL_DIAMETER * Math.PI);
 
-    public static double TargetAngle = 0;
-    public static double MaxAngle = 60;
+    public static double TargetAngle = -2;
+    public static double MaxTargetAngle = 6;
+    public static double MaxAngle = 30;
 
     public static boolean manualDrive = false;
 

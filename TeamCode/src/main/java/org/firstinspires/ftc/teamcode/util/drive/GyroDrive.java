@@ -115,6 +115,7 @@ public class GyroDrive {
             targetAngle -= targetVel / SpeedConstants.Drive * SpeedConstants.ManualDrive;
         }
         targetAngle += headDelta * BalanceConstants.HeadAngleConversion;
+        targetAngle = Math.max(BalanceConstants.TargetAngle - BalanceConstants.MaxTargetAngle, Math.min(BalanceConstants.TargetAngle + BalanceConstants.MaxTargetAngle, targetAngle));
 
         FtcDashboardManager.addData("Velocity", vel);
         FtcDashboardManager.addData("VelocityError", velError);
@@ -180,7 +181,7 @@ public class GyroDrive {
     }
 
     public void resetTarget() {
-        targetAngle = 0;
+        targetAngle = BalanceConstants.TargetAngle;
     }
 
     private void updateState() {
