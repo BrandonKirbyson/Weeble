@@ -32,6 +32,7 @@ public class Drive extends LinearOpMode {
             lastTime = currentTime;
 
             gamepad1Buttons.update();
+            gamepad2Buttons.update();
 
             robot.drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1Buttons.getButton(GamepadButton.LEFT_BUMPER));
 
@@ -51,11 +52,11 @@ public class Drive extends LinearOpMode {
                 robot.drive.setTargetAngle(BalanceConstants.TargetAngle);
             }
 
-            if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {
-                robot.vision.setRecording(true);
-            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.X)) {
-                robot.vision.setRecording(false);
-            }
+//            if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {
+//                robot.vision.setRecording(true);
+//            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.X)) {
+//                robot.vision.setRecording(false);
+//            }
             FtcDashboardManager.addData("RECORDING", robot.vision.isRecording());
 
             //noinspection SuspiciousNameCombination
