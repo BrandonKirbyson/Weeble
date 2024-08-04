@@ -41,7 +41,7 @@ public class Weeble {
 
     public void update() {
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
-        drive.update(angles, head.getDeltaPitch());
+        drive.update(angles);
         head.updateAngles(angles);
 
         vision.update();
@@ -61,7 +61,6 @@ public class Weeble {
         }
 
         if (uprighting && angles.getPitch(AngleUnit.DEGREES) > BalanceConstants.UprightPowerMargin) {
-//            drive.uprightPower();
             uprighting = false;
         }
 
