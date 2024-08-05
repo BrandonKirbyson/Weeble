@@ -80,6 +80,19 @@ public class GyroDrive {
 
         double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 
+        //Use LQRConstants
+        /*
+ u[0] = ( k[0]*(encoder_set_point  - average_theta)
+          +k[1]*(pitch_set_point-pitch)
+          +k[2]*(velocity_set_point-average_RPM)
+          +k[3]*(pitch_dot_set_point-pitch_dot));
+
+  u[1] = (k1[0]*yaw +k1[1]*yaw_dot) ;
+  v[0] = (0.5 *(u[0] + u[1])); // for right motor
+  v[1] = (0.5 *(u[0] - u[1])); // for left motor
+         */
+
+
 //        setPower(outputPower + rotSpeed, outputPower - rotSpeed);
 
         updateState();

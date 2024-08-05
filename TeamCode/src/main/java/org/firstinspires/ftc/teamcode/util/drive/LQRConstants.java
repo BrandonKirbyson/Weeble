@@ -11,20 +11,20 @@ public class LQRConstants {
             {GRAVITY / LENGTH, 0, 0, 0},
             {0, 0, 0, 1},
             {-GRAVITY / MASS, 0, 0, 0}
-    };
+    }; // state matrix
 
     public static final double[][] B = {
             {1 / -(MASS * (LENGTH * LENGTH))},
             {0},
             {0},
             {1 / MASS}
-    };
+    }; // control matrix
 
     public static double AnglePenalty = 1;
     public static double AngularVelocityPenalty = 0;
     public static double PositionPenalty = 0;
     public static double VelocityPenalty = 0;
 
-    public static double[] Q = {AnglePenalty, AngularVelocityPenalty, PositionPenalty, VelocityPenalty};
+    public static double[] Q = {AnglePenalty, AngularVelocityPenalty, PositionPenalty, VelocityPenalty}; // state penalty, x, x dot, theta, theta dot
     public static double R = 1;
 }
