@@ -34,4 +34,5 @@ dependencies {
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 
     implementation "com.acmerobotics.dashboard:dashboard:0.4.14"
+    implementation "org.hipparchus:hipparchus-core:3.0"
 }
