@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
+import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.RealMatrix;
 
 public class GyroDrive {
     private final DcMotor leftMotor;
@@ -83,7 +85,15 @@ public class GyroDrive {
         }
 
         double currentAngle = angles.getPitch(AngleUnit.DEGREES);
-        
+
+        double currentVelocity = 0;
+
+        // Get the current state from the LQRController
+        RealMatrix currentState = controller.getCurrentState(angles, currentVelocity);
+
+        // Define the target state based on your desired behavior
+        RealMatrix targetState = getTargetState();
+
 //        setPower(outputPower + rotSpeed, outputPower - rotSpeed);
 
         updateState();
@@ -93,6 +103,16 @@ public class GyroDrive {
         FtcDashboardManager.addData("Turn", rotationVel);
 //        FtcDashboardManager.addData("Output", outputPower);
         overlayRobot();
+    }
+
+    private RealMatrix getTargetState() {
+        // Define the target state based on your desired behavior
+        return MatrixUtils.createRealMatrix(new double[][]{
+                {BalanceConstants.TargetAngle}, // pitch angle
+                {0}, // pitch rate
+                {0}, // position
+                {targetVel} // velocity
+        });
     }
 
     private void updateState() {
