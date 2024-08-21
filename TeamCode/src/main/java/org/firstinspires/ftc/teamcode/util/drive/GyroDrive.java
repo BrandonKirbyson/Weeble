@@ -101,7 +101,7 @@ public class GyroDrive {
 
         double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 
-        RealMatrix currentState = controller.getCurrentState(angles, pitchRate, currentVel);
+        RealMatrix currentState = getCurrentState(currentAngle, pitchRate, currentVel);
 
         RealMatrix targetState = getTargetState(headAngle);
 
@@ -113,27 +113,41 @@ public class GyroDrive {
 
         FtcDashboardManager.addData("Angle", currentAngle);
         FtcDashboardManager.addData("AngleError", currentAngle);
+        FtcDashboardManager.addData("PitchRate", pitchRate);
+        FtcDashboardManager.addData("CurrentVelocity", currentVel);
+        FtcDashboardManager.addData("TargetVelocity", targetVel);
         FtcDashboardManager.addData("Turn", rotationVel);
         FtcDashboardManager.addData("Output", output[0] + " | " + output[1]);
+        FtcDashboardManager.addData("K", controller.getK());
         overlayRobot();
         lastTime = System.currentTimeMillis();
     }
 
     private void updateCurrentVelocity() {
-        currentPos = (double) (leftMotor.getCurrentPosition() + rightMotor.getCurrentPosition()) / 2 * LQRConstants.TICKS_PER_M;
+        currentPos = (double) (leftMotor.getCurrentPosition() + rightMotor.getCurrentPosition()) / 2 / LQRConstants.TICKS_PER_M;
 
         currentVel = (currentPos - lastPos) / (System.currentTimeMillis() - lastTime);
 
         lastPos = currentPos;
     }
 
+    public RealMatrix getCurrentState(double angle, double pitchRate, double currentVelocity) {
+        // Construct the state vector [pitchAngle, pitchRate, currentVelocity, ...]
+        return MatrixUtils.createRealMatrix(new double[][]{
+                {angle},
+                {pitchRate},
+                {currentPos},
+                {currentVelocity}
+        });
+    }
+
     private RealMatrix getTargetState(double headAngle) {
-        double targetAngle = BalanceConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * BalanceConstants.HeadAngleConversion;
+        double targetAngle = LQRConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * BalanceConstants.HeadAngleConversion;
 
         return MatrixUtils.createRealMatrix(new double[][]{
                 {targetAngle}, // pitch angle
                 {0}, // pitch rate
-                {0}, // position
+                {lastPos}, // position
                 {targetVel} // velocity
         });
     }

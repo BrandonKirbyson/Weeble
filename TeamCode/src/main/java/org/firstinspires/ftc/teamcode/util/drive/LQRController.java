@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.util.drive;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RiccatiEquationSolver;
@@ -18,7 +17,7 @@ public class LQRController {
     private final ExecutorService executor;
 
     public LQRController() {
-        calculateLQRGain();
+        K = calculateLQRGain();
 
         executor = Executors.newSingleThreadExecutor();
     }
@@ -37,6 +36,8 @@ public class LQRController {
     }
 
     public double[] calculateOutputPowers(RealMatrix currentState, RealMatrix targetState) {
+        if (K == null) return new double[]{0, 0};
+
         // Calculate the state error
         RealMatrix error = targetState.subtract(currentState);
 
@@ -44,27 +45,17 @@ public class LQRController {
         RealMatrix controlInput = K.multiply(error).scalarMultiply(-1);
 
         // Assume controlInput contains power values for left and right motors
-        double leftPower = controlInput.getEntry(0, 0);
-        double rightPower = controlInput.getEntry(1, 0);
+        FtcDashboardManager.addData("control", controlInput);
+        double power = controlInput.getEntry(0, 0) / 100;
 
         // Return the motor powers as a 2-element array
-        return new double[]{leftPower, rightPower};
-    }
-
-    public RealMatrix getCurrentState(YawPitchRollAngles angles, double pitchRate, double currentVelocity) {
-        double pitchAngle = angles.getPitch(AngleUnit.RADIANS);
-        // Construct the state vector [pitchAngle, pitchRate, currentVelocity, ...]
-        return MatrixUtils.createRealMatrix(new double[][]{
-                {pitchAngle},
-                {pitchRate},
-                {currentVelocity}
-        });
+        return new double[]{power, power};
     }
 
     private RealMatrix calculateLQRGain() {
-        RealMatrix A = MatrixUtils.createRealMatrix(LQRConstants.A);
-        RealMatrix B = MatrixUtils.createRealMatrix(LQRConstants.B);
-        RealMatrix Q = MatrixUtils.createRealDiagonalMatrix(LQRConstants.Q);
+        RealMatrix A = MatrixUtils.createRealMatrix(LQRConstants.getA());
+        RealMatrix B = MatrixUtils.createRealMatrix(LQRConstants.getB());
+        RealMatrix Q = MatrixUtils.createRealDiagonalMatrix(LQRConstants.getQ());
         RealMatrix R = MatrixUtils.createRealMatrix(new double[][]{{LQRConstants.R}});
 
         // Solve the Riccati equation
