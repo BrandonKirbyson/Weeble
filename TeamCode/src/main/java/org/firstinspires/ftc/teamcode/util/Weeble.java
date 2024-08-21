@@ -41,7 +41,8 @@ public class Weeble {
 
     public void update() {
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
-        drive.update(angles);
+        double pitchRate = imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;
+        drive.update(angles, pitchRate, head.getPitch());
         head.updateAngles(angles);
 
         vision.update();

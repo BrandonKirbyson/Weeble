@@ -69,6 +69,10 @@ public class Head {
         return deltaPitch;
     }
 
+    public double getPitch() {
+        return neckServo.getPosition();
+    }
+
     public void update(Point trackingTarget) {
         updateCurrentHeadOrientation();
 

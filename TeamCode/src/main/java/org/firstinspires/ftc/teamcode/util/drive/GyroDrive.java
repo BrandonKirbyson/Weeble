@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -20,14 +21,21 @@ public class GyroDrive {
 
     private YawPitchRollAngles angles;
 
-    private LQRController controller = new LQRController();
+    private final LQRController controller;
 
     private final Pose pose = new Pose();
 
     private boolean lastBalanced = false;
 
     private double targetVel = 0;
+    private double currentVel = 0;
+
     private double rotationVel = 0;
+
+    private double lastPos = 0;
+    private double currentPos = 0;
+
+    private double lastTime = 0;
 
     private boolean emergencyStop = false;
 
@@ -71,7 +79,7 @@ public class GyroDrive {
     public void setTargetAngle(double target) {
     }
 
-    public void update(YawPitchRollAngles angles) {
+    public void update(YawPitchRollAngles angles, double pitchRate, double headAngle) {
         this.angles = angles;
 
         if (!isBalanced() || emergencyStop) {
@@ -84,31 +92,46 @@ public class GyroDrive {
             lastBalanced = true;
         }
 
+        if (LQRConstants.UpdateLQRGains) {
+            controller.updateK();
+            LQRConstants.UpdateLQRGains = false;
+        }
+
+        updateCurrentVelocity();
+
         double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 
-        double currentVelocity = 0;
+        RealMatrix currentState = controller.getCurrentState(angles, pitchRate, currentVel);
 
-        // Get the current state from the LQRController
-        RealMatrix currentState = controller.getCurrentState(angles, currentVelocity);
+        RealMatrix targetState = getTargetState(headAngle);
 
-        // Define the target state based on your desired behavior
-        RealMatrix targetState = getTargetState();
+        double[] output = controller.calculateOutputPowers(currentState, targetState);
 
-//        setPower(outputPower + rotSpeed, outputPower - rotSpeed);
+        setPower(output[0] + rotationVel, output[1] - rotationVel);
 
         updateState();
 
         FtcDashboardManager.addData("Angle", currentAngle);
         FtcDashboardManager.addData("AngleError", currentAngle);
         FtcDashboardManager.addData("Turn", rotationVel);
-//        FtcDashboardManager.addData("Output", outputPower);
+        FtcDashboardManager.addData("Output", output[0] + " | " + output[1]);
         overlayRobot();
+        lastTime = System.currentTimeMillis();
     }
 
-    private RealMatrix getTargetState() {
-        // Define the target state based on your desired behavior
+    private void updateCurrentVelocity() {
+        currentPos = (double) (leftMotor.getCurrentPosition() + rightMotor.getCurrentPosition()) / 2 * LQRConstants.TICKS_PER_M;
+
+        currentVel = (currentPos - lastPos) / (System.currentTimeMillis() - lastTime);
+
+        lastPos = currentPos;
+    }
+
+    private RealMatrix getTargetState(double headAngle) {
+        double targetAngle = BalanceConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * BalanceConstants.HeadAngleConversion;
+
         return MatrixUtils.createRealMatrix(new double[][]{
-                {BalanceConstants.TargetAngle}, // pitch angle
+                {targetAngle}, // pitch angle
                 {0}, // pitch rate
                 {0}, // position
                 {targetVel} // velocity

@@ -51,9 +51,8 @@ public class LQRController {
         return new double[]{leftPower, rightPower};
     }
 
-    public RealMatrix getCurrentState(YawPitchRollAngles angles, double currentVelocity) {
-        double pitchAngle = angles.getPitch(AngleUnit.RADIANS);  // Pitch angle in radians
-        double pitchRate = 0;
+    public RealMatrix getCurrentState(YawPitchRollAngles angles, double pitchRate, double currentVelocity) {
+        double pitchAngle = angles.getPitch(AngleUnit.RADIANS);
         // Construct the state vector [pitchAngle, pitchRate, currentVelocity, ...]
         return MatrixUtils.createRealMatrix(new double[][]{
                 {pitchAngle},

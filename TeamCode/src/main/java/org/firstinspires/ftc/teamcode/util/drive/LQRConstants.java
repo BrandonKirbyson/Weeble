@@ -5,6 +5,9 @@ public class LQRConstants {
     private final static double LENGTH = 0.12; // length to center of mass (m)
     private final static double MASS = 10; // kg
     private final static double WHEEL_RADIUS = 0.05; // m
+    private static final double TICKS_PER_REVOLUTE = 537.7 * 26 / 20;
+
+    public static final double TICKS_PER_M = TICKS_PER_REVOLUTE / (WHEEL_RADIUS * Math.PI);
 
     public static final double[][] A = {
             {0, 1, 0, 0},
@@ -27,4 +30,6 @@ public class LQRConstants {
 
     public static double[] Q = {AnglePenalty, AngularVelocityPenalty, PositionPenalty, VelocityPenalty}; // state penalty, x, x dot, theta, theta dot
     public static double R = 0.2;
+
+    public static boolean UpdateLQRGains = false;
 }
