@@ -27,11 +27,13 @@ public class GyroDrive {
 
     private boolean lastBalanced = false;
 
+    private double lastTargetVel = 0;
     private double targetVel = 0;
     private double currentVel = 0;
 
     private double rotationVel = 0;
 
+    private double targetPos = 0;
     private double lastPos = 0;
     private double currentPos = 0;
 
@@ -73,7 +75,11 @@ public class GyroDrive {
 
     public void drive(double drivePower, double turnPower, boolean fast) {
         targetVel = drivePower * (fast ? SpeedConstants.FastDrive : SpeedConstants.Drive);
+        if (lastTargetVel != 0 && targetVel != 0) {
+            targetPos = currentPos;
+        }
         rotationVel = turnPower * (fast ? SpeedConstants.FastTurn : SpeedConstants.Turn);
+        lastTargetVel = targetVel;
     }
 
     public void setTargetAngle(double target) {
@@ -117,6 +123,8 @@ public class GyroDrive {
         FtcDashboardManager.addData("CurrentVelocity", currentVel);
         FtcDashboardManager.addData("TargetVelocity", targetVel);
         FtcDashboardManager.addData("Turn", rotationVel);
+        FtcDashboardManager.addData("CurrentPos", currentPos);
+        FtcDashboardManager.addData("TargetPos", targetPos);
         FtcDashboardManager.addData("Output", output[0] + " | " + output[1]);
         FtcDashboardManager.addData("K", controller.getK());
         overlayRobot();
@@ -124,15 +132,14 @@ public class GyroDrive {
     }
 
     private void updateCurrentVelocity() {
-        currentPos = (double) (leftMotor.getCurrentPosition() + rightMotor.getCurrentPosition()) / 2 / LQRConstants.TICKS_PER_M;
+        currentPos = (double) (leftMotor.getCurrentPosition() + rightMotor.getCurrentPosition()) / 2 * LQRConstants.M_PER_TICKS * LQRConstants.PositionModifier;
 
-        currentVel = (currentPos - lastPos) / (System.currentTimeMillis() - lastTime);
+        currentVel = (currentPos - lastPos) / (System.currentTimeMillis() - lastTime) / LQRConstants.PositionModifier * LQRConstants.VelocityModifier;
 
         lastPos = currentPos;
     }
 
     public RealMatrix getCurrentState(double angle, double pitchRate, double currentVelocity) {
-        // Construct the state vector [pitchAngle, pitchRate, currentVelocity, ...]
         return MatrixUtils.createRealMatrix(new double[][]{
                 {angle},
                 {pitchRate},
@@ -142,12 +149,12 @@ public class GyroDrive {
     }
 
     private RealMatrix getTargetState(double headAngle) {
-        double targetAngle = LQRConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * BalanceConstants.HeadAngleConversion;
+        double targetAngle = LQRConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * LQRConstants.HeadAngleModifier;
 
         return MatrixUtils.createRealMatrix(new double[][]{
                 {targetAngle}, // pitch angle
                 {0}, // pitch rate
-                {lastPos}, // position
+                {targetPos}, // position
                 {targetVel} // velocity
         });
     }

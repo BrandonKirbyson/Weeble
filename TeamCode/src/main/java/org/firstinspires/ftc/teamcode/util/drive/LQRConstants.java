@@ -10,7 +10,7 @@ public class LQRConstants {
     public static double WHEEL_RADIUS = 0.05; // m
     public static double TICKS_PER_REVOLUTE = 537.7 * 26 / 20;
 
-    public static final double TICKS_PER_M = TICKS_PER_REVOLUTE / (WHEEL_RADIUS * Math.PI);
+    public static double M_PER_TICKS = (WHEEL_RADIUS * 2 * Math.PI) / TICKS_PER_REVOLUTE;
 
     public static double[][] getA() {
         return new double[][]{
@@ -30,12 +30,11 @@ public class LQRConstants {
         };
     }
 
-    public static double AnglePenalty = 1;
+    public static double AnglePenalty = 0.9;
     public static double AngularVelocityPenalty = 0.0;
-    public static double PositionPenalty = 0.02;
+    public static double PositionPenalty = 1;
     public static double VelocityPenalty = 1;
 
-    //    public static double[] Q = {AnglePenalty, AngularVelocityPenalty, PositionPenalty, VelocityPenalty}; // state penalty, x, x dot, theta, theta dot
     public static double[] getQ() {
         return new double[]{AnglePenalty, AngularVelocityPenalty, PositionPenalty, VelocityPenalty}; // state penalty, x, x dot, theta, theta dot
     }
@@ -43,6 +42,10 @@ public class LQRConstants {
     public static double R = 0.1;
 
     public static double TargetAngle = -3.5;
+    public static double HeadAngleModifier = -15;
+
+    public static double VelocityModifier = 10000;
+    public static double PositionModifier = 1;
 
     public static boolean UpdateLQRGains = false;
 }
