@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class LQRConstants {
     private final static double GRAVITY = 9.81; // m/s^2
-    public static double LENGTH = 0.04708; // length to center of mass (m)
+    public static double LENGTH = 0.04208; // length to center of mass (m) 0.04708
     public static double MASS = 3.401942775; // kg (7.5 lbs)
     public static double WHEEL_RADIUS = 0.05; // m
     public static double TICKS_PER_REVOLUTE = 537.7 * 26 / 20;
@@ -41,7 +41,7 @@ public class LQRConstants {
 
     public static double R = 0.1;
 
-    public static double TargetAngle = -3.5;
+    public static double TargetAngle = -3;
     public static double HeadAngleModifier = -15;
 
     public static double VelocityModifier = 10000;

@@ -51,8 +51,10 @@ public class Weeble {
             head.update(vision.getTrackingCenter());
         }
 
+        arms.update(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle);
+
         if (drive.getLastState() != DriveState.STOPPED && drive.getState() == DriveState.STOPPED) {
-            arms.setArmPosition(ArmPosition.Crash);
+//            arms.setArmPosition(ArmPosition.Crash);
             head.protectionMode();
             head.setEyebrows(HeadConstants.eyebrowsSad);
         } else if (drive.getLastState() == DriveState.STOPPED && drive.getState() != DriveState.STOPPED) {

@@ -10,7 +10,7 @@ public class HeadConstants {
     public static double xMax = 20;
     public static double xConversion = 180;
 
-    public static double yCenter = 0.34;
+    public static double yCenter = 0.42;
     public static double yMin = -60;
     public static double yMax = 60;
     public static double yConversion = -180;

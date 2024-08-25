@@ -21,7 +21,10 @@ public class ArmsTest extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             gamepad1Buttons.update();
 
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_UP)) {
+            if (gamepad2.left_stick_y != 0 || gamepad2.right_stick_y != 0) {
+                arms.setLeftArmPosition(ArmPosition.Down + gamepad2.left_stick_y * 0.5);
+                arms.setRightArmPosition(ArmPosition.Down + gamepad2.right_stick_y * 0.5);
+            } else if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_UP)) {
                 arms.setArmPosition(ArmPosition.Up);
             } else if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_DOWN)) {
                 arms.setArmPosition(ArmPosition.Down);

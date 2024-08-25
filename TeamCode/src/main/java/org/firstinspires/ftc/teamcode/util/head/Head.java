@@ -36,7 +36,7 @@ public class Head {
 
     public Head(HardwareMap hardwareMap) {
         neckServo = hardwareMap.get(Servo.class, "neck");
-        headServo = hardwareMap.get(Servo.class, "eyes");
+        headServo = hardwareMap.get(Servo.class, "head");
         eyesServo = hardwareMap.get(Servo.class, "eyes");
         eyebrowsServo = hardwareMap.get(Servo.class, "eyebrows");
 

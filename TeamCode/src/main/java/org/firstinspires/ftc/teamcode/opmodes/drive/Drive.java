@@ -94,6 +94,10 @@ public class Drive extends LinearOpMode {
 
             robot.update();
 
+            if (gamepad2.left_stick_y != 0 || gamepad2.right_stick_y != 0) {
+                robot.arms.setLeftArmPosition(gamepad2.left_stick_y);
+                robot.arms.setRightArmPosition(gamepad2.right_stick_y);
+            }
 
             FtcDashboardManager.update();
         }

@@ -12,7 +12,7 @@ public class BalanceConstants {
 
     public static double TargetAngle = -2;
     public static double MaxTargetAngle = 6;
-    public static double MaxAngle = 30;
+    public static double MaxAngle = 60;
 
     public static boolean manualDrive = false;
 

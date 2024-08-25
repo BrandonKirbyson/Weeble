@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.util.arms;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
 
 public class Arms {
     private final Servo leftArm;
@@ -16,5 +17,31 @@ public class Arms {
     public void setArmPosition(double position) {
         leftArm.setPosition(position);
         rightArm.setPosition(position);
+    }
+
+    public void setLeftArmPosition(double position) {
+        leftArm.setPosition(position);
+    }
+
+    public void setRightArmPosition(double position) {
+        rightArm.setPosition(position);
+    }
+
+    public void update(double angle) {
+        if (Math.abs(angle) > BalanceConstants.MaxAngle) {
+            if (angle < 0) {
+                setArmPosition(ArmPosition.FullForward);
+            } else {
+                setArmPosition(ArmPosition.FullBack);
+            }
+        } else if (Math.abs(angle) > ArmPosition.MovingAngle) {
+            if (angle < 0) {
+                setArmPosition(ArmPosition.Forward);
+            } else {
+                setArmPosition(ArmPosition.Back);
+            }
+        } else {
+            setArmPosition(ArmPosition.Down);
+        }
     }
 }
