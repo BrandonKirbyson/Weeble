@@ -23,7 +23,7 @@ improvements will be made to make the LQR controller PID-assisted to improve vel
 
 ## What is Weeble Made Of?
 
-<img alt="" src="assets/weeble_parts.png" height="400">
+<img alt="" src="https://cdn.jsdelivr.net/gh/BrandonKirbyson/Weeble@main/assets/weeble_parts.png" height="400">
 
 - Fully 3D printed body
 - 2x 100mm rubber wheels with 3D printed hubs
