@@ -6,6 +6,10 @@ Weeble is a 2 wheeled balancing robot with a lot of personality!
 He features 2 wheels, 2 arms, and a moving head, eyes, and eyebrows all compacted into fully 3d printed body.
 To balance, he uses a LQR Controller and also has fun features like head and eye tracking!
 
+[Robot Reveal Video](https://www.youtube.com/watch?v=vaklsPUqb7Q)
+
+[Onshape CAD Assembly](https://cad.onshape.com/documents/580f78b3fd6e84e547fe38d2/w/b6d75d737f737433c694a54b/e/f82997b12f5279d180b2472a?renderMode=0&uiState=66ce9b099fbb4060b414570f)
+
 ## How Does Weeble Balance?
 
 <img alt="" src="assets/weeble_square.jpg" height="300">
