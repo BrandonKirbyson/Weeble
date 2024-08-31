@@ -4,7 +4,7 @@
 
 ## Robot Reveal Video
 
-### PLEASE watch the full video but if you just want to see the final version of Weeble, skip to 0:54.
+### PLEASE watch the full video but if you just want to see the final version of Weeble, skip to `0:54`.
 
 [![YouTube](http://i.ytimg.com/vi/vaklsPUqb7Q/hqdefault.jpg)](https://www.youtube.com/watch?v=vaklsPUqb7Q)
 
@@ -14,8 +14,9 @@
 
 ### Weeble is a 2 wheeled balancing robot with a lot of personality!
 
-He features 2 wheels, 2 arms, and a moving head, eyes, and eyebrows all compacted into fully 3d printed body.
-To balance, he uses a LQR Controller and also has fun features like head and eye tracking!
+He features **2 wheels, 2 arms, and a moving head, eyes, and eyebrows** all **compacted** into **fully 3d printed body
+**.
+To balance, he uses a **LQR Controller** and also has fun features like **head and eye tracking**!
 
 [Robot Reveal Video](https://www.youtube.com/watch?v=vaklsPUqb7Q)
 
@@ -29,7 +30,9 @@ To balance, he uses a LQR Controller and also has fun features like head and eye
 
 Weeble balances using a Linear Quadratic Regulator (LQR) Controller. The previous versions of Weeble used a PID
 controller, but the LQR controller is much more efficient and stable. Also, with the slower loop speed of the REV
-Control Hub, the PID was unable to be effective enough. The LQR controller uses the state-space model of the robot to
+Control Hub, the PID was unable to be effective enough.
+
+The LQR controller uses the state-space model of the robot to
 calculate the optimal gains to keep the model balanced. The state-space model is a mathematical model that represents
 the behavior of a physical system as the set of input, output, and state variables. The gains are used with the state of
 the robot (
@@ -78,16 +81,16 @@ The control input `u` is computed using the feedback law:
 
 <img alt="" src="https://cdn.jsdelivr.net/gh/BrandonKirbyson/Weeble@main/assets/weeble_parts.png" height="400">
 
-- Fully 3D printed body
-- 2x 100mm rubber wheels with 3D printed hubs
-- 2x 312 RPM GoBilda DC motors with encoders (Wheels)
-- REV Control Hub (Brain)
-- 2x REV Servos (Arms)
-- 1x Axon Mini+ Servo (Neck)
-- 4x SG90S Servos (Head, Eyes, Eyebrows)
-- 3x REV 2M Distance Sensors (Front, Left, Right)
-- 1x Innomaker Arducam (Embedded in Right Eye, OpenCV)
-- 1x 12V Battery (Power)
+- **Fully** 3D printed body
+- `2x` 100mm rubber wheels with 3D printed hubs
+- `2x` 312 RPM GoBilda DC motors with encoders (Wheels)
+- `1x` REV Control Hub (Brain)
+- `2x` REV Servos (Arms)
+- `1x` Axon Mini+ Servo (Neck)
+- `4x` SG90S Servos (Head, Eyes, Eyebrows)
+- `3x` REV 2M Distance Sensors (Front, Left, Right)
+- `1x` Innomaker Arducam (Embedded in Right Eye, OpenCV)
+- `1x` 12V Battery (Power)
 
 All 3 versions of Weeble were fully designed in OnShape and 3D printed parts were made with a Prusa Mini+ 3D printer.
 
