@@ -14,9 +14,8 @@
 
 ### Weeble is a 2 wheeled balancing robot with a lot of personality!
 
-He features **2 wheels, 2 arms, and a moving head, eyes, and eyebrows** all **compacted** into **fully 3d printed body
-**.
-To balance, he uses a **LQR Controller** and also has fun features like **head and eye tracking**!
+He features 2 wheels, 2 arms, and a moving head, eyes, and eyebrows all compacted into a fully 3d printed body.
+To balance, he uses a LQR Controller and also has fun features like head and eye tracking!
 
 [Robot Reveal Video](https://www.youtube.com/watch?v=vaklsPUqb7Q)
 
@@ -24,13 +23,24 @@ To balance, he uses a **LQR Controller** and also has fun features like **head a
 
 ## How Does Weeble Balance?
 
-<img alt="" src="assets/weeble_square.jpg" height="300">
+[//]: # (<img alt="" src="assets/weeble_square.jpg" height="300">)
 
 ### Linear Quadratic Regulator (LQR) Controller
 
 Weeble balances using a Linear Quadratic Regulator (LQR) Controller. The previous versions of Weeble used a PID
 controller, but the LQR controller is much more efficient and stable. Also, with the slower loop speed of the REV
-Control Hub, the PID was unable to be effective enough.
+Control Hub, the PID was unable to be effective enough. Below are the key java classes that handle keeping Weeble
+balanced (github links):
+
+- [
+  `LQRController.java`](https://github.com/BrandonKirbyson/Weeble/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/util/drive/LQRController.java) -
+  The LQR controller class. It calculates the optimal gains and calculates the optimal control input for the motors.
+
+- [
+  `GyroDrive.java`](https://github.com/BrandonKirbyson/Weeble/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/util/drive/GyroDrive.java) -
+  The class that handles the balancing of Weeble. It uses the LQR controller class and the states of Weeble.
+
+### About LQR Controller
 
 The LQR controller uses the state-space model of the robot to
 calculate the optimal gains to keep the model balanced. The state-space model is a mathematical model that represents
@@ -42,7 +52,7 @@ improvements will be made to make the LQR controller PID-assisted to improve vel
 Below are the two most important components of the LQR controller, there are many more equations and components that
 make up
 the
-LQR controller but these are the most important.
+LQR controller but these are the most important and easiest to understand.
 
 ### State-Space Model
 
