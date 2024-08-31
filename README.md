@@ -1,6 +1,12 @@
 # Weeble
 
-<img alt="" src="assets/weeble_video_thumbnail.jpeg" height="300">
+<!-- <img alt="" src="assets/weeble_video_thumbnail.jpeg" height="300">-->
+
+## Robot Reveal Video 
+
+[![YouTube](http://i.ytimg.com/vi/vaklsPUqb7Q/hqdefault.jpg)](https://www.youtube.com/watch?v=vaklsPUqb7Q)
+
+Click to play on youtube! ^
 
 Weeble is a 2 wheeled balancing robot with a lot of personality!
 He features 2 wheels, 2 arms, and a moving head, eyes, and eyebrows all compacted into fully 3d printed body.
