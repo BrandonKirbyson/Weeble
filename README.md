@@ -2,13 +2,16 @@
 
 <!-- <img alt="" src="assets/weeble_video_thumbnail.jpeg" height="300">-->
 
-## Robot Reveal Video 
+## Robot Reveal Video
+
+### PLEASE watch the full video but if you just want to see the final version of Weeble, skip to 0:54.
 
 [![YouTube](http://i.ytimg.com/vi/vaklsPUqb7Q/hqdefault.jpg)](https://www.youtube.com/watch?v=vaklsPUqb7Q)
 
-Click to play on youtube! ^
+### Click to play on YouTube! ^
 
-Weeble is a 2 wheeled balancing robot with a lot of personality!
+### Weeble is a 2 wheeled balancing robot with a lot of personality!
+
 He features 2 wheels, 2 arms, and a moving head, eyes, and eyebrows all compacted into fully 3d printed body.
 To balance, he uses a LQR Controller and also has fun features like head and eye tracking!
 
@@ -20,7 +23,7 @@ To balance, he uses a LQR Controller and also has fun features like head and eye
 
 <img alt="" src="assets/weeble_square.jpg" height="300">
 
-- Linear Quadratic Regulator (LQR) Controller
+### Linear Quadratic Regulator (LQR) Controller
 
 Weeble balances using a Linear Quadratic Regulator (LQR) Controller. The previous versions of Weeble used a PID
 controller, but the LQR controller is much more efficient and stable. Also, with the slower loop speed of the REV
@@ -30,6 +33,40 @@ the behavior of a physical system as the set of input, output, and state variabl
 the robot (
 angle, angular velocity, position, and velocity) to keep the robot balanced and driving. Future
 improvements will be made to make the LQR controller PID-assisted to improve velocity control.
+
+Below are the two most important components of the LQR controller, there are many more equations and components that
+make up
+the
+LQR controller but these are the most important.
+
+### State-Space Model
+
+The dynamics of the system are modeled as a set of linear differential equations:
+
+$$
+\dot{x} = A x + B u
+$$
+
+where:
+
+- `x` is the state vector (angle, angular velocity, position, velocity)
+- `u` is the control input vector (motor power)
+- `A` is the state matrix (how state evolves over time)
+- `B` is the input matrix (how control input affects state)
+
+### Optimal Control Law
+
+The control input `u` is computed using the feedback law:
+
+$$
+u = -K x
+$$
+
+where:
+
+- `K` is the feedback gain matrix (computed using LQR)
+- `x` is the state vector (angle, angular velocity, position, velocity)
+- `u` is the control input vector (motor power to keep the robot balanced)
 
 ## What is Weeble Made Of?
 
