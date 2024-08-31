@@ -10,6 +10,8 @@
 
 ### Click to play on YouTube! ^
 
+## Quick Overview of Weeble
+
 ### Weeble is a 2 wheeled balancing robot with a lot of personality!
 
 He features 2 wheels, 2 arms, and a moving head, eyes, and eyebrows all compacted into fully 3d printed body.
@@ -43,11 +45,13 @@ LQR controller but these are the most important.
 
 The dynamics of the system are modeled as a set of linear differential equations:
 
-$$
-\dot{x} = A x + B u
-$$
+[//]: # ($$)
 
-where:
+[//]: # (\dot{x} = A x + B u)
+
+[//]: # ($$)
+
+`ẋ = Ax + Bu`
 
 - `x` is the state vector (angle, angular velocity, position, velocity)
 - `u` is the control input vector (motor power)
@@ -58,11 +62,13 @@ where:
 
 The control input `u` is computed using the feedback law:
 
-$$
-u = -K x
-$$
+[//]: # ($$)
 
-where:
+[//]: # (u = -K x)
+
+[//]: # ($$)
+
+`u = -Kx`
 
 - `K` is the feedback gain matrix (computed using LQR)
 - `x` is the state vector (angle, angular velocity, position, velocity)
