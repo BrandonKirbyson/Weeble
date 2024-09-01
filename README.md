@@ -13,8 +13,7 @@
 ## Quick Overview of Weeble
 
 ### Weeble is a 2 wheeled balancing robot with a lot of personality!
-It took a lot of work to `fit the many features` into such a `compact fully 3d printed cute` robot let alone get him to `balance and drive so stable` on `slow 20ms loop times of the Control Hub` and being `7.5 pounds`! Hope you like him!
-
+It took a lot of work to `fit the many features` of Weeble into such a `compact fully 3d printed cute` robot let alone get him to `balance and drive so stable` `with the slow 20ms loop times of the Control Hub` and being `7.5 pounds`! Hope you like him!
 
 - Fully `3d Printed` Body
 - `Linear Quadratic Regulator (LQR) controller` to balance and drive around the `7.5 pound` Weeble!
@@ -25,6 +24,7 @@ It took a lot of work to `fit the many features` into such a `compact fully 3d p
 - `Moveable eyebrows` to express `complex emotions`
 - `2 cute arms` powered by servos
 - `2 epic 100mm Wheels` powered by `312 rpm motors`, `high torque` because Weeble is heavy!
+- `3 2M TOF distance sensors` for `autonomous driving and obstacle detection`
 - `Efficient LQR controller` and `12V battery` means `long 30+ min battery life`.
 
 [Robot Reveal Video](https://www.youtube.com/watch?v=vaklsPUqb7Q)
@@ -39,9 +39,9 @@ It took a lot of work to `fit the many features` into such a `compact fully 3d p
 
 ### Linear Quadratic Regulator (LQR) Controller
 
-Weeble balances using a Linear Quadratic Regulator (LQR) Controller. The previous versions of Weeble used a PID
-controller, but the LQR controller is much more efficient and stable. Also, with the slower loop speed of the REV
-Control Hub, the PID was unable to be effective enough. Below are the key java classes that handle keeping Weeble
+Weeble balances using a `Linear Quadratic Regulator (LQR) Controller`. The previous versions of Weeble used a `PID
+controller`, but the `LQR controller` is much `more efficient and stable`. Also, with the `slow 20ms loop speed of the REV
+Control Hub`, the `PID was unable to be effective enough`. Below are the key java classes that handle keeping Weeble
 balanced (github links):
 
 - [
@@ -54,12 +54,12 @@ balanced (github links):
 
 ### About LQR Controller
 
-The LQR controller uses the state-space model of the robot to
-calculate the optimal gains to keep the model balanced. The state-space model is a mathematical model that represents
+The `LQR controller` uses the `state-space model` of the robot to
+`calculate the optimal gains` to keep Weeble balanced. The state-space model is a mathematical model that represents
 the behavior of a physical system as the set of input, output, and state variables. The gains are used with the state of
 the robot (
-angle, angular velocity, position, and velocity) to keep the robot balanced and driving. Future
-improvements will be made to make the LQR controller PID-assisted to improve velocity control.
+angle, angular velocity, position, and velocity) `to keep the robot balanced and driving`. Future
+improvements will be made to make the `LQR controller PID-assisted to improve velocity control`.
 
 Below are the two most important components of the LQR controller, there are many more equations and components that
 make up
@@ -101,7 +101,9 @@ The control input `u` is computed using the feedback law:
 
 ## What is Weeble Made Of?
 
-<img alt="" src="https://cdn.jsdelivr.net/gh/BrandonKirbyson/Weeble@main/assets/weeble_parts.png" height="400">
+<img src="https://github.com/user-attachments/assets/3c2281e7-5c41-4965-acc4-117555d68f99" height="300" />
+
+<img alt="" src="https://cdn.jsdelivr.net/gh/BrandonKirbyson/Weeble@main/assets/weeble_parts.png" height="400" />
 
 - **Fully** 3D printed body
 - `2x` 100mm rubber wheels with 3D printed hubs
@@ -114,12 +116,12 @@ The control input `u` is computed using the feedback law:
 - `1x` Innomaker Arducam (Embedded in Right Eye, OpenCV)
 - `1x` 12V Battery (Power)
 
-All 3 versions of Weeble were fully designed in OnShape and 3D printed parts were made with a Prusa Mini+ 3D printer.
+All `3 versions` of Weeble were `fully designed in OnShape` and 3D printed parts were made with a `Prusa Mini+ 3D printer`.
 
 ## How Does Weeble Work?
 
-Weeble is programmed in Java using the FTC SDK as he uses a leftover REV Control Hub from the 2024 FTC season. He also
-uses OpenCV to track objects and faces. The robot is controlled wireless with a Logitech Gamepad over a WiFi connection
+Weeble is programmed in `Java` using the `FTC SDK` as he uses a `leftover REV Control Hub from the 2024 FTC season`. He also
+uses `OpenCV to track objects and faces`. The robot is `controlled wireless with a Logitech Gamepad over a WiFi connection`
 to the REV Control Hub.
 
 ## Why Was Weeble Made?
