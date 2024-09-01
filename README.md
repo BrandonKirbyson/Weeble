@@ -44,12 +44,10 @@ controller`, but the `LQR controller` is much `more efficient and stable`. Also,
 Control Hub`, the `PID was unable to be effective enough`. Below are the key java classes that handle keeping Weeble
 balanced (github links):
 
-- [
-  `LQRController.java`](https://github.com/BrandonKirbyson/Weeble/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/util/drive/LQRController.java) -
+- [**LQRController.java**](https://github.com/BrandonKirbyson/Weeble/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/util/drive/LQRController.java) -
   The LQR controller class. It calculates the optimal gains and calculates the optimal control input for the motors.
 
-- [
-  `GyroDrive.java`](https://github.com/BrandonKirbyson/Weeble/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/util/drive/GyroDrive.java) -
+- [**GyroDrive.java**](https://github.com/BrandonKirbyson/Weeble/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/util/drive/GyroDrive.java) -
   The class that handles the balancing of Weeble. It uses the LQR controller class and the states of Weeble.
 
 ### About LQR Controller
@@ -118,11 +116,15 @@ The control input `u` is computed using the feedback law:
 
 All `3 versions` of Weeble were `fully designed in OnShape` and 3D printed parts were made with a `Prusa Mini+ 3D printer`.
 
+[Onshape CAD Assembly](https://cad.onshape.com/documents/580f78b3fd6e84e547fe38d2/w/b6d75d737f737433c694a54b/e/f82997b12f5279d180b2472a?renderMode=0&uiState=66ce9b099fbb4060b414570f)
+
 ## How Does Weeble Work?
 
 Weeble is programmed in `Java` using the `FTC SDK` as he uses a `leftover REV Control Hub from the 2024 FTC season`. He also
 uses `OpenCV to track objects and faces`. The robot is `controlled wireless with a Logitech Gamepad over a WiFi connection`
 to the REV Control Hub.
+
+<img src="https://skillicons.dev/icons?i=java,opencv,idea" />
 
 ## Why Was Weeble Made?
 
