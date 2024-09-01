@@ -13,13 +13,25 @@
 ## Quick Overview of Weeble
 
 ### Weeble is a 2 wheeled balancing robot with a lot of personality!
+It took a lot of work to `fit the many features` into such a `compact fully 3d printed cute` robot let alone get him to `balance and drive so stable` on `slow 20ms loop times of the Control Hub` and being `7.5 pounds`! Hope you like him!
 
-He features 2 wheels, 2 arms, and a moving head, eyes, and eyebrows all compacted into a fully 3d printed body.
-To balance, he uses a LQR Controller and also has fun features like head and eye tracking!
+
+- Fully `3d Printed` Body
+- `Linear Quadratic Regulator (LQR) controller` to balance and drive around the `7.5 pound` Weeble!
+- A `1080P Camera` embedded in the right eye, used for `computer vision (openCV)`
+- `Object detection and tracking` with `embedded camera in right eye`
+- A `head that can move` up, down, left and right super quickly
+- `2 massive adorable eyes`, that both `move side to side`
+- `Moveable eyebrows` to express `complex emotions`
+- `2 cute arms` powered by servos
+- `2 epic 100mm Wheels` powered by `312 rpm motors`, `high torque` because Weeble is heavy!
+- `Efficient LQR controller` and `12V battery` means `long 30+ min battery life`.
 
 [Robot Reveal Video](https://www.youtube.com/watch?v=vaklsPUqb7Q)
 
 [Onshape CAD Assembly](https://cad.onshape.com/documents/580f78b3fd6e84e547fe38d2/w/b6d75d737f737433c694a54b/e/f82997b12f5279d180b2472a?renderMode=0&uiState=66ce9b099fbb4060b414570f)
+
+<img alt="" src="https://cdn.jsdelivr.net/gh/BrandonKirbyson/Weeble@main/assets/weeble_parts.png" height="400">
 
 ## How Does Weeble Balance?
 
