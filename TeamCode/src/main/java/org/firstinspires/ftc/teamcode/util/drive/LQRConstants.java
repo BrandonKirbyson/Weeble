@@ -30,10 +30,10 @@ public class LQRConstants {
         };
     }
 
-    public static double AnglePenalty = 0.9;
+    public static double AnglePenalty = 1;
     public static double AngularVelocityPenalty = 0.0;
-    public static double PositionPenalty = 1;
-    public static double VelocityPenalty = 1;
+    public static double PositionPenalty = 20;
+    public static double VelocityPenalty = 1.5;
 
     public static double[] getQ() {
         return new double[]{AnglePenalty, AngularVelocityPenalty, PositionPenalty, VelocityPenalty}; // state penalty, x, x dot, theta, theta dot
