@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
@@ -26,6 +27,7 @@ public class GyroDrive {
     private final Pose pose = new Pose();
 
     private boolean lastBalanced = false;
+    private ElapsedTime enablingTimer = null;
 
     private double lastTargetVel = 0;
     private double targetVel = 0;
@@ -40,6 +42,9 @@ public class GyroDrive {
     private double lastTime = 0;
 
     private boolean emergencyStop = false;
+
+    private boolean stopping = false;
+    private ElapsedTime stoppingTimer = null;
 
     public GyroDrive(HardwareMap hardwareMap) {
         leftMotor = hardwareMap.get(DcMotor.class, "left");
@@ -78,8 +83,15 @@ public class GyroDrive {
         if (lastTargetVel != 0 && targetVel != 0) {
             targetPos = currentPos;
         }
+        if (targetVel == 0 && lastTargetVel != 0) {
+            stopping = true;
+        }
         rotationVel = turnPower * (fast ? SpeedConstants.FastTurn : SpeedConstants.Turn);
         lastTargetVel = targetVel;
+    }
+
+    public void setTargetPos() {
+        targetPos = currentPos;
     }
 
     public void setTargetAngle(double target) {
@@ -87,6 +99,18 @@ public class GyroDrive {
 
     public void update(YawPitchRollAngles angles, double pitchRate, double headAngle) {
         this.angles = angles;
+
+        if (!lastBalanced) {
+            if (isPlaceable()) {
+                if (enablingTimer == null) enablingTimer = new ElapsedTime();
+                else if (enablingTimer.seconds() > LQRConstants.PlaceDelay) lastBalanced = true;
+                state = DriveState.PLACING;
+            } else {
+                enablingTimer = null;
+                state = DriveState.STOPPED;
+            }
+            return;
+        }
 
         if (!isBalanced() || emergencyStop) {
             if (!isBalanced() && emergencyStop) emergencyStop = false;
@@ -97,6 +121,7 @@ public class GyroDrive {
         } else if (!lastBalanced) {
             lastBalanced = true;
         }
+
 
         if (LQRConstants.UpdateLQRGains) {
             controller.updateK();
@@ -151,6 +176,23 @@ public class GyroDrive {
     private RealMatrix getTargetState(double headAngle) {
         double targetAngle = LQRConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * LQRConstants.HeadAngleModifier;
 
+        double targetVel = this.targetVel;
+
+        if (targetVel == 0 && stopping) {
+            targetVel = (-currentVel / Math.abs(currentVel)) * Math.min(Math.abs(currentVel) * LQRConstants.StoppingAmount, SpeedConstants.Stopping);
+        } else if (targetVel != 0 && stopping) {
+            stopping = false;
+        }
+
+        if (stopping && currentVel < LQRConstants.StoppedMargin) {
+            targetVel = 0;
+            stoppingTimer = new ElapsedTime();
+            if (stoppingTimer.milliseconds() < LQRConstants.StoppedTime * 1000) {
+                stopping = false;
+                stoppingTimer = null;
+            }
+        }
+
         return MatrixUtils.createRealMatrix(new double[][]{
                 {targetAngle}, // pitch angle
                 {0}, // pitch rate
@@ -178,7 +220,11 @@ public class GyroDrive {
     }
 
     public boolean isBalanced() {
-        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxAngle;
+        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - LQRConstants.TargetAngle) < LQRConstants.MaxAngle;
+    }
+
+    public boolean isPlaceable() {
+        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - LQRConstants.TargetAngle) < LQRConstants.MaxPlaceAngle;
     }
 
     public void stopMotors() {

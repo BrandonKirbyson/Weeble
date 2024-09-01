@@ -38,6 +38,7 @@ public class Drive extends LinearOpMode {
 
             if (gamepad1Buttons.getButton(GamepadButton.RIGHT_BUMPER)) {
 //                robot.drive.resetTarget();
+                robot.drive.setTargetPos();
             }
 
             if (gamepad1Buttons.getButton(GamepadButton.RIGHT_STICK_BUTTON)) {

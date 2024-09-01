@@ -32,7 +32,7 @@ public class LQRConstants {
 
     public static double AnglePenalty = 1;
     public static double AngularVelocityPenalty = 0.0;
-    public static double PositionPenalty = 20;
+    public static double PositionPenalty = 10;
     public static double VelocityPenalty = 1.5;
 
     public static double[] getQ() {
@@ -46,6 +46,15 @@ public class LQRConstants {
 
     public static double VelocityModifier = 10000;
     public static double PositionModifier = 1;
+
+    public static double StoppingAmount = 0;
+    public static double StoppedMargin = 0.2;
+    public static double StoppedTime = 2;
+
+    public static double MaxAngle = 60;
+    public static double MaxPlaceAngle = 20;
+
+    public static double PlaceDelay = 2;
 
     public static boolean UpdateLQRGains = false;
 }

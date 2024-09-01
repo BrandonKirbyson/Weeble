@@ -4,5 +4,6 @@ public enum DriveState {
     STOPPED,
     IDLE,
     CORRECTING,
-    DRIVING
+    DRIVING,
+    PLACING
 }
