@@ -124,8 +124,6 @@ Weeble is programmed in `Java` using the `FTC SDK` as he uses a `leftover REV Co
 uses `OpenCV to track objects and faces`. The robot is `controlled wireless with a Logitech Gamepad over a WiFi connection`
 to the REV Control Hub.
 
-<img src="https://skillicons.dev/icons?i=java,opencv,idea" />
-
 ## Why Was Weeble Made?
 
 I made Weeble as a challenge to myself to see if I could make a balancing robot. I also wanted to make a robot that was
