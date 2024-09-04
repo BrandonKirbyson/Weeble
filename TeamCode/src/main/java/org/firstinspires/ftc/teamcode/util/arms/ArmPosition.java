@@ -11,5 +11,10 @@ public class ArmPosition {
     public static double Back = 0.8;
     public static double Down = 0.7;
 
+    public static double ManualCenter = 0.5;
+    public static double ManualRange = 0.5;
+
     public static double MovingAngle = 5;
+
+    public static boolean AutoMove = true;
 }

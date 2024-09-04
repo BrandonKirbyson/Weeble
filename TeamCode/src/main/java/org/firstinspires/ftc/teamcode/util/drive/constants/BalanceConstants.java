@@ -11,10 +11,10 @@ public class BalanceConstants {
     public static double MaxAngle = 60;
 
     public static double MaxPlaceAngle = 20;
-    public static double PlaceDelay = 2;
+    public static double PlaceDelay = 0.5;
 
     public static boolean UpdateAngle = true;
     public static boolean AngleAssistedDriving = true;
-    public static PIDParams AnglePID = new PIDParams(0.1, 0.0, 0.0, 0.3);
+    public static PIDParams AnglePID = new PIDParams(0.002, 0.0, 0.0, 0.3);
     public static double MaxTargetAngle = 10;
 }

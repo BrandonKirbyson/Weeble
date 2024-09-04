@@ -171,7 +171,7 @@ public class GyroDrive {
         if (!BalanceConstants.UpdateAngle) return;
 
         double error = targetVel - currentVel;
-        targetAngle += angleController.update(error);
+        targetAngle -= angleController.update(error);
         targetAngle = Math.min(BalanceConstants.MaxTargetAngle, Math.max(-BalanceConstants.MaxTargetAngle, targetAngle));
 
         FtcDashboardManager.addData("TargetAngle", targetAngle);
@@ -195,7 +195,7 @@ public class GyroDrive {
     }
 
     private RealMatrix getTargetState(double headAngle) {
-        double targetAngle = BalanceConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * BalanceConstants.HeadAngleModifier;
+        double target = targetAngle + (headAngle - HeadConstants.xCenter) * BalanceConstants.HeadAngleModifier;
 
         double targetVel = this.targetVel;
 
@@ -215,7 +215,7 @@ public class GyroDrive {
         }
 
         return MatrixUtils.createRealMatrix(new double[][]{
-                {targetAngle}, // pitch angle
+                {target}, // pitch angle
                 {0}, // pitch rate
                 {targetPos}, // position
                 {targetVel} // velocity

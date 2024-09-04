@@ -4,8 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
-import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
+import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
@@ -39,6 +39,7 @@ public class Drive extends LinearOpMode {
             if (gamepad1Buttons.getButton(GamepadButton.RIGHT_BUMPER)) {
 //                robot.drive.resetTarget();
                 robot.drive.setTargetPos();
+                robot.drive.setTargetAngle(PIDConstants.TargetAngle);
             }
 
             if (gamepad1Buttons.getButton(GamepadButton.RIGHT_STICK_BUTTON)) {
@@ -49,9 +50,8 @@ public class Drive extends LinearOpMode {
                 robot.uprightWithArms();
             }
 
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.RIGHT_STICK_BUTTON)) {
-                robot.drive.setTargetAngle(PIDConstants.TargetAngle);
-            }
+//            if (gamepad1Buttons.wasJustPressed(GamepadButton.RIGHT_STICK_BUTTON)) {
+//            }
 
 //            if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {
 //                robot.vision.setRecording(true);
@@ -61,9 +61,13 @@ public class Drive extends LinearOpMode {
             FtcDashboardManager.addData("RECORDING", robot.vision.isRecording());
 
             //noinspection SuspiciousNameCombination
-            robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
+            if (gamepad1.right_stick_y != 0 || gamepad2.right_stick_x != 0 || robot.drive.getTurnVelocity() == 0) {
+                robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
+            }
 
-            robot.head.setEyes(0.5 + (-gamepad1.left_trigger + gamepad1.right_trigger) / 2);
+            if (robot.drive.getTurnVelocity() == 0) {
+                robot.head.setEyes(0.5 + (-gamepad1.left_trigger + gamepad1.right_trigger) / 2);
+            }
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
                 robot.vision.setMode(VisionMode.DISABLED);

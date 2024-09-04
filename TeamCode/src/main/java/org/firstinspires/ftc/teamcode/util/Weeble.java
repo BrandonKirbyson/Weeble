@@ -54,7 +54,7 @@ public class Weeble {
             head.update(vision.getTrackingCenter());
         }
 
-        arms.update(angles.getPitch(AngleUnit.DEGREES) - PIDConstants.TargetAngle);
+        if (ArmPosition.AutoMove) arms.update(angles.getPitch(AngleUnit.DEGREES) - PIDConstants.TargetAngle);
 
         if (drive.getLastState() != DriveState.STOPPED && drive.getState() == DriveState.STOPPED) {
 //            arms.setArmPosition(ArmPosition.Crash);
@@ -68,6 +68,9 @@ public class Weeble {
 
         if (uprighting && angles.getPitch(AngleUnit.DEGREES) > PIDConstants.UprightPowerMargin) {
             uprighting = false;
+            arms.setArmPosition(ArmPosition.Down);
+            head.reset();
+            head.setEyebrows(HeadConstants.eyebrowsNeutral);
         }
 
         overlay.updatePose(drive.getPose());
