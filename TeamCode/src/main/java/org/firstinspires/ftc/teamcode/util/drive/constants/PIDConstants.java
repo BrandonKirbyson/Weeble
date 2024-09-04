@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.drive.constants;
 
 import com.acmerobotics.dashboard.config.Config;
+import org.firstinspires.ftc.teamcode.util.lib.PIDParams;
 
 @Config
 public class PIDConstants {
@@ -29,9 +30,9 @@ public class PIDConstants {
 
     public static double LargeAnglePIDMargin = 20;
 
-    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants SmallAnglePID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(0.08, 0.00005, 1, 0.1); // 0.06, 0.0002, 1
-    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants LargeAnglePID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(0.1, 0.0001, 1, 0.2);
-    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants VelPID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(-0.03, 0.000, 0.2, 0.3); //-0.08, 0, 0
+    public static PIDParams SmallAnglePID = new PIDParams(0.08, 0.00005, 1, 0.1); // 0.06, 0.0002, 1
+    public static PIDParams LargeAnglePID = new PIDParams(0.1, 0.0001, 1, 0.2);
+    public static PIDParams VelPID = new PIDParams(-0.03, 0.000, 0.2, 0.3); //-0.08, 0, 0
 
-    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants MotorPID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(0.0012, 0.000, 0, 0.3);
+    public static PIDParams MotorPID = new PIDParams(0.0012, 0.000, 0, 0.3);
 }

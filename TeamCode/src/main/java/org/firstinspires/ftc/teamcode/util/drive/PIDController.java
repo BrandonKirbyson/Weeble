@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode.util.drive;
 
-import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
+import org.firstinspires.ftc.teamcode.util.lib.PIDParams;
 
 public class PIDController {
-    private PIDConstants constants;
+    private PIDParams constants;
     private double i;
     private double lastError;
     private double lastTime;
 
-    public PIDController(PIDConstants constants) {
+    public PIDController(PIDParams constants) {
         this.constants = constants;
         i = 0;
         lastError = 0;
@@ -26,11 +26,11 @@ public class PIDController {
         return p + i + d;
     }
 
-    public void setConstants(PIDConstants constants) {
+    public void setConstants(PIDParams constants) {
         this.constants = constants;
     }
 
-    public PIDConstants getConstants() {
+    public PIDParams getConstants() {
         return constants;
     }
 

@@ -27,7 +27,11 @@ public class GyroDrive {
 
     private final LQRController controller;
 
+    private final PIDController angleController = new PIDController(BalanceConstants.AnglePID);
+
     private final Pose pose = new Pose();
+
+    private double targetAngle = BalanceConstants.TargetAngle;
 
     private boolean lastBalanced = false;
     private ElapsedTime enablingTimer = null;
@@ -98,6 +102,7 @@ public class GyroDrive {
     }
 
     public void setTargetAngle(double target) {
+        targetAngle = target;
     }
 
     public void update(YawPitchRollAngles angles, double pitchRate, double headAngle) {
@@ -125,7 +130,6 @@ public class GyroDrive {
             lastBalanced = true;
         }
 
-
         if (LQRConstants.UpdateLQRGains) {
             controller.updateK();
             LQRConstants.UpdateLQRGains = false;
@@ -143,6 +147,10 @@ public class GyroDrive {
 
         setPower(output[0] + rotationVel, output[1] - rotationVel);
 
+        if (targetVel == 0 || BalanceConstants.AngleAssistedDriving) {
+            updateAngle();
+        }
+
         updateState();
 
         FtcDashboardManager.addData("Angle", currentAngle);
@@ -157,6 +165,16 @@ public class GyroDrive {
         FtcDashboardManager.addData("K", controller.getK());
         overlayRobot();
         lastTime = System.currentTimeMillis();
+    }
+
+    public void updateAngle() {
+        if (!BalanceConstants.UpdateAngle) return;
+
+        double error = targetVel - currentVel;
+        targetAngle += angleController.update(error);
+        targetAngle = Math.min(BalanceConstants.MaxTargetAngle, Math.max(-BalanceConstants.MaxTargetAngle, targetAngle));
+
+        FtcDashboardManager.addData("TargetAngle", targetAngle);
     }
 
     private void updateCurrentVelocity() {

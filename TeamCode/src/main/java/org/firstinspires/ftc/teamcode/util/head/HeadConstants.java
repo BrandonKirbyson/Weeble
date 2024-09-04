@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.head;
 
 import com.acmerobotics.dashboard.config.Config;
-import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
+import org.firstinspires.ftc.teamcode.util.lib.PIDParams;
 
 @Config
 public class HeadConstants {
@@ -28,7 +28,7 @@ public class HeadConstants {
 
     public static boolean eyesTracking = true;
 
-    public static PIDConstants xTrackingPID = new PIDConstants(-0.002, 0.0, 0.0, 0.3);
-    public static PIDConstants yTrackingPID = new PIDConstants(0.008, 0.0, 0.0, 0.3);
-    public static PIDConstants eyesTrackingPID = new PIDConstants(0.008, 0.0, 0.0, 0.3);
+    public static PIDParams xTrackingPID = new PIDParams(-0.002, 0.0, 0.0, 0.3);
+    public static PIDParams yTrackingPID = new PIDParams(0.008, 0.0, 0.0, 0.3);
+    public static PIDParams eyesTrackingPID = new PIDParams(0.008, 0.0, 0.0, 0.3);
 }

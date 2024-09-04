@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.drive.constants;
 
 import com.acmerobotics.dashboard.config.Config;
+import org.firstinspires.ftc.teamcode.util.lib.PIDParams;
 
 @Config
 public class BalanceConstants {
@@ -11,4 +12,9 @@ public class BalanceConstants {
 
     public static double MaxPlaceAngle = 20;
     public static double PlaceDelay = 2;
+
+    public static boolean UpdateAngle = true;
+    public static boolean AngleAssistedDriving = true;
+    public static PIDParams AnglePID = new PIDParams(0.1, 0.0, 0.0, 0.3);
+    public static double MaxTargetAngle = 10;
 }
