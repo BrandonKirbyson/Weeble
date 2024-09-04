@@ -248,6 +248,10 @@ public class GyroDrive {
         return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxPlaceAngle;
     }
 
+    public double getTurnVelocity() {
+        return rotationVel;
+    }
+
     public void stopMotors() {
         leftMotor.setPower(0);
         rightMotor.setPower(0);

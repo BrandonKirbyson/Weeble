@@ -31,4 +31,7 @@ public class HeadConstants {
     public static PIDParams xTrackingPID = new PIDParams(-0.002, 0.0, 0.0, 0.3);
     public static PIDParams yTrackingPID = new PIDParams(0.008, 0.0, 0.0, 0.3);
     public static PIDParams eyesTrackingPID = new PIDParams(0.008, 0.0, 0.0, 0.3);
+
+    public static double HeadAutoTurnAmount = 0.1;
+    public static double EyesAutoTurnAmount = 0.1;
 }

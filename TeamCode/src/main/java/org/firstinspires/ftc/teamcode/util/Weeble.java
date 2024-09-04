@@ -44,6 +44,9 @@ public class Weeble {
         double pitchRate = imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;
         drive.update(angles, pitchRate, head.getPitch());
         head.updateAngles(angles);
+        if (drive.getTurnVelocity() != 0) {
+            head.autoTurn(drive.getTurnVelocity());
+        }
 
         vision.update();
 

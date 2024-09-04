@@ -83,6 +83,13 @@ public class Head {
         }
     }
 
+    public void autoTurn(double amount) {
+        HeadOrientation position = new HeadOrientation(0, 0, 0);
+        position.y = amount * HeadConstants.HeadAutoTurnAmount;
+        position.eyes = amount * HeadConstants.EyesAutoTurnAmount;
+        setHeadPosition(position);
+    }
+
     public void reset() {
         HeadOrientation position = new HeadOrientation(0, 0, 0);
         setHeadPosition(position);
