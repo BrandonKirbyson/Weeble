@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
+import org.firstinspires.ftc.teamcode.util.drive.constants.SpeedConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 
 public class PIDGyroDrive {
@@ -17,11 +19,11 @@ public class PIDGyroDrive {
     private DriveState lastState = DriveState.STOPPED;
     private DriveState state = DriveState.STOPPED;
 
-    private final PIDController anglePID = new PIDController(BalanceConstants.SmallAnglePID);
-    private final PIDController velPID = new PIDController(BalanceConstants.VelPID);
+    private final PIDController anglePID = new PIDController(PIDConstants.SmallAnglePID);
+    private final PIDController velPID = new PIDController(PIDConstants.VelPID);
 
-    private final PIDController leftMotorPID = new PIDController(BalanceConstants.MotorPID);
-    private final PIDController rightMotorPID = new PIDController(BalanceConstants.MotorPID);
+    private final PIDController leftMotorPID = new PIDController(PIDConstants.MotorPID);
+    private final PIDController rightMotorPID = new PIDController(PIDConstants.MotorPID);
 
     private YawPitchRollAngles angles;
 
@@ -43,7 +45,7 @@ public class PIDGyroDrive {
     private boolean lastBalanced = false;
 
     private double targetVel = 0;
-    private double targetAngle = BalanceConstants.TargetAngle;
+    private double targetAngle = PIDConstants.TargetAngle;
     private double rotSpeed = 0;
 
     private boolean emergencyStop = false;
@@ -94,7 +96,7 @@ public class PIDGyroDrive {
 
         double deltaTime = time - lastTime;
 
-        double ticksToVel = (1000 / deltaTime) * (1 / BalanceConstants.TICKS_PER_INCH);
+        double ticksToVel = (1000 / deltaTime) * (1 / PIDConstants.TICKS_PER_INCH);
 
         leftVel = (leftTicks - lastLeftTicks) * ticksToVel;
         rightVel = (rightTicks - lastRightTicks) * ticksToVel;
@@ -103,7 +105,7 @@ public class PIDGyroDrive {
 
         double velError = targetVel - vel;
 
-        if (!BalanceConstants.manualDrive) {
+        if (!PIDConstants.manualDrive) {
             double angleOutput = velPID.update(velError);
             double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 //            if (Math.abs(velError) < BalanceConstants.VelErrorMargin) {
@@ -114,8 +116,8 @@ public class PIDGyroDrive {
         } else {
             targetAngle -= targetVel / SpeedConstants.Drive * SpeedConstants.ManualDrive;
         }
-        targetAngle += headDelta * BalanceConstants.HeadAngleConversion;
-        targetAngle = Math.max(BalanceConstants.TargetAngle - BalanceConstants.MaxTargetAngle, Math.min(BalanceConstants.TargetAngle + BalanceConstants.MaxTargetAngle, targetAngle));
+        targetAngle += headDelta * PIDConstants.HeadAngleConversion;
+        targetAngle = Math.max(PIDConstants.TargetAngle - PIDConstants.MaxTargetAngle, Math.min(PIDConstants.TargetAngle + PIDConstants.MaxTargetAngle, targetAngle));
 
         FtcDashboardManager.addData("Velocity", vel);
         FtcDashboardManager.addData("VelocityError", velError);
@@ -142,13 +144,13 @@ public class PIDGyroDrive {
             lastBalanced = false;
             return;
         } else if (!lastBalanced) {
-            targetAngle = BalanceConstants.TargetAngle;
+            targetAngle = PIDConstants.TargetAngle;
             lastBalanced = true;
         }
 
         double currentAngle = angles.getPitch(AngleUnit.DEGREES);
 
-        if (loopCounter % BalanceConstants.LoopSpeedRatio == 0 && Math.abs(targetAngle - currentAngle) < BalanceConstants.TargetAngleMargin) {
+        if (loopCounter % PIDConstants.LoopSpeedRatio == 0 && Math.abs(targetAngle - currentAngle) < PIDConstants.TargetAngleMargin) {
             updateAngle(headDelta);
         }
 
@@ -159,10 +161,10 @@ public class PIDGyroDrive {
         if (angleError / Math.abs(angleError) != lastAngleError / Math.abs(lastAngleError)) {
             anglePID.resetI();
         }
-        if (Math.abs(angleError) < BalanceConstants.LargeAnglePIDMargin) {
-            anglePID.setConstants(BalanceConstants.SmallAnglePID);
+        if (Math.abs(angleError) < PIDConstants.LargeAnglePIDMargin) {
+            anglePID.setConstants(PIDConstants.SmallAnglePID);
         } else {
-            anglePID.setConstants(BalanceConstants.LargeAnglePID);
+            anglePID.setConstants(PIDConstants.LargeAnglePID);
         }
         double outputPower = anglePID.update(angleError);
 
@@ -181,14 +183,14 @@ public class PIDGyroDrive {
     }
 
     public void resetTarget() {
-        targetAngle = BalanceConstants.TargetAngle;
+        targetAngle = PIDConstants.TargetAngle;
     }
 
     private void updateState() {
         lastState = state;
         if (isBalanced()) {
             if (targetVel == 0) {
-                if (vel < BalanceConstants.DriveVelMin) {
+                if (vel < PIDConstants.DriveVelMin) {
                     state = DriveState.IDLE;
                 } else {
                     state = DriveState.DRIVING;
@@ -202,9 +204,9 @@ public class PIDGyroDrive {
     }
 
     private void setPower(double leftPower, double rightPower) {
-        if (BalanceConstants.MotorPIDEnabled) {
-            double leftError = leftPower * BalanceConstants.TICKS_PER_INCH - leftVel;
-            double rightError = rightPower * BalanceConstants.TICKS_PER_INCH - rightVel;
+        if (PIDConstants.MotorPIDEnabled) {
+            double leftError = leftPower * PIDConstants.TICKS_PER_INCH - leftVel;
+            double rightError = rightPower * PIDConstants.TICKS_PER_INCH - rightVel;
             double leftOutput = leftMotorPID.update(leftError);
             double rightOutput = rightMotorPID.update(rightError);
 //
@@ -227,7 +229,7 @@ public class PIDGyroDrive {
     }
 
     public boolean isBalanced() {
-        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxAngle;
+        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - PIDConstants.TargetAngle) < PIDConstants.MaxAngle;
     }
 
     public void stopMotors() {

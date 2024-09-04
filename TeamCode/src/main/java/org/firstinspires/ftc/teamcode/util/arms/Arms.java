@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.util.arms;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
+import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 
 public class Arms {
     private final Servo leftArm;
@@ -28,7 +28,7 @@ public class Arms {
     }
 
     public void update(double angle) {
-        if (Math.abs(angle) > BalanceConstants.MaxAngle) {
+        if (Math.abs(angle) > PIDConstants.MaxAngle) {
             if (angle < 0) {
                 setArmPosition(ArmPosition.FullForward);
             } else {

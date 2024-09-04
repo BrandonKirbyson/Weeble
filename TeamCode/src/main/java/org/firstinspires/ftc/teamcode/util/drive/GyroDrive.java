@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.util.drive.constants.BalanceConstants;
+import org.firstinspires.ftc.teamcode.util.drive.constants.LQRConstants;
+import org.firstinspires.ftc.teamcode.util.drive.constants.SpeedConstants;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.hipparchus.linear.MatrixUtils;
@@ -103,7 +106,7 @@ public class GyroDrive {
         if (!lastBalanced) {
             if (isPlaceable()) {
                 if (enablingTimer == null) enablingTimer = new ElapsedTime();
-                else if (enablingTimer.seconds() > LQRConstants.PlaceDelay) lastBalanced = true;
+                else if (enablingTimer.seconds() > BalanceConstants.PlaceDelay) lastBalanced = true;
                 state = DriveState.PLACING;
             } else {
                 enablingTimer = null;
@@ -174,7 +177,7 @@ public class GyroDrive {
     }
 
     private RealMatrix getTargetState(double headAngle) {
-        double targetAngle = LQRConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * LQRConstants.HeadAngleModifier;
+        double targetAngle = BalanceConstants.TargetAngle + (headAngle - HeadConstants.xCenter) * BalanceConstants.HeadAngleModifier;
 
         double targetVel = this.targetVel;
 
@@ -220,11 +223,11 @@ public class GyroDrive {
     }
 
     public boolean isBalanced() {
-        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - LQRConstants.TargetAngle) < LQRConstants.MaxAngle;
+        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxAngle;
     }
 
     public boolean isPlaceable() {
-        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - LQRConstants.TargetAngle) < LQRConstants.MaxPlaceAngle;
+        return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxPlaceAngle;
     }
 
     public void stopMotors() {

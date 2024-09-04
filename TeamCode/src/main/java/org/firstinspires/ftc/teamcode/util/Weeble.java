@@ -6,7 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.arms.ArmPosition;
 import org.firstinspires.ftc.teamcode.util.arms.Arms;
-import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
+import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.drive.GyroDrive;
 import org.firstinspires.ftc.teamcode.util.head.Head;
@@ -51,7 +51,7 @@ public class Weeble {
             head.update(vision.getTrackingCenter());
         }
 
-        arms.update(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle);
+        arms.update(angles.getPitch(AngleUnit.DEGREES) - PIDConstants.TargetAngle);
 
         if (drive.getLastState() != DriveState.STOPPED && drive.getState() == DriveState.STOPPED) {
 //            arms.setArmPosition(ArmPosition.Crash);
@@ -63,7 +63,7 @@ public class Weeble {
             head.setEyebrows(HeadConstants.eyebrowsNeutral);
         }
 
-        if (uprighting && angles.getPitch(AngleUnit.DEGREES) > BalanceConstants.UprightPowerMargin) {
+        if (uprighting && angles.getPitch(AngleUnit.DEGREES) > PIDConstants.UprightPowerMargin) {
             uprighting = false;
         }
 

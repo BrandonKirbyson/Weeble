@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
-import org.firstinspires.ftc.teamcode.util.drive.BalanceConstants;
+import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
@@ -50,7 +50,7 @@ public class Drive extends LinearOpMode {
             }
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.RIGHT_STICK_BUTTON)) {
-                robot.drive.setTargetAngle(BalanceConstants.TargetAngle);
+                robot.drive.setTargetAngle(PIDConstants.TargetAngle);
             }
 
 //            if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {

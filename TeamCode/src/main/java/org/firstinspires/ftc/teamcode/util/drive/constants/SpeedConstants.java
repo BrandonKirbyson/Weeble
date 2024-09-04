@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util.drive;
+package org.firstinspires.ftc.teamcode.util.drive.constants;
 
 import com.acmerobotics.dashboard.config.Config;
 

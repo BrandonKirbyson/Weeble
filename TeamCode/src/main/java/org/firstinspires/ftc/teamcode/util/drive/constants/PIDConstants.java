@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.util.drive;
+package org.firstinspires.ftc.teamcode.util.drive.constants;
 
 import com.acmerobotics.dashboard.config.Config;
-import org.firstinspires.ftc.teamcode.util.lib.PIDConstants;
 
 @Config
-public class BalanceConstants {
+public class PIDConstants {
     private static final double WHEEL_DIAMETER = 3.44488188976378;
     private static final double TICKS_PER_REVOLUTE = 537.7 * 26 / 20;
     public static final double TICKS_PER_INCH = TICKS_PER_REVOLUTE / (WHEEL_DIAMETER * Math.PI);
@@ -30,9 +29,9 @@ public class BalanceConstants {
 
     public static double LargeAnglePIDMargin = 20;
 
-    public static PIDConstants SmallAnglePID = new PIDConstants(0.08, 0.00005, 1, 0.1); // 0.06, 0.0002, 1
-    public static PIDConstants LargeAnglePID = new PIDConstants(0.1, 0.0001, 1, 0.2);
-    public static PIDConstants VelPID = new PIDConstants(-0.03, 0.000, 0.2, 0.3); //-0.08, 0, 0
+    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants SmallAnglePID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(0.08, 0.00005, 1, 0.1); // 0.06, 0.0002, 1
+    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants LargeAnglePID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(0.1, 0.0001, 1, 0.2);
+    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants VelPID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(-0.03, 0.000, 0.2, 0.3); //-0.08, 0, 0
 
-    public static PIDConstants MotorPID = new PIDConstants(0.0012, 0.000, 0, 0.3);
+    public static org.firstinspires.ftc.teamcode.util.lib.PIDConstants MotorPID = new org.firstinspires.ftc.teamcode.util.lib.PIDConstants(0.0012, 0.000, 0, 0.3);
 }
