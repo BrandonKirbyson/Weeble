@@ -91,7 +91,7 @@ public class Head {
 
     public void holdHead() {
         HeadOrientation position = new HeadOrientation(0, 0, 0);
-        position.y = yPos;
+        position.y = -yPos;
         relativeToWorld(position);
         position.eyes = 0;
         if (HeadConstants.HoldX) position.x = 0;
@@ -102,7 +102,8 @@ public class Head {
         HeadOrientation position = new HeadOrientation(0, 0, 0);
         position.y = amount * HeadConstants.HeadAutoTurnAmount;
         position.eyes = amount * HeadConstants.EyesAutoTurnAmount;
-        setHeadPosition(position);
+        setEyes(position.eyes / HeadConstants.eyesConversion + HeadConstants.eyesCenter);
+//        setHeadPosition(position);
     }
 
     public void reset() {

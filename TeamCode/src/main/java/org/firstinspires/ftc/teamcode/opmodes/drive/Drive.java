@@ -63,9 +63,9 @@ public class Drive extends LinearOpMode {
             FtcDashboardManager.addData("RECORDING", robot.vision.isRecording());
 
             //noinspection SuspiciousNameCombination
-            if (gamepad1.right_stick_y != 0 || gamepad2.right_stick_x != 0 || robot.drive.getTurnVelocity() == 0) {
-                robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
-            }
+//            if (gamepad1.right_stick_y != 0 || gamepad2.right_stick_x != 0) {
+            robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
+//            }
 
             if (robot.drive.getTurnVelocity() == 0) {
                 robot.head.setEyes(0.5 + (-gamepad1.left_trigger + gamepad1.right_trigger) / 2);
