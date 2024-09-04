@@ -20,6 +20,8 @@ public class Head {
 
     private HeadOrientation currentPosition = new HeadOrientation(0, 0, 0);
 
+    private double yPos = 0;
+
     private ArrayList<HeadAnimationKeyframe> currentAnimation = null;
     private final ElapsedTime animationTimer = new ElapsedTime();
     private int animationIndex = 0;
@@ -83,6 +85,19 @@ public class Head {
         }
     }
 
+    public void initHoldHead() {
+        yPos = angles.getYaw(AngleUnit.DEGREES);
+    }
+
+    public void holdHead() {
+        HeadOrientation position = new HeadOrientation(0, 0, 0);
+        position.y = yPos;
+        relativeToWorld(position);
+        position.eyes = 0;
+        if (HeadConstants.HoldX) position.x = 0;
+        setHeadPosition(position);
+    }
+
     public void autoTurn(double amount) {
         HeadOrientation position = new HeadOrientation(0, 0, 0);
         position.y = amount * HeadConstants.HeadAutoTurnAmount;
@@ -130,7 +145,7 @@ public class Head {
 
     private void relativeToWorld(HeadOrientation position) {
         position.x = position.x - angles.getPitch(AngleUnit.DEGREES);
-        position.y = position.y - angles.getRoll(AngleUnit.DEGREES);
+        position.y = position.y - angles.getYaw(AngleUnit.DEGREES);
         position.eyes = position.eyes + angles.getYaw(AngleUnit.DEGREES);
     }
 

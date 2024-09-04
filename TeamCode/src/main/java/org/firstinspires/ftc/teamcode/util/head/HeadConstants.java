@@ -11,9 +11,9 @@ public class HeadConstants {
     public static double xConversion = 180;
 
     public static double yCenter = 0.42;
-    public static double yMin = -60;
-    public static double yMax = 60;
-    public static double yConversion = -180;
+    public static double yMin = -70;
+    public static double yMax = 80;
+    public static double yConversion = 180;
 
     public static double eyesCenter = 0.5;
     public static double eyesMin = -35;
@@ -34,4 +34,6 @@ public class HeadConstants {
 
     public static double HeadAutoTurnAmount = 0;
     public static double EyesAutoTurnAmount = 120;
+
+    public static boolean HoldX = true;
 }

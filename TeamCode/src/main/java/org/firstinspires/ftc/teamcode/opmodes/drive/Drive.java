@@ -24,6 +24,8 @@ public class Drive extends LinearOpMode {
 
         waitForStart();
 
+        robot.vision.setMode(VisionMode.DISABLED);
+
         double lastTime = System.currentTimeMillis();
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -98,6 +100,13 @@ public class Drive extends LinearOpMode {
 //            }
 
             robot.update();
+
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
+                robot.head.initHoldHead();
+            }
+            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
+                robot.head.holdHead();
+            }
 
             if (gamepad2.left_stick_y != 0 || gamepad2.right_stick_y != 0) {
                 robot.arms.setLeftArmPosition(gamepad2.left_stick_y);
