@@ -20,11 +20,11 @@ public class Arms {
     }
 
     public void setLeftArmPosition(double position) {
-        leftArm.setPosition(position);
+        leftArm.setPosition(ArmPosition.ManualCenter + (position * ArmPosition.ManualRange));
     }
 
     public void setRightArmPosition(double position) {
-        rightArm.setPosition(position);
+        rightArm.setPosition(ArmPosition.ManualCenter + (position * ArmPosition.ManualRange));
     }
 
     public void update(double angle) {
