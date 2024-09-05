@@ -58,6 +58,12 @@ public class GyroDrive {
         rightMotor = hardwareMap.get(DcMotor.class, "right");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+//        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+//        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -111,7 +117,10 @@ public class GyroDrive {
         if (!lastBalanced) {
             if (isPlaceable()) {
                 if (enablingTimer == null) enablingTimer = new ElapsedTime();
-                else if (enablingTimer.seconds() > BalanceConstants.PlaceDelay) lastBalanced = true;
+                else if (enablingTimer.seconds() > BalanceConstants.PlaceDelay) {
+                    lastBalanced = true;
+                    targetPos = currentPos;
+                }
                 state = DriveState.PLACING;
             } else {
                 enablingTimer = null;
