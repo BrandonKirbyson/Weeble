@@ -1,13 +1,41 @@
 # Weeble
 
-Weeble is a cute self-balancing robot made with FTC parts and a fully 3D printed body. Weeble uses a Linear Quadratic
+Weeble is a cute 2 wheeled self-balancing robot made with FTC parts and a fully 3D printed body. Weeble uses a Linear Quadratic
 Regulator (LQR) controller to balance and drive around!
 
-<p class="display: flex; justify-content: center">
+<p class="display: flex; justify-content: center; align-items: center;">
   <img alt="" src="assets/weeble_square.jpg" height="300" style="border-radius: 1rem;">
   <img alt="" src="assets/weeble_front.jpg" height="300" style="border-radius: 1rem;">
 </p>
 
+It took a lot of work to `fit the many features` of Weeble into such a `compact fully 3d printed cute` robot let alone
+get him to `balance and drive so stable` `with the slow 20ms loop times of the Control Hub` and being `7.5 pounds`! Hope you like him!
+
+- Fully `3d Printed` Body
+- `Linear Quadratic Regulator (LQR) controller` to balance and drive around the `7.5 pound` Weeble!
+- A `1080P Camera` embedded in the right eye, used for `computer vision (openCV)`
+- `Object detection and tracking` with `embedded camera in right eye`
+- A `head that can move` up, down, left and right super quickly
+- `2 massive adorable eyes`, that both `move side to side`
+- `Moveable eyebrows` to express `complex emotions`
+- `2 cute arms` powered by servos
+- `2 epic 100mm Wheels` powered by `312 rpm motors`, `high torque` because Weeble is heavy!
+- `3 2M TOF distance sensors` for `autonomous driving and obstacle detection`
+- `Efficient LQR controller` and `12V battery` means `long 30+ min battery life`.
+
+## Table of Contents
+
+- [Robot Reveal Video](#robot-reveal-video)
+- [Onshape CAD Assembly](#onshape-cad-assembly)
+- [How Does Weeble Balance?](#how-does-weeble-balance)
+    - [Linear Quadratic Regulator (LQR) Controller](#linear-quadratic-regulator-lqr-controller)
+    - [About LQR Controller](#about-lqr-controller)
+    - [State-Space Model](#state-space-model)
+    - [Optimal Control Law](#optimal-control-law)
+- [What is Weeble Made Of?](#what-is-weeble-made-of)
+- [How Does Weeble Work?](#how-does-weeble-work)
+- [Why Was Weeble Made?](#why-was-weeble-made)
+  
 ## Robot Reveal Video
 
 Watch the video below to see Weeble in action! The video shows the progressions of Weeble from the first version to the
@@ -35,34 +63,6 @@ to the smallest screws!
   <img alt="" src="assets/weeble_parts.png" height="300" style="border-radius: 1rem;">
 </p>
 
-## Table of Contents
-
-- [Quick Overview of Weeble](#quick-overview-of-weeble)
-- [How Does Weeble Balance?](#how-does-weeble-balance)
-    - [Linear Quadratic Regulator (LQR) Controller](#linear-quadratic-regulator-lqr-controller)
-    - [About LQR Controller](#about-lqr-controller)
-    - [State-Space Model](#state-space-model)
-    - [Optimal Control Law](#optimal-control-law)
-- [What is Weeble Made Of?](#what-is-weeble-made-of)
-- [How Does Weeble Work?](#how-does-weeble-work)
-- [Why Was Weeble Made?](#why-was-weeble-made)
-
-## Quick Overview of Weeble
-
-It took a lot of work to `fit the many features` of Weeble into such a `compact fully 3d printed cute` robot let alone
-get him to `balance and drive so stable` `with the slow 20ms loop times of the Control Hub` and being `7.5 pounds`!
-
-- Fully `3d Printed` Body
-- `Linear Quadratic Regulator (LQR) controller` to balance and drive around the `7.5 pound` Weeble!
-- A `1080P Camera` embedded in the right eye, used for `computer vision (openCV)`
-- `Object detection and tracking` with `embedded camera in right eye`
-- A `head that can move` up, down, left and right super quickly
-- `2 massive adorable eyes`, that both `move side to side`
-- `Moveable eyebrows` to express `complex emotions`
-- `2 cute arms` powered by servos
-- `2 epic 100mm Wheels` powered by `312 rpm motors`, `high torque` because Weeble is heavy!
-- `3 2M TOF distance sensors` for `autonomous driving and obstacle detection`
-- `Efficient LQR controller` and `12V battery` means `long 30+ min battery life`.
 
 ## How Does Weeble Balance?
 
@@ -133,7 +133,8 @@ The control input `u` is computed using the feedback law:
 ## What is Weeble Made Of?
 
 <img src="https://github.com/user-attachments/assets/3c2281e7-5c41-4965-acc4-117555d68f99" height="300" />
-<img alt="" src="https://cdn.jsdelivr.net/gh/BrandonKirbyson/Weeble@main/assets/weeble_parts.png" height="400" />
+
+<img alt="" src="assets/weeble_parts.png" height="400" align="right" />
 
 - **Fully** 3D printed body
 - `2x` 100mm rubber wheels with 3D printed hubs
@@ -145,6 +146,7 @@ The control input `u` is computed using the feedback law:
 - `3x` REV 2M Distance Sensors (Front, Left, Right)
 - `1x` Innomaker Arducam (Embedded in Right Eye, OpenCV)
 - `1x` 12V Battery (Power)
+
 
 All `3 versions` of Weeble were `fully designed in OnShape` and 3D printed parts were made with a
 `Prusa Mini+ 3D printer`.
