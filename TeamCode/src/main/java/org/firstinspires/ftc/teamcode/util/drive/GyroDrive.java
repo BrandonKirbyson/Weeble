@@ -65,6 +65,9 @@ public class GyroDrive {
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        updateCurrentVelocity();
+        updateCurrentVelocity();
+
         controller = new LQRController();
     }
 
@@ -77,6 +80,14 @@ public class GyroDrive {
                         )
                 )
         );
+    }
+
+    public void setDriveType(DriveType driveType) {
+        this.driveType = driveType;
+    }
+
+    public DriveType getDriveType() {
+        return driveType;
     }
 
     public Pose getPose() {

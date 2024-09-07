@@ -40,6 +40,10 @@ public class Weeble {
         arms.setArmPosition(ArmPosition.Down);
     }
 
+    public void setDriveType(DriveType driveType) {
+        drive.setDriveType(driveType);
+    }
+
     public void update() {
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
         double pitchRate = imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;

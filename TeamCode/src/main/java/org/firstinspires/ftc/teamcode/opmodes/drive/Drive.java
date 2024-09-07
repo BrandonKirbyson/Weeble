@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
-import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.drive.DriveType;
 import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
@@ -31,6 +30,8 @@ public class Drive extends LinearOpMode {
 
         robot.vision.setMode(VisionMode.DISABLED);
 
+        robot.head.reset();
+
         double lastTime = System.currentTimeMillis();
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -49,13 +50,21 @@ public class Drive extends LinearOpMode {
                 robot.drive.setTargetAngle(PIDConstants.TargetAngle);
             }
 
-            if (gamepad1Buttons.getButton(GamepadButton.RIGHT_STICK_BUTTON)) {
-                robot.drive.emergencyStop();
+//            if (gamepad2Buttons.getButton(GamepadButton.DPAD_RIGHT)) {
+//                robot.drive.emergencyStop();
+//            }
+
+            if (gamepad2Buttons.wasJustPressed(GamepadButton.X) && gamepad2Buttons.getButton(GamepadButton.RIGHT_BUMPER)) {
+                robot.drive.setDriveType(DriveType.NONE);
+            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {
+                robot.drive.setDriveType(DriveType.OFFROAD);
+            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.A)) {
+                robot.drive.setDriveType(DriveType.SMOOTH);
             }
 
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.LEFT_STICK_BUTTON) && robot.drive.getState() == DriveState.STOPPED) {
-                robot.uprightWithArms();
-            }
+//            if (gamepad1Buttons.wasJustPressed(GamepadButton.LEFT_STICK_BUTTON) && robot.drive.getState() == DriveState.STOPPED) {
+//                robot.uprightWithArms();
+//            }
 
 //            if (gamepad1Buttons.wasJustPressed(GamepadButton.RIGHT_STICK_BUTTON)) {
 //            }
@@ -65,29 +74,32 @@ public class Drive extends LinearOpMode {
 //            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.X)) {
 //                robot.vision.setRecording(false);
 //            }
-            FtcDashboardManager.addData("RECORDING", robot.vision.isRecording());
+//            FtcDashboardManager.addData("RECORDING", robot.vision.isRecording());
+            FtcDashboardManager.addData("Drive Type", robot.drive.getDriveType());
 
-            //noinspection SuspiciousNameCombination
 //            if (gamepad1.right_stick_y != 0 || gamepad2.right_stick_x != 0) {
+            //noinspection SuspiciousNameCombination
             robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
 //            }
 
             if (robot.drive.getTurnVelocity() == 0) {
                 robot.head.setEyes(0.5 + (-gamepad1.left_trigger + gamepad1.right_trigger) / 2);
             }
-
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
-                robot.vision.setMode(VisionMode.DISABLED);
-                robot.head.reset();
-                robot.head.setEyebrows(HeadConstants.eyebrowsNeutral);
-            }
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
-                robot.vision.setMode(VisionMode.ENABLED);
-                robot.head.setTracking(false);
-            }
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
-                robot.vision.setMode(VisionMode.BLOB_TRACKING);
-                robot.head.setTracking(true);
+//
+            if (robot.drive.getDriveType() == DriveType.NONE) {
+                if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
+                    robot.vision.setMode(VisionMode.DISABLED);
+                    robot.head.reset();
+                    robot.head.setEyebrows(HeadConstants.eyebrowsNeutral);
+                }
+                if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
+                    robot.vision.setMode(VisionMode.ENABLED);
+                    robot.head.setTracking(false);
+                }
+                if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
+                    robot.vision.setMode(VisionMode.BLOB_TRACKING);
+                    robot.head.setTracking(true);
+                }
             }
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_UP)) {
