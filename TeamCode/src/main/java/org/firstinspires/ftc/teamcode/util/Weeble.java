@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.util.arms.ArmPosition;
 import org.firstinspires.ftc.teamcode.util.arms.Arms;
+import org.firstinspires.ftc.teamcode.util.drive.DriveType;
 import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
 import org.firstinspires.ftc.teamcode.util.drive.GyroDrive;
@@ -26,9 +27,9 @@ public class Weeble {
 
     private boolean uprighting = false;
 
-    public Weeble(HardwareMap hardwareMap) {
+    public Weeble(HardwareMap hardwareMap, DriveType driveType) {
         vision = new Vision(hardwareMap);
-        drive = new GyroDrive(hardwareMap);
+        drive = new GyroDrive(hardwareMap, driveType);
         arms = new Arms(hardwareMap);
         head = new Head(hardwareMap);
 

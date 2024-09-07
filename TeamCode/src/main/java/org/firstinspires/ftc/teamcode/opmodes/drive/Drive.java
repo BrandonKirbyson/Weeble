@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Weeble;
 import org.firstinspires.ftc.teamcode.util.drive.DriveState;
+import org.firstinspires.ftc.teamcode.util.drive.DriveType;
 import org.firstinspires.ftc.teamcode.util.drive.constants.PIDConstants;
 import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
@@ -15,9 +16,13 @@ import org.firstinspires.ftc.teamcode.util.vision.VisionMode;
 @Config
 @TeleOp(name = "Drive")
 public class Drive extends LinearOpMode {
+    protected DriveType getDriveType() {
+        return DriveType.SMOOTH;
+    }
+
     @Override
     public void runOpMode() {
-        Weeble robot = new Weeble(hardwareMap);
+        Weeble robot = new Weeble(hardwareMap, getDriveType());
 
         StatefulGamepad gamepad1Buttons = new StatefulGamepad(gamepad1);
         StatefulGamepad gamepad2Buttons = new StatefulGamepad(gamepad2);

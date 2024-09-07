@@ -20,6 +20,8 @@ public class GyroDrive {
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
 
+    private DriveType driveType = DriveType.SMOOTH;
+
     private DriveState lastState = DriveState.STOPPED;
     private DriveState state = DriveState.STOPPED;
 
@@ -53,16 +55,12 @@ public class GyroDrive {
     private boolean stopping = false;
     private ElapsedTime stoppingTimer = null;
 
-    public GyroDrive(HardwareMap hardwareMap) {
+    public GyroDrive(HardwareMap hardwareMap, DriveType driveType) {
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-//        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-//        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.driveType = driveType;
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -92,7 +90,7 @@ public class GyroDrive {
     }
 
     public void drive(double drivePower, double turnPower, boolean fast) {
-        targetVel = drivePower * (fast ? SpeedConstants.FastDrive : SpeedConstants.Drive);
+        targetVel = drivePower * (driveType == DriveType.SMOOTH ? (fast ? SpeedConstants.FastDrive : SpeedConstants.Drive) : (fast ? SpeedConstants.FastOffroadDrive : SpeedConstants.OffroadDrive));
         if (lastTargetVel != 0 && targetVel != 0) {
             targetPos = currentPos;
         }
@@ -154,7 +152,11 @@ public class GyroDrive {
 
         double[] output = controller.calculateOutputPowers(currentState, targetState);
 
-        setPower(output[0] + rotationVel, output[1] - rotationVel);
+        if (driveType == DriveType.NONE) {
+            setPower(0, 0);
+        } else {
+            setPower(output[0] + rotationVel, output[1] - rotationVel);
+        }
 
         if (targetVel == 0 || BalanceConstants.AngleAssistedDriving) {
             updateAngle();
