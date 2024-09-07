@@ -20,7 +20,7 @@ public class GyroDrive {
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
 
-    private DriveType driveType = DriveType.SMOOTH;
+    private DriveType driveType;
 
     private DriveState lastState = DriveState.STOPPED;
     private DriveState state = DriveState.STOPPED;
@@ -54,6 +54,8 @@ public class GyroDrive {
 
     private boolean stopping = false;
     private ElapsedTime stoppingTimer = null;
+
+    private boolean position = false;
 
     public GyroDrive(HardwareMap hardwareMap, DriveType driveType) {
         leftMotor = hardwareMap.get(DcMotor.class, "left");
@@ -102,6 +104,11 @@ public class GyroDrive {
 
     public void drive(double drivePower, double turnPower, boolean fast) {
         targetVel = drivePower * (driveType == DriveType.SMOOTH ? (fast ? SpeedConstants.FastDrive : SpeedConstants.Drive) : (fast ? SpeedConstants.FastOffroadDrive : SpeedConstants.OffroadDrive));
+        if (!position && isBalanced() && targetVel != 0) position = true;
+        if (!position) {
+            targetPos = currentPos;
+            setTargetAngle(BalanceConstants.TargetAngle);
+        }
         if (lastTargetVel != 0 && targetVel != 0) {
             targetPos = currentPos;
         }
@@ -118,6 +125,14 @@ public class GyroDrive {
 
     public void setTargetAngle(double target) {
         targetAngle = target;
+    }
+
+    public void brake() {
+        setTargetPos();
+        setTargetAngle(BalanceConstants.TargetAngle);
+        if (!position && isPlaceable()) {
+            position = true;
+        }
     }
 
     public void update(YawPitchRollAngles angles, double pitchRate, double headAngle) {
@@ -254,6 +269,7 @@ public class GyroDrive {
             }
         } else {
             state = DriveState.STOPPED;
+            position = false;
         }
     }
 
@@ -263,6 +279,7 @@ public class GyroDrive {
     }
 
     public boolean isBalanced() {
+        if (angles == null) return false;
         return Math.abs(angles.getPitch(AngleUnit.DEGREES) - BalanceConstants.TargetAngle) < BalanceConstants.MaxAngle;
     }
 

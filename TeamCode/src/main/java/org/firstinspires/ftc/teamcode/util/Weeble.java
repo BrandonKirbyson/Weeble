@@ -40,10 +40,6 @@ public class Weeble {
         arms.setArmPosition(ArmPosition.Down);
     }
 
-    public void setDriveType(DriveType driveType) {
-        drive.setDriveType(driveType);
-    }
-
     public void update() {
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
         double pitchRate = imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;
@@ -51,6 +47,10 @@ public class Weeble {
         head.updateAngles(angles);
         if (drive.getTurnVelocity() != 0) {
             head.autoTurn(drive.getTurnVelocity());
+        }
+
+        if (drive.getState() == DriveState.PLACING) {
+            head.reset();
         }
 
         vision.update();
@@ -70,13 +70,14 @@ public class Weeble {
             head.reset();
             head.setEyebrows(HeadConstants.eyebrowsNeutral);
         }
-
-        if (uprighting && angles.getPitch(AngleUnit.DEGREES) > PIDConstants.UprightPowerMargin) {
-            uprighting = false;
-            arms.setArmPosition(ArmPosition.Down);
-            head.reset();
-            head.setEyebrows(HeadConstants.eyebrowsNeutral);
-        }
+//
+//        if (uprighting && Math.abs(angles.getPitch(AngleUnit.DEGREES)) < PIDConstants.UprightPowerMargin) {
+//            arms.setArmPosition(ArmPosition.Down);
+//            head.reset();
+//            head.setEyebrows(HeadConstants.eyebrowsNeutral);
+//            drive.setTargetPos();
+//            uprighting = false;
+//        }
 
         overlay.updatePose(drive.getPose());
         overlay.updatePoints(vision.sensorMapping.getPoints());
