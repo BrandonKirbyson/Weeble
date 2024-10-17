@@ -28,7 +28,8 @@ public class Weeble {
     private boolean uprighting = false;
 
     public Weeble(HardwareMap hardwareMap, DriveType driveType) {
-        vision = new Vision(hardwareMap);
+//        vision = new Vision(hardwareMap);
+        vision = null;
         drive = new GyroDrive(hardwareMap, driveType);
         arms = new Arms(hardwareMap);
         head = new Head(hardwareMap);
@@ -52,12 +53,12 @@ public class Weeble {
         if (drive.getState() == DriveState.PLACING) {
             head.reset();
         }
-
-        vision.update();
-
-        if (vision.getTrackingCenter() != null) {
-            head.update(vision.getTrackingCenter());
-        }
+//
+//        vision.update();
+//
+//        if (vision.getTrackingCenter() != null) {
+//            head.update(vision.getTrackingCenter());
+//        }
 
         if (ArmPosition.AutoMove) arms.update(angles.getPitch(AngleUnit.DEGREES) - PIDConstants.TargetAngle);
 
@@ -80,7 +81,7 @@ public class Weeble {
 //        }
 
         overlay.updatePose(drive.getPose());
-        overlay.updatePoints(vision.sensorMapping.getPoints());
+//        overlay.updatePoints(vision.sensorMapping.getPoints());
 
         overlay.update();
     }

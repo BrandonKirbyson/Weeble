@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.util.head.HeadConstants;
 import org.firstinspires.ftc.teamcode.util.lib.FtcDashboardManager;
 import org.firstinspires.ftc.teamcode.util.lib.GamepadButton;
 import org.firstinspires.ftc.teamcode.util.lib.StatefulGamepad;
-import org.firstinspires.ftc.teamcode.util.vision.VisionMode;
 
 @Config
 @TeleOp(name = "Drive")
@@ -27,7 +26,7 @@ public class Drive extends LinearOpMode {
 
         waitForStart();
 
-        robot.vision.setMode(VisionMode.DISABLED);
+//        robot.vision.setMode(VisionMode.DISABLED);
 
         robot.head.reset();
 
@@ -53,14 +52,14 @@ public class Drive extends LinearOpMode {
 //            if (gamepad2Buttons.getButton(GamepadButton.DPAD_RIGHT)) {
 //                robot.drive.emergencyStop();
 //            }
-
-            if (gamepad2Buttons.wasJustPressed(GamepadButton.X) && gamepad2Buttons.getButton(GamepadButton.RIGHT_BUMPER)) {
-                robot.drive.setDriveType(DriveType.NONE);
-            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {
-                robot.drive.setDriveType(DriveType.OFFROAD);
-            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.A)) {
-                robot.drive.setDriveType(DriveType.SMOOTH);
-            }
+//
+//            if (gamepad2Buttons.wasJustPressed(GamepadButton.X) && gamepad2Buttons.getButton(GamepadButton.RIGHT_BUMPER)) {
+//                robot.drive.setDriveType(DriveType.NONE);
+//            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.Y)) {
+//                robot.drive.setDriveType(DriveType.OFFROAD);
+//            } else if (gamepad2Buttons.wasJustPressed(GamepadButton.A)) {
+//                robot.drive.setDriveType(DriveType.SMOOTH);
+//            }
 
 //            if (gamepad1Buttons.wasJustPressed(GamepadButton.LEFT_STICK_BUTTON) && robot.drive.getState() == DriveState.STOPPED) {
 //                robot.uprightWithArms();
@@ -78,29 +77,40 @@ public class Drive extends LinearOpMode {
             FtcDashboardManager.addData("Drive Type", robot.drive.getDriveType());
 
 //            if (gamepad1.right_stick_y != 0 || gamepad2.right_stick_x != 0) {
-            //noinspection SuspiciousNameCombination
-            robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
+            if (!gamepad1Buttons.getButton(GamepadButton.DPAD_RIGHT) && !gamepad1Buttons.getButton(GamepadButton.X)) {
+                //noinspection SuspiciousNameCombination
+                robot.head.manualControl(gamepad1.right_stick_y, gamepad1.right_stick_x);
+            } else {
+                robot.head.manualControlAdjust(gamepad1.right_stick_y, gamepad1.right_stick_x);
+            }
+
+            if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
+                robot.head.reset();
+                robot.head.manualControl(0, 0);
+            }
+
+
 //            }
 
             if (robot.drive.getTurnVelocity() == 0) {
                 robot.head.setEyes(0.5 + (-gamepad1.left_trigger + gamepad1.right_trigger) / 2);
             }
-//
-            if (robot.drive.getDriveType() == DriveType.NONE) {
-                if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
-                    robot.vision.setMode(VisionMode.DISABLED);
-                    robot.head.reset();
-                    robot.head.setEyebrows(HeadConstants.eyebrowsNeutral);
-                }
-                if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
-                    robot.vision.setMode(VisionMode.ENABLED);
-                    robot.head.setTracking(false);
-                }
-                if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
-                    robot.vision.setMode(VisionMode.BLOB_TRACKING);
-                    robot.head.setTracking(true);
-                }
-            }
+////
+//            if (robot.drive.getDriveType() == DriveType.NONE) {
+//                if (gamepad1Buttons.wasJustPressed(GamepadButton.A)) {
+//                    robot.vision.setMode(VisionMode.DISABLED);
+//                    robot.head.reset();
+//                    robot.head.setEyebrows(HeadConstants.eyebrowsNeutral);
+//                }
+//                if (gamepad1Buttons.wasJustPressed(GamepadButton.B)) {
+//                    robot.vision.setMode(VisionMode.ENABLED);
+//                    robot.head.setTracking(false);
+//                }
+//                if (gamepad1Buttons.wasJustPressed(GamepadButton.X)) {
+//                    robot.vision.setMode(VisionMode.BLOB_TRACKING);
+//                    robot.head.setTracking(true);
+//                }
+//            }
 
             if (gamepad1Buttons.wasJustPressed(GamepadButton.DPAD_UP)) {
                 robot.head.setEyebrows(HeadConstants.eyebrowsAngry);
@@ -118,12 +128,12 @@ public class Drive extends LinearOpMode {
 
             robot.update();
 
-            if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
-                robot.head.initHoldHead();
-            }
-            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
-                robot.head.holdHead();
-            }
+//            if (gamepad1Buttons.wasJustPressed(GamepadButton.Y)) {
+//                robot.head.initHoldHead();
+//            }
+//            if (gamepad1Buttons.getButton(GamepadButton.Y)) {
+//                robot.head.holdHead();
+//            }
 
             if (gamepad2.left_stick_y != 0 || gamepad2.right_stick_y != 0) {
                 robot.arms.setLeftArmPosition(gamepad2.left_stick_y);

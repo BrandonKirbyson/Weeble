@@ -35,5 +35,8 @@ public class HeadConstants {
     public static double HeadAutoTurnAmount = 0;
     public static double EyesAutoTurnAmount = 120;
 
+    public static double xSpeed = 1;
+    public static double ySpeed = 1;
+
     public static boolean HoldX = true;
 }

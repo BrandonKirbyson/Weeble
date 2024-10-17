@@ -134,6 +134,16 @@ public class Head {
         }
     }
 
+    public void manualControlAdjust(double x, double y) {
+        if (x != 0 || y != 0) {
+            HeadOrientation position = currentPosition;
+            position.x += x * HeadConstants.xSpeed;
+            position.y += y * HeadConstants.ySpeed;
+            setHeadPosition(position);
+            tracking = false;
+        }
+    }
+
     public void setEyes(double e) {
         eyesServo.setPosition(e);
     }
